@@ -1,0 +1,26 @@
+
+Versão 0.4.2:
+
+- Mapa com a localização das entidades e quantidade de chamados (Chamados -> Mapa);
+
+- Relatório por categorias (Relatórios -> por Categoria);
+
+- Relatório de chamados com parâmetros opcionais (Relatórios -> Chamados);
+
+- Porcentagens nos gráficos de pizza;
+
+- Usuário precisa estar logado para acessar o Dashboard;
+
+
+
+Version 0.4.2:
+
+- Map of the entities location and quantity of tickets (Tickets -> Map);
+
+- Report by categories (Reports -> By Category);
+
+- Tickets report with optional parameters (Reports -> Called);
+
+- Percentages in pie charts;
+
+- User must be logged in to access the Dashboard;
