@@ -1,26 +1,26 @@
 
-Versão 0.4.2:
+Versão 0.4.3:
 
-- Mapa com a localização das entidades e quantidade de chamados (Chamados -> Mapa);
+- Nova página inicial;
 
-- Relatório por categorias (Relatórios -> por Categoria);
+- Atualizado bootstrap para a versão 3;
 
-- Relatório de chamados com parâmetros opcionais (Relatórios -> Chamados);
+- Relatório por localização (Relatórios -> por Localização);
 
-- Porcentagens nos gráficos de pizza;
+- Melhor compatibilidade com dispositivos móveis;
 
-- Usuário precisa estar logado para acessar o Dashboard;
+- Correção de pequenos bugs.
 
 
 
-Version 0.4.2:
+Version 0.4.3:
 
-- Map of the entities location and quantity of tickets (Tickets -> Map);
+- New home page;
 
-- Report by categories (Reports -> By Category);
+- Bootstrap updated to version 3;
 
-- Tickets report with optional parameters (Reports -> Called);
+- Report by location (Reports -> By Location);
 
-- Percentages in pie charts;
+- Improved compatibility with mobile devices;
 
-- User must be logged in to access the Dashboard;
+- Fixed minor bugs.
