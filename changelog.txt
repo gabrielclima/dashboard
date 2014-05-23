@@ -1,7 +1,8 @@
-
 Versão 0.4.4:
 
 - Controle de acesso baseado no perfil do usuário:
+
+Por padrão têm acesso: Admin e Super-Admin.
 
 Para configurar basta setar os direitos no campo perfil em Administração->Perfis, selecione o perfil e a 
 aba Administração, campo Perfis.
@@ -16,6 +17,8 @@ Acesso para Ler ou Gravar: permite ao usuário ver o Dashboard.
 Version 0.4.4:
 
 - Access control based on the user's profile:
+
+Have access by default: Admin and Super Admin.
 
 To configure simply set the rights in the profile field in Administration-> Profiles, select the profile and the Administration tab, Profiles field.
 
