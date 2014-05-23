@@ -1,13 +1,13 @@
 
-Versão 0.4.3:
+Versão 0.4.4:
 
-- Nova página inicial;
+- Controle de acesso baseado no perfil do usuário:
 
-- Atualizado bootstrap para a versão 3;
+Para configurar basta setar os direitos no campo perfil em Administração->Perfis, selecione o perfil e na 
+aba Administração, campo Perfis.
 
-- Relatório por localização (Relatórios -> por Localização);
-
-- Melhor compatibilidade com dispositivos móveis;
+Sem acesso: usuário não vai acessar o Dashboard.
+Acesso para Ler ou Gravar: permite ao usuário ver o Dashboard.
 
 - Correção de pequenos bugs.
 
