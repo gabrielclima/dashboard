@@ -3,7 +3,7 @@ Versão 0.4.4:
 
 - Controle de acesso baseado no perfil do usuário:
 
-Para configurar basta setar os direitos no campo perfil em Administração->Perfis, selecione o perfil e na 
+Para configurar basta setar os direitos no campo perfil em Administração->Perfis, selecione o perfil e a 
 aba Administração, campo Perfis.
 
 Sem acesso: usuário não vai acessar o Dashboard.
@@ -13,14 +13,13 @@ Acesso para Ler ou Gravar: permite ao usuário ver o Dashboard.
 
 
 
-Version 0.4.3:
+Version 0.4.4:
 
-- New home page;
+- Access control based on the user's profile:
 
-- Bootstrap updated to version 3;
+To configure simply set the rights in the profile field in Administration-> Profiles, select the profile and the Administration tab, Profiles field.
 
-- Report by location (Reports -> By Location);
-
-- Improved compatibility with mobile devices;
+No Access: Users will not access the Dashboard.
+Read or Write access: allows the user to view the Dashboard.
 
 - Fixed minor bugs.
