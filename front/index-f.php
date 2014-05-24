@@ -123,7 +123,7 @@ $('#clock').jclock(options);
 
                     <!-- Brand and toggle get grouped for better mobile display -->
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="<?php echo $CFG_GLPI['url_base'].'/glpi/front/ticket.php';?>" target="_blank">
+                        <a class="navbar-brand" href="<?php echo $CFG_GLPI['root_doc'].'/front/ticket.php';?>" target="_blank">
                             <span>GLPI</span></a>
                     </div>
 					<!-- NAVBAR LEFT  -->
