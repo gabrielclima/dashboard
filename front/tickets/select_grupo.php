@@ -80,7 +80,7 @@ $ent = $DB->fetch_assoc($result_ent);
 
 $res_ent = $DB->query($sql_ent);
 $arr_ent = array();
-$arr_ent[0] = "-- ". __('Select a Group', 'dashboard') . " --" ;
+$arr_ent[0] = "-- ". __('Select a group', 'dashboard') . " --" ;
 
 $DB->data_seek($result_ent, 0) ;
 
@@ -140,28 +140,27 @@ $('.chosen-select').chosen();
 
 <?php
 
-$sel = $_GET['sel'];
+$sel = $_REQUEST['sel'];
 
 if($sel == "1") {
  
 if(!isset($_POST["sel_ent"])) {
-
-$id_ent = $_GET["ent"];	
+	$id_ent = $_REQUEST["ent"];	
 }
 
 else {
-$id_ent = $_POST["sel_ent"];
+	$id_ent = $_POST["sel_ent"];
 }
 
-if($id_ent == "") {
-echo '<script language="javascript"> alert(" ' . __('Select Group', 'dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="select_grupo.php"; </script>';
+if($id_ent == " " || $id_ent == 0) {
+	echo '<script language="javascript"> alert(" ' . __('Select a group', 'dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="select_grupo.php"; </script>';
 }
 
 ?>
 
 <script type="text/javascript" >
-location.href="cham_grupos.php?ent=<?php echo $id_ent; ?>";
+	location.href="cham_grupos.php?ent=<?php echo $id_ent; ?>";
 </script>
 
 <p></p>

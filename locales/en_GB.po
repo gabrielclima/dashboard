@@ -186,11 +186,11 @@ msgstr "Clean"
 msgid "No ticket found"
 msgstr "No ticket found"
 
-msgid "Select technician"
-msgstr "Select technician"
+msgid "Select a technician"
+msgstr "Select a technician"
 
-msgid "Select requester"
-msgstr "Select Requester"
+msgid "Select a requester"
+msgstr "Select a requester"
 
 msgid "Title"
 msgstr "Title"
@@ -237,11 +237,11 @@ msgstr "Last 30 days"
 msgid "Last 3 months"
 msgstr "Last 3 months"
 
-msgid "Select Entity"
-msgstr "Select Entity"
+msgid "Select a entity"
+msgstr "Select a entity"
 
-msgid "Select Group"
-msgstr "Select Group"
+msgid "Select a group"
+msgstr "Select a group"
 
 msgid "Version"
 msgstr "Version"
@@ -355,14 +355,20 @@ msgstr "Select"
 msgid "by Category"
 msgstr "by Category"
 
-msgid "Select a Category"
-msgstr "Select a Category"
+msgid "Select a category"
+msgstr "Select a category"
 
 msgid "by Location"
 msgstr "by Location"
 
-msgid "Select a Location"
-msgstr "Select a Location"
+msgid "Select a location"
+msgstr "Select a location"
 
 msgid "Welcome"
 msgstr "Welcome"
+
+msgid "Select a asset"
+msgstr "Select a asset"
+
+msgid "by Assets"
+msgstr "by Assets"

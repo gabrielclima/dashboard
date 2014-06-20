@@ -23,7 +23,7 @@ msgid "Dashboard"
 msgstr "Cuadro de borde"
 
 msgid "Tickets"
-msgstr "Tickets"
+msgstr "Incidencias"
 
 msgid "Reports"
 msgstr "Informes"
@@ -35,7 +35,7 @@ msgid "Home"
 msgstr "Recepción"
 
 msgid "Tickets Statistics"
-msgstr "Estadísticos de los tickets"
+msgstr "Estadísticos de las incidencias"
 
 msgid "by Technician"
 msgstr "Por técnico"
@@ -62,22 +62,22 @@ msgid "Activa"
 msgstr "activo"
 
 msgid "Tickets Evolución"
-msgstr "evolución de las Tickets"
+msgstr "Evolución de las incidencias"
 
 msgid "Tickets by Status"
-msgstr "Tickets Por Estado"
+msgstr "Incidencias Por Estado"
 
 msgid "Tickets by Entity"
-msgstr "Tickets Por la entidad"
+msgstr "Incidencias Por la entidad"
 
 msgid "Tickets by Category"
-msgstr "Tickets Por categoría"
+msgstr "Incidencias Por categoría"
 
 msgid "Daily Evolución"
 msgstr "evolución cotidiana"
 
 msgid "Tickets Total"
-msgstr "Tickets total"
+msgstr "Incidencias total"
 
 msgid "by Entity"
 msgstr "Por entidad"
@@ -89,10 +89,10 @@ msgid "Entity"
 msgstr "Entidad"
 
 msgid "Open Tickets"
-msgstr "Tickets abiertos"
+msgstr "Incidencias abiertas"
 
 msgid "Today Tickets"
-msgstr "Tickets Del día"
+msgstr "Incidencias Del día"
 
 msgid "by Group"
 msgstr "Por grupo"
@@ -107,10 +107,10 @@ msgid "Late"
 msgstr "en retraso"
 
 msgid "Opened Tickets by Status"
-msgstr "Tickets Abierta por estado"
+msgstr "Incidencias Abiertas por estado"
 
 msgid "Last Tickets"
-msgstr "Últimos Tickets"
+msgstr "Últimas Incidencias"
 
 msgid "All"
 msgstr "Todo"
@@ -187,11 +187,11 @@ msgstr "Borrar"
 msgid "No ticket found"
 msgstr "Ningún billete expósito"
 
-msgid "Select technician"
-msgstr "Seleccionáis técnico"
+msgid "Select a technician"
+msgstr "Seleccionáis un técnico"
 
-msgid "Select requester"
-msgstr "Seleccionáis peticionario"
+msgid "Select a requester"
+msgstr "Seleccionáis un peticionario"
 
 msgid "Title"
 msgstr "Título"
@@ -238,11 +238,11 @@ msgstr "30 últimos días"
 msgid "Last 3 months"
 msgstr "3 últimos meses"
 
-msgid "Select Entity"
-msgstr "Seleccionáis Entidad"
+msgid "Select a entity"
+msgstr "Seleccionáis una entidad"
 
-msgid "Select Group"
-msgstr "Seleccionáis Grupo"
+msgid "Select a group"
+msgstr "Seleccionáis un grupo"
 
 msgid "Versión"
 msgstr "Versión"
@@ -257,7 +257,7 @@ msgid "Tab display"
 msgstr "Affichage Del onglet"
 
 msgid "Tickets by Source"
-msgstr "Tickets Por Origen"
+msgstr "Incidencias Por Origen"
 
 msgid "Last Events"
 msgstr "Últimos Eventos"
@@ -344,7 +344,7 @@ msgid "Map"
 msgstr "Mapa"
 
 msgid "Tickets Map"
-msgstr "Mapa de los Tickets"
+msgstr "Mapa de las Incidencias"
 
 msgid "Fill in entities: address, city, state and country."
 msgstr "Rellena entidades: dirección, ciudad, estado y país."
@@ -355,14 +355,20 @@ msgstr "Seleccionáis"
 msgid "by Category"
 msgstr "por Categoría"
 
-msgid "Select a Category"
-msgstr "Seleccionáis una Categoría"
+msgid "Select a category"
+msgstr "Seleccionáis una categoría"
 
 msgid "by Location"
 msgstr "por Ubicación"
 
-msgid "Select a Location"
-msgstr "Seleccionáis una Ubicación"
+msgid "Select a location"
+msgstr "Seleccionáis una ubicación"
 
 msgid "Welcome"
 msgstr "Bienvenido"
+
+msgid "Select a asset"
+msgstr "Seleccionáis un bien"
+
+msgid "by Assets"
+msgstr "por Bienes"

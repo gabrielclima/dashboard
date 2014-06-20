@@ -186,11 +186,11 @@ msgstr "Effacer"
 msgid "No ticket found"
 msgstr "Aucun billet trouvé"
 
-msgid "Select technician"
-msgstr "Sélectionnez technicien"
+msgid "Select a technician"
+msgstr "Sélectionnez un technicien"
 
-msgid "Select requester"
-msgstr "Sélectionnez demandeur"
+msgid "Select a requester"
+msgstr "Sélectionnez un demandeur"
 
 msgid "Title"
 msgstr "Titre"
@@ -237,11 +237,11 @@ msgstr "30 derniers jours"
 msgid "Last 3 months"
 msgstr "3 derniers mois"
 
-msgid "Select Entity"
-msgstr "Sélectionnez Entité"
+msgid "Select a entity"
+msgstr "Sélectionnez une entité"
 
-msgid "Select Group"
-msgstr "Sélectionnez Groupe"
+msgid "Select a group"
+msgstr "Sélectionnez un groupe"
 
 msgid "Version"
 msgstr "Version"
@@ -354,14 +354,20 @@ msgstr "Sélectionnez"
 msgid "by Category"
 msgstr "par Catégorie"
 
-msgid "Select a Category"
-msgstr "Sélectionnez un catégorie"
+msgid "Select a category"
+msgstr "Sélectionnez une catégorie"
 
 msgid "by Location"
 msgstr "par emplacement"
 
-msgid "Select a Location"
+msgid "Select a location"
 msgstr "Sélectionnez un emplacement"
 
 msgid "Welcome"
 msgstr "Accueil"
+
+msgid "Select a asset"
+msgstr "Sélectionnez un atout"
+
+msgid "by Assets"
+msgstr "par Atouts"

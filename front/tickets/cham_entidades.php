@@ -214,7 +214,7 @@ $status = "('2','1','3','4')"	;
 
 echo "<table class='table table-hover table-striped' style='font-size: 18px; font-weight:bold;' cellpadding = 2px >";
 
-$sql_cham = "SELECT glpi_tickets.id, glpi_tickets.name AS descri, glpi_tickets.status AS status, glpi_tickets.date_mod
+$sql_cham = "SELECT glpi_tickets.id, glpi_tickets.name AS descri, glpi_tickets.status AS status, glpi_tickets.date_mod,  glpi_tickets.priority
 FROM glpi_tickets
 WHERE  glpi_tickets.status IN  ".$status." 
 AND glpi_tickets.is_deleted = 0
@@ -228,12 +228,10 @@ echo "<tr>
 <td style='text-align:center; width:240px;'>Status</td>
 <td style='text-align:center;'>". __('Title','dashboard')."</td>
 <td style='text-align:center;'>". __('Technician','dashboard')."</td>
+<td style='text-align:center;'>". __('Priority')."</td>
 </tr>";
 
-
 while($row = $DB->fetch_assoc($result_cham)){ 
-
-//$status1 = Ticket::getStatus($row['status']);
 
 $status1 = $row['status']; 
 
@@ -255,27 +253,36 @@ AND glpi_tickets_users.type = 2 ";
 $result_tec = $DB->query($sql_tec);	
 $row_tec = $DB->fetch_assoc($result_tec);
 
+$sql_prio = "SELECT priority_".$row['priority']." AS priority
+				FROM glpi_configs";
+
+$result_prio = $DB->query($sql_prio);	
+$row_prio = $DB->fetch_assoc($result_prio);	
+
+$priority = $row['priority'];
+
+if($priority == 2) {
+	$prio_name = _x('priority', 'Low'); }
+	
+if($priority == 3) {
+	$prio_name = _x('priority', 'Medium'); } 		
+	
+if($priority == 4) {
+	$prio_name = _x('priority', 'High'); } 				 		
+
 
 echo "<tr>
-<td style='text-align:center; vertical-align:middle;'> 
-<a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span style='color:#000099';>" . $row['id'] . "</span> </a>
-</td>
-<td style='vertical-align:middle;'>
-<span style='color:#000099';><img src=../../../../pics/".$status1.".png />  ".Ticket::getStatus($row['status'])."</span >
-</td>
-<td style='vertical-align:middle;'>
-<a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span >" . $row['descri'] . "</span> </a>
-</td>
-<td style='vertical-align:middle;'>
-<span >". $row_tec['name'] ." ".$row_tec['sname'] ."</span> 
-</td>
+<td style='text-align:center; vertical-align:middle;'> <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span style='color:#000099';>" . $row['id'] . "</span> </a></td>
+<td style='vertical-align:middle;'><span style='color:#000099';><img src=../../../../pics/".$status1.".png />  ".Ticket::getStatus($row['status'])."</span ></td>
+<td style='vertical-align:middle;'><a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span >" . $row['descri'] . "</span> </a></td>
+<td style='vertical-align:middle;'><span >". $row_tec['name'] ." ".$row_tec['sname'] ."</span> </td>
+<td style='vertical-align:middle; text-align:center; background-color:". $row_prio['priority'] .";'>" . $prio_name . "</td>
 </tr>"; 
  
  } 
  
 echo "</table>"; 
 
-//}
 ?>
 
 </div>

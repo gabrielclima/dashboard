@@ -117,7 +117,7 @@ function dropdown( $name, array $options, $selected=null )
 
 $res_tec = $DB->query($sql_tec);
 $arr_tec = array();
-$arr_tec[0] = "-- ". __('Select requester','dashboard') . " --" ;
+$arr_tec[0] = "-- ". __('Select a requester','dashboard') . " --" ;
 
 $DB->data_seek($result_tec, 0) ;
 
@@ -145,8 +145,8 @@ $selected = 0;
 	
 <div id="titulo_graf" >
 
-	  <?php echo __('Tickets','dashboard') ." ". __('by Requester','dashboard');//." - ". $mes ." ".$ano.":" ; ?> 
-	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> <?php //echo "&nbsp; ".$total_mes['total'] ; ?> </span> </div>
+	  <?php echo __('Tickets','dashboard') ." ". __('by Requester','dashboard');?> 
+	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> </span> </div>
 
 
 <div id="datas-tec" class="span12 row-fluid" > 
@@ -228,17 +228,16 @@ else {
 }  
 
 if(!isset($_POST["sel_tec"])) {
-
-$id_tec = $_GET["tec"];	
+	$id_tec = $_GET["tec"];	
 }
 
 else {
-$id_tec = $_POST["sel_tec"];
+	$id_tec = $_POST["sel_tec"];
 }
 
 if($id_tec == 0) {
-echo '<script language="javascript"> alert(" ' . __('Select requester','dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="graf_usuario.php"; </script>';
+	echo '<script language="javascript"> alert(" ' . __('Select a requester','dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="graf_usuario.php"; </script>';
 }
 
 
@@ -258,11 +257,11 @@ $tec_name = $DB->fetch_assoc($result_nm);
 
 
 if($data_ini == $data_fin) {
-$datas = "LIKE '".$data_ini."%'";	
+	$datas = "LIKE '".$data_ini."%'";	
 }	
 
 else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
+	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
 //quant chamados
@@ -288,18 +287,17 @@ echo "</div>";
 ?>
 
 <div id="graf_linhas" class="span12" style="height: 450px; margin-top: 25px; margin-left: -5px;">
-
-<?php include ("./inc/graflinhas_user.inc.php"); ?>
+	<?php include ("./inc/graflinhas_user.inc.php"); ?>
 </div>
 
 
 <div id="graf2" class="span6" >
-<?php include ("./inc/grafpie_stat_user.inc.php"); ?>
+	<?php include ("./inc/grafpie_stat_user.inc.php"); ?>
 </div>
 
 
 <div id="graf4" class="span6" >
-<?php include ("./inc/grafcat_user.inc.php"); ?>
+	<?php include ("./inc/grafcat_user.inc.php"); ?>
 </div>
 
 <?php 

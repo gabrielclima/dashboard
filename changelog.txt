@@ -1,28 +1,22 @@
-Versão 0.4.4:
 
-- Controle de acesso baseado no perfil do usuário:
+Versão 0.4.5:
 
-Por padrão têm acesso: Admin e Super-Admin.
+- Todos os relatório podem ser exportados em pdf, csv ou excel;
 
-Para configurar basta setar os direitos no campo perfil em Administração->Perfis, selecione o perfil e a 
-aba Administração, campo Perfis.
+- Relatório de chamados por ativos;
 
-Sem acesso: usuário não vai acessar o Dashboard.
-Acesso para Ler ou Gravar: permite ao usuário ver o Dashboard.
+- Gráfico de chamados por ativos;
 
 - Correção de pequenos bugs.
 
 
 
-Version 0.4.4:
+Version 0.4.5:
 
-- Access control based on the user's profile:
+- All reports can be exported in pdf, csv or excel;
 
-Have access by default: Admin and Super Admin.
+- Tickets report by assets;
 
-To configure simply set the rights in the profile field in Administration-> Profiles, select the profile and the Administration tab, Profiles field.
-
-No Access: Users will not access the Dashboard.
-Read or Write access: allows the user to view the Dashboard.
+- Tickets by assets chart;
 
 - Fixed minor bugs.

@@ -96,7 +96,18 @@ function dropdown( $name, array $options, $selected=null )
    <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
    <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
    
-   <script src="../js/sorttable.js"></script>
+   <!-- <script src="../js/sorttable.j"></script> -->
+	<script src="../js/media/js/jquery.dataTables.min.js"></script>
+	<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+	<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+	
+	<style type="text/css" title="currentStyle">	
+		@import "../js/media/css/jquery.dataTables_themeroller.css";
+		@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
+		
+	select { width: 60px; }
+	table.dataTable { empty-cells: show; }
+	</style>
    
 </head>
 
@@ -124,243 +135,243 @@ a:hover {
 	
 		<div id="datas-tec" class="span12 row-fluid" >
  
-<form id="form1" name="form1" class="form_rel" method="post" action="rel_tickets.php?con=1" onsubmit="datai();dataf();" style="margin-left: 25%;"> 
-<table border="0" cellspacing="0" cellpadding="3" bgcolor="#efefef" >
-<tr>
-	
-<td style="margin-top:2px; width:110px;"><?php echo __('Period'); ?>: </td>	
-<td style="width: 200px;">
-<?php
-$url = $_SERVER['REQUEST_URI']; 
-$arr_url = explode("?", $url);
-$url2 = $arr_url[0];
-    
-echo'
-<table style="margin-top:6px;" >
-<tr><td>
-    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date1" value="'.$data_ini.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-</td><td>
-   <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date2" value="'.$data_fin.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-</tr></td>
-    </table>
-    ';
-?>
-
-<script language="Javascript">
-
-$('#dp1').datepicker('update');
-$('#dp2').datepicker('update');
-
-</script>
-</td>
-</tr>
-
-<tr>
-<td style="margin-top:2px; width:100px;"><?php echo __('Entity'); ?>: </td>
-
-<td style="margin-top:2px;">
-<?php
-
-// lista de entidades
-
-$sql_ent = "
-SELECT id , name
-FROM `glpi_entities`
-ORDER BY `name` ASC
-";
-
-$result_ent = $DB->query($sql_ent);
-//$ent = $DB->fetch_assoc($result_ent);
-
-//$res_ent = $DB->query($sql_ent);
-$arr_ent = array();
-$arr_ent[0] = "" ;
-
-//$DB->data_seek($result_ent, 0) ;
-
-while ($row_ent = $DB->fetch_assoc($result_ent))		
-	{ 
-	$v_row_ent = $row_ent['id'];
-	$arr_ent[$v_row_ent] = $row_ent['name'] ;			
-	} 
-	
-$name = 'sel_ent';
-$options = $arr_ent;
-$selected = "0";
-
-echo dropdown( $name, $options, $selected );
-
-?>
-</td>
-</tr>
-
-
-<tr>
-<td style="margin-top:2px; width:100px;"><?php echo __('Status'); ?>:  </td>
-
-<td style="margin-top:2px;">
-<?php
-// lista de status
-
-$sql_sta = "
-SELECT DISTINCT status
-FROM glpi_tickets
-ORDER BY status ASC
-";
-
-$result_sta = $DB->query($sql_sta);
-
-$arr_sta = array();
-$arr_sta[0] = "-----";
-
-while ($row_sta = $DB->fetch_assoc($result_sta))		
-	{ 
-	$v_row_sta = $row_sta['status'];
-	$arr_sta[$v_row_sta] = Ticket::getStatus($row_sta['status']) ;			
-	} 
-	
-$name = 'sel_sta';
-$options = $arr_sta;
-$selected = "0";
-
-echo dropdown( $name, $options, $selected );
-?>
-</td>
-</tr>
-
-
-<tr>
-<td style="margin-top:2px; width:165px;"><?php echo __('Request source'); ?>: </td>
-
-<td style="margin-top:2px;">
-<?php
-// lista de origem
-
-$sql_req = "
-SELECT id, name
-FROM glpi_requesttypes
-ORDER BY id ASC
-";
-
-$result_req = $DB->query($sql_req);
-
-$arr_req = array();
-$arr_req[0] = "-----";
-
-while ($row_req = $DB->fetch_assoc($result_req))		
-	{ 
-	$v_row_req = $row_req['id'];
-	$arr_req[$v_row_req] = $row_req['name'] ;			
-	} 
-	
-$name = 'sel_req';
-$options = $arr_req;
-$selected = "0";
-
-echo dropdown( $name, $options, $selected );
-?>
-</td>
-</tr>
-
-
-<tr>
-<td style="margin-top:2px; width:100px;"><?php echo __('Priority'); ?>:  </td>
-
-<td style="margin-top:2px;">
-<?php
-// lista de tipos
-
-$arr_pri = array();
-$arr_pri[0] = "-----" ;
-$arr_pri[1] = _x('priority', 'Very low');
-$arr_pri[2] = _x('priority', 'Low');
-$arr_pri[3] = _x('priority', 'Medium');
-$arr_pri[4] = _x('priority', 'High');
-$arr_pri[5] = _x('priority', 'Very high');
-$arr_pri[6] = _x('priority', 'Major');
-
-
-$name = 'sel_pri';
-$options = $arr_pri;
-$selected = "0";
-
-echo dropdown( $name, $options, $selected );
-?>
-</td>
-</tr>
-
-
-<tr>
-<td style="margin-top:2px; width:100px;"><?php echo __('Category'); ?>:  </td>
-
-<td style="margin-top:2px;">
-<?php
-// lista de categorias
-
-$sql_cat = "
-SELECT id, name
-FROM glpi_itilcategories
-ORDER BY name ASC ";
-
-$result_cat = $DB->query($sql_cat);
-
-$arr_cat = array();
-$arr_cat[0] = "-----" ;
-
-while ($row_cat = $DB->fetch_assoc($result_cat))		
-	{ 
-	$v_row_cat = $row_cat['id'];
-	$arr_cat[$v_row_cat] = $row_cat['name'] ;			
-	} 
-	
-$name = 'sel_cat';
-$options = $arr_cat;
-$selected = "0";
-
-echo dropdown( $name, $options, $selected );
-?>
-</td>
-</tr>
-
-
-<tr>
-<td style="margin-top:2px; width:100px;"><?php echo __('Type'); ?>:  </td>
-
-<td style="margin-top:2px;">
-<?php
-// lista de tipos
-
-$arr_tip = array();
-$arr_tip[0] = "-----" ;
-$arr_tip[1] = __('Incident') ;
-$arr_tip[2] = __('Request');
-
-$name = 'sel_tip';
-$options = $arr_tip;
-$selected = "0";
-
-echo dropdown( $name, $options, $selected );
-?>
-</td>
-</tr>
-
-<tr><td height="15px"></td></tr>
-<tr>
-<td colspan="2" align="center">
- 
-<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
-<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
-</td>
-</tr>
-	
-	</table>
-<?php Html::closeForm(); ?>
+		<form id="form1" name="form1" class="form_rel" method="post" action="rel_tickets.php?con=1" onsubmit="datai();dataf();" style="margin-left: 25%;"> 
+		<table border="0" cellspacing="0" cellpadding="3" bgcolor="#efefef" >
+		<tr>
+			
+		<td style="margin-top:2px; width:110px;"><?php echo __('Period'); ?>: </td>	
+		<td style="width: 200px;">
+		<?php
+		$url = $_SERVER['REQUEST_URI']; 
+		$arr_url = explode("?", $url);
+		$url2 = $arr_url[0];
+		    
+		echo'
+		<table style="margin-top:6px;" >
+		<tr><td>
+		    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
+		    <input class="span9" size="16" type="text" name="date1" value="'.$data_ini.'">
+		    <span class="add-on"><i class="icon-th"></i></span>
+		    </div>
+		</td><td>
+		   <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
+		    <input class="span9" size="16" type="text" name="date2" value="'.$data_fin.'">
+		    <span class="add-on"><i class="icon-th"></i></span>
+		    </div>
+		</tr></td>
+		    </table>
+		    ';
+		?>
+		
+		<script language="Javascript">
+		
+		$('#dp1').datepicker('update');
+		$('#dp2').datepicker('update');
+		
+		</script>
+		</td>
+		</tr>
+		
+		<tr>
+		<td style="margin-top:2px; width:100px;"><?php echo __('Entity'); ?>: </td>
+		
+		<td style="margin-top:2px;">
+		<?php
+		
+		// lista de entidades
+		
+		$sql_ent = "
+		SELECT id , name
+		FROM `glpi_entities`
+		ORDER BY `name` ASC
+		";
+		
+		$result_ent = $DB->query($sql_ent);
+		//$ent = $DB->fetch_assoc($result_ent);
+		
+		//$res_ent = $DB->query($sql_ent);
+		$arr_ent = array();
+		$arr_ent[0] = "" ;
+		
+		//$DB->data_seek($result_ent, 0) ;
+		
+		while ($row_ent = $DB->fetch_assoc($result_ent))		
+			{ 
+			$v_row_ent = $row_ent['id'];
+			$arr_ent[$v_row_ent] = $row_ent['name'] ;			
+			} 
+			
+		$name = 'sel_ent';
+		$options = $arr_ent;
+		$selected = "0";
+		
+		echo dropdown( $name, $options, $selected );
+		
+		?>
+		</td>
+		</tr>
+		
+		
+		<tr>
+		<td style="margin-top:2px; width:100px;"><?php echo __('Status'); ?>:  </td>
+		
+		<td style="margin-top:2px;">
+		<?php
+		// lista de status
+		
+		$sql_sta = "
+		SELECT DISTINCT status
+		FROM glpi_tickets
+		ORDER BY status ASC
+		";
+		
+		$result_sta = $DB->query($sql_sta);
+		
+		$arr_sta = array();
+		$arr_sta[0] = "-----";
+		
+		while ($row_sta = $DB->fetch_assoc($result_sta))		
+			{ 
+			$v_row_sta = $row_sta['status'];
+			$arr_sta[$v_row_sta] = Ticket::getStatus($row_sta['status']) ;			
+			} 
+			
+		$name = 'sel_sta';
+		$options = $arr_sta;
+		$selected = "0";
+		
+		echo dropdown( $name, $options, $selected );
+		?>
+		</td>
+		</tr>
+		
+		
+		<tr>
+		<td style="margin-top:2px; width:165px;"><?php echo __('Request source'); ?>: </td>
+		
+		<td style="margin-top:2px;">
+		<?php
+		// lista de origem
+		
+		$sql_req = "
+		SELECT id, name
+		FROM glpi_requesttypes
+		ORDER BY id ASC
+		";
+		
+		$result_req = $DB->query($sql_req);
+		
+		$arr_req = array();
+		$arr_req[0] = "-----";
+		
+		while ($row_req = $DB->fetch_assoc($result_req))		
+			{ 
+			$v_row_req = $row_req['id'];
+			$arr_req[$v_row_req] = $row_req['name'] ;			
+			} 
+			
+		$name = 'sel_req';
+		$options = $arr_req;
+		$selected = "0";
+		
+		echo dropdown( $name, $options, $selected );
+		?>
+		</td>
+		</tr>
+		
+		
+		<tr>
+		<td style="margin-top:2px; width:100px;"><?php echo __('Priority'); ?>:  </td>
+		
+		<td style="margin-top:2px;">
+		<?php
+		// lista de tipos
+		
+		$arr_pri = array();
+		$arr_pri[0] = "-----" ;
+		$arr_pri[1] = _x('priority', 'Very low');
+		$arr_pri[2] = _x('priority', 'Low');
+		$arr_pri[3] = _x('priority', 'Medium');
+		$arr_pri[4] = _x('priority', 'High');
+		$arr_pri[5] = _x('priority', 'Very high');
+		$arr_pri[6] = _x('priority', 'Major');
+		
+		
+		$name = 'sel_pri';
+		$options = $arr_pri;
+		$selected = "0";
+		
+		echo dropdown( $name, $options, $selected );
+		?>
+		</td>
+		</tr>
+		
+		
+		<tr>
+		<td style="margin-top:2px; width:100px;"><?php echo __('Category'); ?>:  </td>
+		
+		<td style="margin-top:2px;">
+		<?php
+		// lista de categorias
+		
+		$sql_cat = "
+		SELECT id, name
+		FROM glpi_itilcategories
+		ORDER BY name ASC ";
+		
+		$result_cat = $DB->query($sql_cat);
+		
+		$arr_cat = array();
+		$arr_cat[0] = "-----" ;
+		
+		while ($row_cat = $DB->fetch_assoc($result_cat))		
+			{ 
+			$v_row_cat = $row_cat['id'];
+			$arr_cat[$v_row_cat] = $row_cat['name'] ;			
+			} 
+			
+		$name = 'sel_cat';
+		$options = $arr_cat;
+		$selected = "0";
+		
+		echo dropdown( $name, $options, $selected );
+		?>
+		</td>
+		</tr>
+		
+		
+		<tr>
+		<td style="margin-top:2px; width:100px;"><?php echo __('Type'); ?>:  </td>
+		
+		<td style="margin-top:2px;">
+		<?php
+		// lista de tipos
+		
+		$arr_tip = array();
+		$arr_tip[0] = "-----" ;
+		$arr_tip[1] = __('Incident') ;
+		$arr_tip[2] = __('Request');
+		
+		$name = 'sel_tip';
+		$options = $arr_tip;
+		$selected = "0";
+		
+		echo dropdown( $name, $options, $selected );
+		?>
+		</td>
+		</tr>
+		
+		<tr><td height="15px"></td></tr>
+		<tr>
+		<td colspan="2" align="center">
+		 
+		<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
+		<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
+		</td>
+		</tr>
+			
+			</table>
+		<?php Html::closeForm(); ?>
 
 		</div>
 	</div>	
@@ -384,9 +395,6 @@ else {
 	$data_fin2 = $_POST['date2'];	
 }  
 
-//if(isset($_REQUEST["sel_ent"]) && $_REQUEST["sel_ent"] != '0') { $id_ent = $_REQUEST["sel_ent"]; }
-//else { $id_ent = ''; }
-
 if(!isset($_REQUEST["sel_ent"])) { $id_ent = 0; }
 else { $id_ent = $_REQUEST["sel_ent"]; }
 
@@ -405,12 +413,7 @@ else { $id_cat = ''; }
 if(isset($_REQUEST["sel_tip"]) && $_REQUEST["sel_tip"] != '0') { $id_tip = $_REQUEST["sel_tip"]; }
 else { $id_tip = ''; }
 
-
 $arr_param = array($id_ent, $id_sta, $id_req, $id_pri, $id_cat, $id_tip);
-
-//print_r($arr_param);
-//echo implode($arr_param, ",");
-
 
 if($data_ini2 == $data_fin2) {
 $datas2 = "LIKE '".$data_ini2."%'";	
@@ -454,9 +457,8 @@ AND glpi_tickets.requesttypes_id LIKE '%".$id_req."'
 AND glpi_tickets.priority LIKE '%".$id_pri."'
 AND glpi_tickets.itilcategories_id LIKE '%".$id_cat."'
 AND glpi_tickets.type LIKE '%".$id_tip."'
-ORDER BY id DESC
-LIMIT ". $primeiro_registro .", ". $num_por_pagina ." ";
-
+ORDER BY id DESC ";
+//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
 
 $result_cham = $DB->query($sql_cham);
 
@@ -509,14 +511,6 @@ $ent_name = $DB->fetch_assoc($result_nm);
 
 echo "
 
-<script>
-function pagina()
-{
-var page=document.getElementById('npage').value;
-location.href = 'rel_tickets.php?con=1&date1=".$data_ini2."&date2=".$data_fin2."&sel_ent=".$id_ent."&sel_sta=".$id_sta."&sel_req=".$id_req."&sel_pri=".$id_pri."&sel_cat=".$id_cat."&sel_tip=".$id_tip."&npage='+page;
-} 
-</script>
-
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
 <table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
@@ -528,42 +522,26 @@ location.href = 'rel_tickets.php?con=1&date1=".$data_ini2."&date2=".$data_fin2."
 
 </table>
 
-<table align='left' style='margin-bottom:10px; margin-top:10px;'>
+<table id='ticket' class='display'  style='font-size: 12px; font-weight:bold;' cellpadding = 2px>
+<thead>
 <tr>
-
-<td width=90%;>
-<select id='npage' class='chosen-select' style='width:80px' onchange='pagina();'>
-  <option value='0'>".__('Show')."</option>
-  <option value='20'>20</option>
-  <option value='30'>30</option>
-  <option value='50'>50</option>
-  <option value='100'>100</option>
-</select> 
-</td>
-
+<th style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Tickets', 'dashboard')." </th>
+<th> </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Type')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Request')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Priority')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Category')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Title', 'dashboard')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Requester', 'dashboard')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Technician', 'dashboard')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Opened', 'dashboard')."</th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Closed', 'dashboard')." </th>
 </tr>
-</table>
-
-<table class='table table-striped sortable'  style='font-size: 12px; font-weight:bold;' cellpadding = 2px>
-<tr>
-<td style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Tickets', 'dashboard')." </td>
-<td> </td>
-
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Type')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Request')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Priority')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Category')." </td>
-
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Title', 'dashboard')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Requester', 'dashboard')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Technician', 'dashboard')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Opening date', 'dashboard')."</td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Close date', 'dashboard')." </td>
-</tr>";
+</thead>
+<tbody>";
 
 
 while($row = $DB->fetch_assoc($result_cham)){
-	
 	
 	$status1 = $row['status']; 
 
@@ -657,8 +635,40 @@ echo "
 </tr>";
 }
 
-echo "</table>	</div>"; ?>
+echo "</tbody>
+		</table>
+		</div>"; ?>
 
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    oTable = $('#ticket').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "bFilter": false,
+        "aaSorting": [[0,'desc']], 
+        "iDisplayLength": 25,
+    	  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], 
+
+        "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+	       "aButtons": [
+	       "copy",
+	       "print",
+	       {
+	           "sExtends":    "collection",
+	           "sButtonText": "Save",
+	           "aButtons":    [ "csv", "xls",
+	            {
+	           "sExtends": "pdf",
+	           "sPdfOrientation": "landscape",
+	           "sPdfMessage": ""
+	            } ]
+	       } ]
+        }
+		  
+    });    
+} );		
+</script>  
 
 <?php
 // paginacao 2
@@ -700,7 +710,7 @@ $total_paginas = ceil($total_paginas);
     }
   }
 // exibir painel na tela
-echo "$prev_link  $painel  $next_link";
+//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
 // fim paginacao 2
 }

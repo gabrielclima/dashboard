@@ -19,7 +19,7 @@ function plugin_version_dashboard(){
 	global $DB, $LANG;
 
 	return array('name'			=> __('Dashboard','dashboard'),
-					'version' 			=> '0.4.4',
+					'version' 			=> '0.4.5',
 					'author'			   => '<a href="mailto:stevenesdonato@gmail.com"> Stevenes Donato </b> </a>',
 					'license'		 	=> 'GPLv2+',
 					'homepage'			=> 'https://sourceforge.net/projects/glpidashboard/',
@@ -30,7 +30,7 @@ function plugin_dashboard_check_prerequisites(){
         if (GLPI_VERSION>=0.84){
                 return true;
         } else {
-                echo "GLPI version not compatible need 0.83";
+                echo "GLPI version not compatible need 0.84";
         }
 }
 

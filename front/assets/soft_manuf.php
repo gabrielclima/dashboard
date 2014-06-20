@@ -1,13 +1,4 @@
 <?php
-/*
-$query_unk = "SELECT count(*) AS total
-FROM `glpi_softwares`
-WHERE `is_deleted` = 0
-AND `manufacturers_id` = 0";
-
-$result = $DB->query($query_unk) or die('erro');
-$unk = $DB->result($result,0,'total');
-*/
 
 $query_os = "
 SELECT glpi_manufacturers.name AS name, count( glpi_softwares.id ) AS conta

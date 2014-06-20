@@ -8,6 +8,13 @@ global $DB;
 Session::checkLoginUser();
 Session::checkRight("profile", "r");
 
+//numero de anos para exibição no index
+// 0 mostra todos; 1 mostra ano atual; 2 ou mais exibe o numero de anos
+
+// number of year to display in index
+// 0 show all; 1 show current year; 2 or more show the number of years
+$num_years = 0;
+
      switch (date("m")) {
     case "01": $mes = __('January','dashboard'); break;
     case "02": $mes = __('February','dashboard'); break;
@@ -302,7 +309,13 @@ $('#clock').jclock(options);
                                                 <i class="fa fa-angle-right"></i>
                                                 <span class='hidden-minibar'> <?php echo _n('Ticket','Tickets',2); ?></span>
                                             </a>
-                                        </li>                             
+                                        </li>
+													 <li class=' '>
+                                              <a href="./reports/rel_assets.php" data-original-title=' Tickets' target="_blank">
+                                                <i class="fa fa-angle-right"></i>
+                                                <span class='hidden-minibar'> <?php echo __('Assets'); ?></span>
+                                            </a>
+                                        </li>                              
                                     </ul>                                    
                                 </li>			                                
                                 
@@ -338,10 +351,16 @@ $('#clock').jclock(options);
                                                 <span class='hidden-minibar'> <?php echo __('Group','dashboard'); ?></span>
                                             </a>
                                         </li>
-                                          <li class=' '>
+                                        <li class=' '>
                                               <a href="./graficos/entidades.php" data-original-title=' Entidades' target="_blank">
                                                 <i class="fa fa-angle-right"></i>
                                                 <span class='hidden-minibar'> <?php echo __('Entity','dashboard'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li class=' '>
+                                              <a href="./graficos/ativos.php" data-original-title=' Ativos' target="_blank">
+                                                <i class="fa fa-angle-right"></i>
+                                                <span class='hidden-minibar'> <?php echo __('Assets'); ?></span>
                                             </a>
                                         </li>
                                          <li class=' '>
@@ -556,12 +575,68 @@ $ano = date("Y");
 $month = date("Y-m");
 $hoje = date("Y-m-d");
 
+
+//selecionar anos 
+
+if($num_years == 0) {
+	
+		$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year ASC ";
+}
+
+if($num_years == 1) {
+	
+	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year DESC
+	LIMIT ".$num_years."";
+}
+
+if($num_years > 1) {
+	
+	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year DESC
+	LIMIT ".$num_years."";
+	
+}
+
+$result_y = $DB->query($query_y);
+
+//numero de anos para eixos Y
+$conta_y = $DB->numrows($result_y);
+
+$arr_years = array();
+
+while ($row_y = $DB->fetch_assoc($result_y))		
+	{ 
+		$arr_years[] = $row_y['year'];			
+	} 
+
+
+if($num_years > 1) {
+	$arr_years = array_reverse($arr_years);
+	$years = implode(",", $arr_years);
+}
+else {
+	$years = implode(",", $arr_years);
+}
+
+
 //chamados ano
 
 $sql_ano =	"SELECT COUNT(glpi_tickets.id) as total        
       FROM glpi_tickets
       LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
-      WHERE glpi_tickets.is_deleted = '0' ";
+      WHERE glpi_tickets.is_deleted = '0' 
+      AND DATE_FORMAT( glpi_tickets.date, '%Y' ) IN (".$years.") ";
 
 $result_ano = $DB->query($sql_ano);
 $total_ano = $DB->fetch_assoc($result_ano);
@@ -572,7 +647,7 @@ $sql_mes =	"SELECT COUNT(glpi_tickets.id) as total
       FROM glpi_tickets
       LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
       WHERE glpi_tickets.date LIKE '$month%'      
-      AND glpi_tickets.is_deleted = '0' ";
+      AND glpi_tickets.is_deleted = '0' ";      
 
 $result_mes = $DB->query($sql_mes);
 $total_mes = $DB->fetch_assoc($result_mes);
@@ -816,8 +891,7 @@ setTimeout(function(){
        </div>   
 </div>
 
-<div class="row ">
-
+<div class="row">
 
 <div id="events" class="col-sm-6 col-md-6 " style="height:300px; margin-top:35px;"> 
  	 				              
@@ -909,87 +983,86 @@ function servico($service) {
 	</div>
 
 
-		<div id="logged_users" class="col-sm-6 col-md-6 " style="height:300px;  margin-top:35px;"> 
+		<div id="logged_users" class="col-sm-6 col-md-6 " style="min-height:300px;  margin-top:35px;"> 
  	 				              
-		      <div class="widget widget-table action-table">
+		   <div class="widget widget-table action-table">
             <div class="widget-header"> <i class="fa fa-group" style="margin-left:7px;"></i>
- <?php
-//logged users
-
-$path = "../../../files/_sessions/";
-$diretorio = opendir($path);        
-
-$arr_arq = array();
-$arquivos = array();    
-       
-   while($arquivo = readdir($diretorio)){   
-      
-     $arr_arq[] = $path.$arquivo;           
-   }
- //  $diretorio -> close();
-
-
-foreach ($arr_arq as $listar) {
-// retira "./" e "../" para que retorne apenas pastas e arquivos
-
-  
-   if ( is_file($listar) && $listar != '.' && $listar != '..'){ 
-			$arquivos[]=$listar;
-   }
-}
-
-$conta = count($arquivos);
-
-if($conta > 0) {
-
-for($i=0; $i < $conta; $i++) {
-
-$file = $arquivos[$i];
-
-$string = file_get_contents( $file ); 
-// poderia ser um string ao invés de file_get_contents().
-
-$list = preg_match( '/glpiID\|s:[0-9]:"(.+)/', $string, $matches );
-
-$posicao = strpos($matches[0], 'glpiID|s:');
-$string2 = substr($matches[0], $posicao, 25);
-$string3 = explode("\"", $string2); 
-
-$arr_ids[] = $string3[1];
-
-}
-}
-
-$ids = array_values($arr_ids);
-$ids2 = implode("','",$ids);
-
-$query_name = 
-"SELECT firstname AS name, realname AS sname, id AS uid, name AS glpiname 
-FROM glpi_users
-WHERE id IN ('".$ids2."')
-ORDER BY name"; 
-
-$result_name = $DB->query($query_name); 
-$num_users = $DB->numrows($result_name);          
-            
-?>    
+				<?php
+				//logged users
+				
+				$path = "../../../files/_sessions/";
+				$diretorio = opendir($path);        
+				
+				$arr_arq = array();
+				$arquivos = array();    
+				       
+				   while($arquivo = readdir($diretorio)){   
+				      
+				     $arr_arq[] = $path.$arquivo;           
+				   }
+				 //  $diretorio -> close();				
+				
+				foreach ($arr_arq as $listar) {
+				// retira "./" e "../" para que retorne apenas pastas e arquivos
+				
+				  
+				   if ( is_file($listar) && $listar != '.' && $listar != '..'){ 
+							$arquivos[]=$listar;
+				   }
+				}
+				
+				$conta = count($arquivos);
+				
+				if($conta > 0) {
+				
+				for($i=0; $i < $conta; $i++) {
+				
+					$file = $arquivos[$i];
+					
+					$string = file_get_contents( $file ); 
+					// poderia ser um string ao invés de file_get_contents().
+					
+					$list = preg_match( '/glpiID\|s:[0-9]:"(.+)/', $string, $matches );
+					
+					$posicao = strpos($matches[0], 'glpiID|s:');
+					$string2 = substr($matches[0], $posicao, 25);
+					$string3 = explode("\"", $string2); 
+					
+					$arr_ids[] = $string3[1];
+				
+				}
+				}
+				
+				$ids = array_values($arr_ids);
+				$ids2 = implode("','",$ids);
+				
+				$query_name = 
+				"SELECT firstname AS name, realname AS sname, id AS uid, name AS glpiname 
+				FROM glpi_users
+				WHERE id IN ('".$ids2."')
+				ORDER BY name"; 
+				
+				$result_name = $DB->query($query_name); 
+				$num_users = $DB->numrows($result_name);          
+				            
+				?>    
            <h3><?php echo __('Logged Users','dashboard')."  :  " .$num_users; ?></h3>
 
             </div>
             <!-- /widget-header -->
-<?php
+				<?php
 	          if($num_users <= 10) {
 	          	echo '<div class="widget-content striped" style="min-height:318px;">'; }
 	          else {
 	          	echo '   <div class="widget-content striped">'; }	          	
-?>        
+				?>        
               <table id="logged_users" class="table table-hover table-bordered table-condensed" >
         <!--      <th style="text-align: center;"><?php echo __('','dashboard'); ?></th> -->              
 				<?php
 								
 				while($row_name = $DB->fetch_assoc($result_name)) 
 					{
-						echo "<tr><td style='text-align: left;'><img src='http://confronta.mpro.gov/fotos_rh/". $row_name['glpiname'] .".jpg' width=40px height=50px> &nbsp;&nbsp;&nbsp;
+						echo "<tr><td style='text-align: left;'><img src='http://confronta.mpro.gov/fotos_rh/". $row_name['glpiname'] .".jpg' width=30px height=40px> &nbsp;&nbsp;&nbsp;
 						      <a href=../../../front/user.form.php?id=".$row_name['uid']." target=_blank style='color: #526273;'>
 						".$row_name['name']." ".$row_name['sname']." (".$row_name['uid'].")</a>	</td></tr>";												
 					}
@@ -1000,13 +1073,11 @@ $num_users = $DB->numrows($result_name);
             </div>
             <!-- /widget-content --> 
           </div>
-	</div>          
-          		
-          <!-- content row 2 --> 
-	<!-- </div> -->          
           
-   </div>   
-    
+	</div>                    		
+          <!-- content row 2 --> 	          
+   </div> 
+     
 	</div> 
  
 <script>
@@ -1016,17 +1087,17 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 </script>
 
-<span class="go-top" onclick="scrollWin()">
-   <i class="fa fa-chevron-up"></i>&nbsp; Top     						
-</span>        
-        
-    </div>    
-</div>
-<!-- end main-content -->
-</div>
-
+    </div>        
+	</div>
+	<!-- end main-content -->
+	</div>
+		<div id="go-top" class="go-top" onclick="scrollWin()">
+		   <i class="fa fa-chevron-up"></i>&nbsp; Top     						
+		</div> 
+              
 </div>
 <!-- /.box-holder -->
+
 </div>
 
 <!-- /.site-holder -->
@@ -1036,21 +1107,21 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
  <!-- Include all compiled plugins (below), or include individual files as needed -->
- <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
- <script src="js/less-1.5.0.min.js"></script>
- 
- <script src="js/jquery.storage.js"></script>        
- <script src="js/jquery.accordion.js"></script>
- <script src="js/bootstrap-typeahead.js"></script>                
- <script src="js/bootstrap-progressbar.js"></script>
- <script src="js/galaxy/hovermenu.js" charset="utf-8"></script>
- <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
- <script src="js/jquery.easy-pie-chart.js"></script>
+<script src="js/jquery-ui-1.10.2.custom.min.js"></script>
+<script src="js/less-1.5.0.min.js"></script>
 
- <script src="js/bootstrap-switch.js"></script>
- <script src="js/jquery.address-1.6.min.js"></script>
+<script src="js/jquery.storage.js"></script>        
+<script src="js/jquery.accordion.js"></script>
+<script src="js/bootstrap-typeahead.js"></script>                
+<script src="js/bootstrap-progressbar.js"></script>
+<script src="js/galaxy/hovermenu.js" charset="utf-8"></script>
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/jquery.easy-pie-chart.js"></script>
+
+<script src="js/bootstrap-switch.js"></script>
+<script src="js/jquery.address-1.6.min.js"></script>
  
- <script src="js/highcharts.js" type="text/javascript" ></script>
+<script src="js/highcharts.js" type="text/javascript" ></script>
 <script src="js/highcharts-3d.js" type="text/javascript" ></script>
 <script src="js/modules/exporting.js" type="text/javascript" ></script>
 <script src="js/themes/grid.js" type="text/javascript" ></script>
@@ -1071,16 +1142,16 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
 <link href="css/odometer.css" rel="stylesheet">
 <script src="js/odometer.js"></script>
 
-                <script>
-                    $('document').ready(function(){
-                        $("[name='my-checkbox']").bootstrapSwitch();
-                    });
-                </script>
+    <script>
+        $('document').ready(function(){
+            $("[name='my-checkbox']").bootstrapSwitch();
+        });
+    </script>
 
-                <!-- Remove below two lines in production --> 
-                
-                <script src="js/theme-options.js"></script>
-                
-                <script src="js/core.js"></script> 
-            </body>
-            </html>
+    <!-- Remove below two lines in production --> 
+    
+    <script src="js/theme-options.js"></script>
+    
+    <script src="js/core.js"></script> 
+</body>
+</html>

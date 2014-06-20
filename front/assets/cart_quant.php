@@ -44,8 +44,6 @@ $DB->data_seek($result_os,0);
 while ($row_result = $DB->fetch_assoc($result_os))	
 {		
 
-//$tipo = strtolower($row_result['name']);
-//$name = strtolower($row_result['name'])."s";
 $id = $row_result['id'];
 
 $query = "
@@ -86,6 +84,20 @@ $(document).ready(function() {
         "sPaginationType": "full_numbers",
         "bFilter":false,
         "aaSorting": [[2,'desc'], [0,'asc']],
+        
+        "sDom": 'T<"clear">lfrtip',
+        "sSwfPath": "copy_csv_xls_pdf.swf",
+  	     "oTableTools": {
+            "aButtons": [
+                "copy",
+                "print",
+                {
+                    "sExtends":    "collection",
+                    "sButtonText": "Save",
+                    "aButtons":    [ "csv", "xls", "pdf" ]
+                }
+            ]
+        }
 //       "aoColumnDefs": [{ "sWidth": "45%", "aTargets": [2] }],
 //        "sDom": 'lf<"fixed_height"t>ip'
         //"sScrollY": "270px",
@@ -95,31 +107,3 @@ $(document).ready(function() {
 } );
 		
 </script>  
-
-
-<?php
-		
-/*
-
-SELECT glpi_cartridgeitems.id, glpi_cartridgeitems.name AS name, glpi_cartridgeitems.ref, COUNT( glpi_cartridges.cartridgeitems_id ) AS conta
-FROM `glpi_cartridges` , glpi_cartridgeitems
-WHERE glpi_cartridgeitems.is_deleted =0
-AND glpi_cartridgeitems.id = glpi_cartridges.cartridgeitems_id
-GROUP BY glpi_cartridges.cartridgeitems_id
-ORDER BY `conta` DESC
-
-
-### usados
-
-SELECT glpi_cartridgeitems.id, glpi_cartridgeitems.name AS name, COUNT( glpi_cartridges.cartridgeitems_id ) AS conta
-FROM `glpi_cartridges` , glpi_cartridgeitems
-WHERE glpi_cartridgeitems.is_deleted =0
-AND glpi_cartridgeitems.id = glpi_cartridges.cartridgeitems_id
-AND glpi_cartridges.printers_id <>0
-AND glpi_cartridges.cartridgeitems_id = 2
-GROUP BY glpi_cartridges.cartridgeitems_id
-ORDER BY `conta` DESC
-
-*/		
-		
-?>

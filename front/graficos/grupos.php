@@ -78,7 +78,7 @@ $datahoje = date("Y-m-d");
 <?php
     
 echo'
-<table style="margin-left: 16px; margin-top:6px; align:rigth;" border=0><tr><td>
+<table style="margin-left: 16px; margin-top:6px; align:right;" border=0><tr><td>
     <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
     <input class="span8" size="14" type="text" name="date1" value="'.$data_ini.'">
     <span class="add-on"><i class="icon-th"></i></span>

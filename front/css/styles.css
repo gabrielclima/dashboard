@@ -146,8 +146,7 @@
 }
 
 
-.form_rel {
-	
+.form_rel {	
 	/*width: 900px;
 	margin-left: -500px;
 	left: 52%; */
@@ -160,8 +159,6 @@
 	margin-top: 25px;
 	margin-left: 20%;
 }
-
-
 
 #charts {
 	/*width: 1000px;
@@ -1826,14 +1823,13 @@ table.sortable thead {
   background-color: #F2F2F2;
 }
 
-.go-top{
+#go-top{
 	background-color:#c1c1c1;
-	cursor:pointer;
-	display:block;
+	cursor:pointer;	
 	font-size:14px;
-	margin-bottom:20px;
+	margin-bottom:10px;
 	margin-right:10px;
-	margin-top: 420px;
+	
 	padding:0 6px 6px;
 	text-decoration:none;
 	border-radius:4px;
@@ -1841,10 +1837,11 @@ table.sortable thead {
 	text-transform:uppercase;
 	text-align: right;
 	width:65px;
-	float: right;	
+	float: right;
+	position: relative;	
 }
 
-.go-top i{
+#go-top i{
 	color:#fff;
 }
 

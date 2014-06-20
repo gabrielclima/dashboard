@@ -17,11 +17,7 @@ $total = $DB->result($result,0,'id');
 
 $arr_totals[$asset] = $total;
 
-//$global+=$total;
-
 }
-
-//print_r($arr_totals);
 
 $grf_os2 = array_keys($arr_totals);
 $quant_os2 = array_values($arr_totals);

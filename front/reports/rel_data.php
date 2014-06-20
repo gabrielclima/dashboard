@@ -90,16 +90,28 @@ function dropdown( $name, array $options, $selected=null )
 <link href="../css/bootstrap.css" rel="stylesheet" type="text/css" />
 <link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
 <link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
-<script language="javascript" src="../js/jquery.min.js"></script>
+
+<script language="javascript" src="../js/jquery.js"></script>
 <link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
 <script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
 
+<script src="../js/bootstrap.min.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
-<script src="../js/sorttable.js"></script>
+<!-- <script src="../js/sorttable.j"></script> -->
+<script src="../js/media/js/jquery.dataTables.min.js"></script>
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 
+<style type="text/css" title="currentStyle">	
+	@import "../js/media/css/jquery.dataTables_themeroller.css";
+	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
+	
+select { width: 60px; }
+table.dataTable { empty-cells: show; }
+</style>
 
 </head>
 
@@ -179,6 +191,7 @@ $selected = 0;
 
 echo dropdown( $name, $options, $selected );
 ?>
+
 </td>
 </tr>
 <tr><td height="15px"></td></tr>
@@ -264,7 +277,6 @@ switch($post_date) {
 //status
 
 $status = "";
-$version = substr($CFG_GLPI["version"],0,5);
 
 $status_open = "('2','1','3','4')";
 $status_close = "('5','6')";
@@ -274,13 +286,13 @@ $status_all = "('2','1','3','4','5','6')";
 if(isset($_GET['stat'])) {
 
     if($_GET['stat'] == "open") {
-        $status = $status_open;
+      $status = $status_open;
     }
     elseif($_GET['stat'] == "close") {
-        $status = $status_close;
+      $status = $status_close;
     }
     else {
-    $status = $status_all;
+    	$status = $status_all;
     }
 }
 
@@ -316,7 +328,9 @@ WHERE glpi_tickets.date ".$sel_date."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.status IN ".$status."
 ORDER BY id DESC
-LIMIT ". $primeiro_registro .", ". $num_por_pagina ."";
+";
+
+//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
 
 $result_cham = $DB->query($sql_cham);
 
@@ -381,13 +395,6 @@ else { $barra = 0;}
 //listar chamados
 
 echo "
-<script>
-function pagina()
-{
-var page=document.getElementById('npage').value;
-location.href = 'rel_data.php?con=1&stat=".$status1."&date1=".$data_ini2."&date2=".$data_fin2."&date=".$id_date ."&npage='+page;
-}
-</script>
 
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
@@ -406,32 +413,25 @@ location.href = 'rel_data.php?con=1&stat=".$status1."&date1=".$data_ini2."&date2
 <table align='right' style='margin-bottom:10px;'>
 <tr>
 
-<td width=90%;>
-<select id='npage' class='chosen-select' style='width:80px' onchange='pagina();'>
-  <option value='0'>".__('Show')."</option>
-  <option value='20'>20</option>
-  <option value='30'>30</option>
-  <option value='50'>50</option>
-  <option value='100'>100</option>
-</select>
-</td>
-
 <td><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_data.php?con=1&stat=open&ent=".$id_ent."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ". __('Opened','dashboard'). "</button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_data.php?con=1&stat=close&ent=".$id_ent."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".  __('Closed','dashboard') ." </button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_data.php?con=1&stat=all&ent=".$id_ent."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ". __('All','dashboard') ." </button> </td>
 </tr>
 </table>
 
-<table class='table table-striped sortable'  style='font-size: 12px; font-weight:bold;' cellpadding = 2px>
+<table id='data' class='display'  style='font-size: 12px; font-weight:bold;' cellpadding = 2px>
+<thead>
 <tr>
-<td style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Tickets','dashboard')." </td>
-<td></td>
-<td style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Title','dashboard')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Requester','dashboard')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Technician','dashboard')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Opened','dashboard')."</td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Closed','dashboard')." </td>
+<th style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Tickets','dashboard')." </th>
+<th></th>
+<th style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Title','dashboard')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Requester','dashboard')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Technician','dashboard')." </th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Opened','dashboard')."</th>
+<th style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Closed','dashboard')." </th>
 </tr>
+</thead>
+<tbody>
 ";
 
 
@@ -482,11 +482,52 @@ echo "
 <td> ". $row_tec['name'] ." ".$row_tec['sname'] ." </td>
 <td> ". conv_data($row['date']) ." </td>
 <td> ". conv_data($row['solvedate']) ." </td>
-<!-- <td> ". Ticket::getStatus($row['status']) ." </td> -->
 </tr>";
 }
 
-echo "</table></div>"; ?>
+echo "</tbody>
+		</table>
+		</div>"; ?>
+
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    oTable = $('#data').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "bFilter": false,
+        "aaSorting": [[0,'desc']], 
+        "iDisplayLength": 25,
+    	  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], 
+
+        "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+         "aButtons": [
+             "copy",
+             "print",
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "Save",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             } ]
+        }
+		  
+    });    
+} );
+</script>
+
+<script type="text/javascript">
+	// For demo to fit into DataTables site builder...
+/*	$('#data')
+		.removeClass( 'display' )
+		.addClass('table table-striped');
+*/		
+</script>
 
 
 <?php
@@ -533,7 +574,7 @@ $total_paginas = ceil($total_paginas);
 
 // exibir painel na tela
 
-echo "$prev_link  $painel  $next_link";
+//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
 // fim paginacao 2
 }
@@ -547,9 +588,7 @@ echo "
 <tr><td style='vertical-align:middle; text-align:center;'> <span style='color: #000;'>" . __('No ticket found', 'dashboard') . "</td></tr>
 <tr></tr>
 </table></div>";
-
 }
-
 }
 ?>
 

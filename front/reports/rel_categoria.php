@@ -94,10 +94,23 @@ function dropdown( $name, array $options, $selected=null )
 <script language="javascript" src="../js/jquery.min.js"></script>  
 <link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
 <script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
-<script src="../js/sorttable.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
+
+<!-- <script src="../js/sorttable.j"></script> -->
+<script src="../js/media/js/jquery.dataTables.min.js"></script>
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+
+<style type="text/css" title="currentStyle">	
+	@import "../js/media/css/jquery.dataTables_themeroller.css";
+	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
+	
+select { width: 60px; }
+table.dataTable { empty-cells: show; }
+
+</style>
    
 </head>
 
@@ -172,7 +185,7 @@ ORDER BY `name` ASC
 $result_cat = $DB->query($sql_cat);
 
 $arr_cat = array();
-$arr_cat[0] = "-- ". __('Select a Category', 'dashboard') . " --" ;
+$arr_cat[0] = "-- ". __('Select a category', 'dashboard') . " --" ;
 
 
 while ($row_result = $DB->fetch_assoc($result_cat))		
@@ -226,34 +239,33 @@ else {
 }  
 
 if(!isset($_POST["sel_cat"])) {
-
-$id_cat = $_GET["cat"];	
+	$id_cat = $_GET["cat"];	
 }
 
 else {
-$id_cat = $_POST["sel_cat"];
+	$id_cat = $_POST["sel_cat"];
 }
 
-if($id_cat == "") {
-echo '<script language="javascript"> alert(" ' . __('Select a Category', 'dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="rel_categoria.php"; </script>';
+if($id_cat == "" || $id_cat == 0) {
+	echo '<script language="javascript"> alert(" ' . __('Select a category', 'dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="rel_categoria.php"; </script>';
 }
 
 if($data_ini2 == $data_fin2) {
-$datas2 = "LIKE '".$data_ini2."%'";	
+	$datas2 = "LIKE '".$data_ini2."%'";	
 }	
 
 else {
-$datas2 = "BETWEEN '".$data_ini2." 00:00:00' AND '".$data_fin2." 23:59:59'";	
+	$datas2 = "BETWEEN '".$data_ini2." 00:00:00' AND '".$data_fin2." 23:59:59'";	
 }
 
 //status
 
 $status = "";
 
-	$status_open = "('2','1','3','4')";
-	$status_close = "('5','6')";	
-	$status_all = "('2','1','3','4','5','6')";
+$status_open = "('2','1','3','4')";
+$status_close = "('5','6')";	
+$status_all = "('2','1','3','4','5','6')";
 
 
 if(isset($_GET['stat'])) {
@@ -303,9 +315,9 @@ WHERE glpi_tickets.itilcategories_id = ".$id_cat."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
-ORDER BY id DESC
-LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
-";
+ORDER BY id DESC ";
+
+//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
 
 $result_cham = $DB->query($sql_cham);
 
@@ -330,9 +342,8 @@ $consulta = $conta_cons;
 if($consulta > 0) {
 
 if(!isset($_GET['pagina'])) {
-$primeiro_registro = 0;
-$pagina = 1;
-
+	$primeiro_registro = 0;
+	$pagina = 1;
 }
 else {
 	$pagina = $_GET['pagina'];
@@ -363,18 +374,18 @@ if($status == $status_close ) {
 }
 
 else {
-
-//porcentagem
-
-$perc = round(($abertos*100)/$conta_cons,1);
-$barra = 100 - $perc;
-
-// cor barra 
-
-if($barra == 100) { $cor = "progress-success"; }
-if($barra >= 80 and $barra < 100) { $cor = ""; } 
-if($barra > 51 and $barra < 80) { $cor = "progress-warning"; }
-if($barra > 0 and $barra <= 50) { $cor = "progress-danger"; }
+	
+	//porcentagem
+	
+	$perc = round(($abertos*100)/$conta_cons,1);
+	$barra = 100 - $perc;
+	
+	// cor barra 
+	
+	if($barra == 100) { $cor = "progress-success"; }
+	if($barra >= 80 and $barra < 100) { $cor = ""; } 
+	if($barra > 51 and $barra < 80) { $cor = "progress-warning"; }
+	if($barra > 0 and $barra <= 50) { $cor = "progress-danger"; }
 
 }
 }
@@ -395,15 +406,6 @@ $ent_name = $DB->fetch_assoc($result_nm);
 //listar chamados
 
 echo "
-
-<script>
-function pagina()
-{
-var page=document.getElementById('npage').value;
-location.href = 'rel_categoria.php?con=1&stat=".$status1."&date1=".$data_ini2."&date2=".$data_fin2."&cat=".$id_cat ."&npage='+page;
-} 
-</script>
-
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
 <table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
@@ -423,32 +425,25 @@ location.href = 'rel_categoria.php?con=1&stat=".$status1."&date1=".$data_ini2."&
 <table align='right' style='margin-bottom:10px;'>
 <tr>
 
-<td width=90%;>
-<select id='npage' class='chosen-select' style='width:80px' onchange='pagina();'>
-  <option value='0'>".__('Show')."</option>
-  <option value='20'>20</option>
-  <option value='30'>30</option>
-  <option value='50'>50</option>
-  <option value='100'>100</option>
-</select> 
-</td>
-
 <td><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_categoria.php?con=1&stat=open&cat=".$id_cat."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened', 'dashboard')." </button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_categoria.php?con=1&stat=close&cat=".$id_cat."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed', 'dashboard')." </button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_categoria.php?con=1&stat=all&cat=".$id_cat."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All', 'dashboard')." </button> </td>
 </tr>
 </table>
 
-<table class='table table-striped sortable'  style='font-size: 12px; font-weight:bold;' cellpadding = 2px>
+<table id='cat' class='display'  style='font-size: 12px; font-weight:bold;' cellpadding = 2px>
+<thead>
 <tr>
 <td style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Tickets', 'dashboard')." </td>
 <td> </td>
 <td style='font-size: 12px; font-weight:bold; color:#000; text-align: center; cursor:pointer;'> ".__('Title', 'dashboard')." </td>
 <td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Requester', 'dashboard')." </td>
 <td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Technician', 'dashboard')." </td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Opening date', 'dashboard')."</td>
-<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Close date', 'dashboard')." </td>
+<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Opened', 'dashboard')."</td>
+<td style='font-size: 12px; font-weight:bold; color:#000; cursor:pointer;'> ".__('Closed', 'dashboard')." </td>
 </tr>
+</thead>
+<tbody>
 ";
 
 
@@ -503,8 +498,42 @@ echo "
 </tr>";
 }
 
-echo "</table>	</div>"; ?>
+echo "</tbody>
+		</table>
+		</div>"; ?>
 
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    oTable = $('#cat').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "bFilter": false,
+        "aaSorting": [[0,'desc']], 
+        "iDisplayLength": 25,
+    	  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], 
+
+        "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+         "aButtons": [
+             "copy",
+             "print",
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "Save",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             }
+         ]
+        }
+		  
+    });    
+} );
+		
+</script> 
 
 <?php
 // paginacao 2
@@ -546,7 +575,7 @@ $total_paginas = ceil($total_paginas);
     }
   }
 // exibir painel na tela
-echo "$prev_link  $painel  $next_link";
+//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
 // fim paginacao 2
 }

@@ -191,7 +191,7 @@ msgid "Select a technician"
 msgstr "Selecione um técnico"
 
 msgid "Select a requester"
-msgstr "Selecione um Requerente"
+msgstr "Selecione um requerente"
 
 msgid "Title"
 msgstr "Título"
@@ -238,10 +238,10 @@ msgstr "Últimos 30 dias"
 msgid "Last 3 months"
 msgstr "Últimos 3 meses"
 
-msgid "Select a Entity"
-msgstr "Selecione uma Entidade"
+msgid "Select a entity"
+msgstr "Selecione uma entidade"
 
-msgid "Select a Group"
+msgid "Select a group"
 msgstr "Selecione um grupo"
 
 msgid "Version"
@@ -355,14 +355,20 @@ msgstr "Selecione"
 msgid "by Category"
 msgstr "por Categoria"
 
-msgid "Select a Category"
+msgid "Select a category"
 msgstr "Selecione uma categoria"
 
 msgid "by Location"
 msgstr "por Localização"
 
-msgid "Select a Location"
+msgid "Select a location"
 msgstr "Selecione uma localização"
 
 msgid "Welcome"
 msgstr "Bem-vindo"
+
+msgid "Select a asset"
+msgstr "Selecione um ativo"
+
+msgid "by Assets"
+msgstr "por Ativos"

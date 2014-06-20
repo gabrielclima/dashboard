@@ -45,7 +45,21 @@ $(document).ready(function() {
         "bFilter":false,
         "aaSorting": [[1,'desc'], [0,'asc']],
         "aoColumnDefs": [{ "sWidth": "60%", "aTargets": [1] }],
-		  //"sScrollY": "250px",
+        "sDom": 'T<"clear">lfrtip',
+        "sSwfPath": "/js/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
+  	     "oTableTools": {
+            "aButtons": [
+                "copy",
+                "print",
+                {
+                    "sExtends":    "collection",
+                    "sButtonText": "Save",
+                    "aButtons":    [ "csv", "xls", "pdf" ]
+                }
+            ]
+        }	        
+        
+ 		  //"sScrollY": "250px",
         //"bPaginate": false,
         //"bScrollCollapse": true
     });

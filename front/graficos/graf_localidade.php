@@ -118,7 +118,7 @@ function dropdown( $name, array $options, $selected=null )
 
 $res_loc = $DB->query($sql_loc);
 $arr_loc = array();
-$arr_loc[0] = "-- ". __('Select a Location','dashboard') . " --" ;
+$arr_loc[0] = "-- ". __('Select a location','dashboard') . " --" ;
 
 $DB->data_seek($result_loc, 0);
 
@@ -238,7 +238,7 @@ $id_loc = $_POST["sel_loc"];
 }
 
 if($id_loc == " ") {
-echo '<script language="javascript"> alert(" ' . __('Select a Location','dashboard') . ' "); </script>';
+echo '<script language="javascript"> alert(" ' . __('Select a location','dashboard') . ' "); </script>';
 echo '<script language="javascript"> location.href="graf_localidade.php"; </script>';
 }
 
