@@ -50,6 +50,18 @@ $(document).ready(function() {
         "bFilter":false,
         "aaSorting": [[2,'desc'], [0,'asc']],
         "aoColumnDefs": [{ "sWidth": "45%", "aTargets": [1] }],
+        "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+            "aButtons": [
+                "copy",
+                "print",
+                {
+                    "sExtends":    "collection",
+                    "sButtonText": "Save",
+                    "aButtons":    [ "csv", "xls", "pdf" ]
+                }
+            ]
+        }
 		  //"sScrollY": "270px",
         //"bPaginate": false,
         //"bScrollCollapse": true

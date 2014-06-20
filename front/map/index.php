@@ -60,9 +60,6 @@ $teste = $DB->fetch_assoc($result1);
 
 $conta_teste = count($teste);
 
-//echo "teste ".$conta_teste; 
-//http://10.20.15.114/glpi/front/ticket.php?is_deleted=0&field[0]=view&searchtype[0]=contains&contains[0]=notold&link[1]=AND&field[1]=80&searchtype[1]=equals&contains[1]=26&itemtype=Ticket&start=0
-
 $DB->data_seek($result_id, 0) ;
 while ($row = $DB->fetch_assoc($result_id))
 {

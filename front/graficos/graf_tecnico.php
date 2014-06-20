@@ -64,8 +64,7 @@ global $DB;
 
 if(!empty($_POST['submit']))
 {	
-	$data_ini =  $_POST['date1'];
-	
+	$data_ini =  $_POST['date1'];	
 	$data_fin = $_POST['date2'];
 }
 
@@ -118,18 +117,13 @@ function dropdown( $name, array $options, $selected=null )
 }
 
 
-
-$res_tec = $DB->query($sql_tec);
-$arr_tec = array();
-$arr_tec[0] = "-- ". __('Select technician','dashboard') . " --" ;
-
 $DB->data_seek($result_tec, 0) ;
 
 while ($row_result = $DB->fetch_assoc($result_tec))		
-	{ 
+{ 
 	$v_row_result = $row_result['id'];
 	$arr_tec[$v_row_result] = $row_result['name']." ".$row_result['sname'] ;			
-	} 
+} 
 
 $name = 'sel_tec';
 $options = $arr_tec;
@@ -149,8 +143,8 @@ $selected = 0;
 	
 <div id="titulo_graf" >
 	
-   <?php echo __('Tickets','dashboard') ." ". __('by Technician','dashboard');//." - ". $mes ." ".$ano.":" ; ?> 
-	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> <?php //echo "&nbsp; ".$total_mes['total'] ; ?> </span> </div>
+   <?php echo __('Tickets','dashboard') ." ". __('by Technician','dashboard'); ?> 
+	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;">  </span> </div>
 
 <?php
 
@@ -158,7 +152,7 @@ $selected = 0;
 
 $res_tec = $DB->query($sql_tec);
 $arr_tec = array();
-$arr_tec[0] = "-- ". __('Select technician','dashboard') . " --" ;
+$arr_tec[0] = "-- ". __('Select a technician','dashboard') . " --" ;
 
 $DB->data_seek($result_tec, 0) ;
 
@@ -172,7 +166,6 @@ $name = 'sel_tec';
 $options = $arr_tec;
 $selected = 0;
 ?>
-
 
 <div id="datas-tec" class="span12 row-fluid" > 
 <form id="form1" name="form1" class="form2" method="post" action="?date1=<?php echo $data_ini ?>&date2=<?php echo $data_fin ?>&con=1" onsubmit="datai();dataf();"> 
@@ -223,7 +216,7 @@ echo dropdown( $name, $options, $selected );
 </td>
 </tr>
 	
-	</table>
+</table>
 <?php Html::closeForm(); ?>
 <!-- </form> -->
 </div>
@@ -257,16 +250,15 @@ else {
 }  
 
 if(!isset($_POST["sel_tec"])) {
-
-$id_tec = $_GET["tec"];	
+	$id_tec = $_GET["tec"];	
 }
 
 else {
-$id_tec = $_POST["sel_tec"];
+	$id_tec = $_POST["sel_tec"];
 }
 
 if($id_tec == 0) {
-echo '<script language="javascript"> alert(" ' . __('Select technician','dashboard') . ' "); </script>';
+echo '<script language="javascript"> alert(" ' . __('Select a technician','dashboard') . ' "); </script>';
 echo '<script language="javascript"> location.href="graf_tecnico.php"; </script>';
 }
 
@@ -287,11 +279,11 @@ $tec_name = $DB->fetch_assoc($result_nm);
 
 
 if($data_ini == $data_fin) {
-$datas = "LIKE '".$data_ini."%'";	
+	$datas = "LIKE '".$data_ini."%'";	
 }	
 
 else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
+	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
 
@@ -315,35 +307,33 @@ echo $tec_name['name']." ".$tec_name['sname']." - <span style = 'color:#000;'> "
 
  ?>
 
-<div id="graf_linhas" class="span12" style="height: 450px; margin-top: 25px; margin-left: -5px;">
-<?php  include ("./inc/graflinhas_tec.inc.php"); ?>
-</div>
+	<div id="graf_linhas" class="span12" style="height: 450px; margin-top: 25px; margin-left: -5px;">
+		<?php  include ("./inc/graflinhas_tec.inc.php"); ?>
+	</div>
+	
+	
+	<div id="graf2" class="span6" >
+		<?php  include ("./inc/grafpie_stat_tec.inc.php");  ?>
+	</div>
+	
+	
+	<div id="graf4" class="span6" >
+		<?php include ("./inc/grafcat_tec.inc.php"); ?>
+	</div>
 
-
-<div id="graf2" class="span6" >
-<?php  include ("./inc/grafpie_stat_tec.inc.php");  ?>
-</div>
-
-
-<div id="graf4" class="span6" >
-<?php include ("./inc/grafcat_tec.inc.php"); ?>
-</div>
-
-<div id="graf_sat" class="span12" style="height: 450px; margin-top:30px; margin-bottom:30px; margin-left: -5px;">
-<?php include ("./inc/grafcol_sat_tec.inc.php"); ?>
-</div>
+	<div id="graf_sat" class="span12" style="height: 450px; margin-top:30px; margin-bottom:30px; margin-left: -5px;">
+		<?php include ("./inc/grafcol_sat_tec.inc.php"); ?>
+	</div>
 
 <?php 
 
 }
 ?>
 
-</div>
-
-</div>
-
-</div>
-</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 </body>
 </html>

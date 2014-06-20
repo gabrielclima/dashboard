@@ -75,15 +75,13 @@ function dropdown( $name, array $options, $selected=null )
 
 function time_ext($solvedate)
 {
-// TEST
-// 1 Day 6 Hours 50 Minutes 31 Seconds ~ 111031 seconds
 
+// 1 Day 6 Hours 50 Minutes 31 Seconds ~ 111031 seconds
 $time = $solvedate; // time duration in seconds
 
  if ($time == 0){
         return '';
     }
-
 
 $days = floor($time / (60 * 60 * 24));
 $time -= $days * (60 * 60 * 24);
@@ -121,14 +119,27 @@ return $return;
 <link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
 <link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
 
-<script language="javascript" src="../js/jquery.min.js"></script>
+<script language="javascript" src="../js/jquery.js"></script>
 <link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
 <script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
 
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
-<script src="../js/sorttable.js"></script>
+
+<!-- <script src="../js/sorttable.j"></script> -->
+<script src="../js/media/js/jquery.dataTables.min.js"></script>
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+
+<style type="text/css" title="currentStyle">	
+	@import "../js/media/css/jquery.dataTables_themeroller.css";
+	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
+	
+select { width: 60px; }
+table.dataTable { empty-cells: show; }
+</style>
+
 </head>
 
 <body style="background-color: #e5e5e5;">
@@ -156,12 +167,9 @@ $tec = $DB->fetch_assoc($result_tec);
 <div id="head" class="row-fluid">
 
 <style type="text/css">
-a:link, a:visited, a:active {
-    text-decoration: none
-    }
-a:hover {
-    color: #000099;
-    }
+a:link, a:visited, a:active { text-decoration: none; }
+a:hover { color: #000099; }
+
 </style>
 
 <a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
@@ -174,6 +182,7 @@ a:hover {
     <table border="0" cellspacing="0" cellpadding="3" bgcolor="#efefef">
     <tr>
 <td style="width: 250px;">
+
 <?php
 $url = $_SERVER['REQUEST_URI'];
 $arr_url = explode("?", $url);
@@ -358,8 +367,9 @@ AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
 GROUP BY id
 ORDER BY id DESC
-LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
+
 ";
+//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
 
 $result_cham = $DB->query($sql_cham);
 
@@ -456,19 +466,14 @@ while($row = $DB->fetch_assoc($result_nome)){
 
 echo "
 
-<script>
-function pagina()
-{
-var page=document.getElementById('npage').value;
-location.href = 'rel_usuario.php?con=1&stat=".$status1."&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec ."&npage='+page;
-}
-</script>
-
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
 <table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
-<tr><td style='vertical-align:middle;'> <span style='color: #000;'>".__('Requester', 'dashboard').": </span>  ". $row['firstname'] ." ". $row['realname']. "</td>
+<tr>
+<td style='vertical-align:middle;'> <span style='color: #000;'>".__('Requester', 'dashboard').": </span>  ". $row['firstname'] ." ". $row['realname']. "</td>
 <td style='vertical-align:middle;'> <span style='color: #000;'>".__('Tickets', 'dashboard').": </span>". $conta_cons ."</td>
+<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
+</td>
 
 <td style='vertical-align:middle; width: 170px; '>
     <div class='progress ". $cor ." progress-striped active' style='margin-top: 15px;'>
@@ -481,33 +486,26 @@ location.href = 'rel_usuario.php?con=1&stat=".$status1."&date1=".$data_ini2."&da
 <table align='right' style='margin-bottom:10px;'>
 <tr>
 
-<td width=90%;>
-<select id='npage' class='chosen-select' style='width:80px' onchange='pagina();'>
-  <option value='0'>".__('Show')."</option>
-  <option value='20'>20</option>
-  <option value='30'>30</option>
-  <option value='50'>50</option>
-  <option value='100'>100</option>
-</select>
-</td>
-
 <td><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_usuario.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened', 'dashboard') ." </button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_usuario.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed', 'dashboard')." </button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_usuario.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All', 'dashboard')." </button> </td>
 </tr>
 </table>
 
-<table class='table table-hover table-striped sortable' style='font-size: 13px; font-weight:bold;' cellpadding = 2px>
-
+<table id='users' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px>
+<thead>
+<tr>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets', 'dashboard') ." </th>
-<th></th>
+<th>&nbsp;</th>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title', 'dashboard') ."</th>
 <th style=' color: #000; cursor:pointer;'> ". __('Opening date', 'dashboard') ."</th>
 <th style=' color: #000; cursor:pointer;'> ". __('Close date', 'dashboard') ."</th>
 <th style=' color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
+</tr>
+</thead>
+<tbody>
 ";
 }
-
 
 //listar chamados
 
@@ -534,8 +532,41 @@ while($row = $DB->fetch_assoc($result_cham)){
 </tr>";
 }
 
-echo "</table></div>"; ?>
+echo "</tbody>
+		</table>
+		</div>"; ?>
 
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    oTable = $('#users').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "bFilter": false,
+        "aaSorting": [[0,'desc']], 
+        "iDisplayLength": 25,
+    	  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], 
+
+        "sDom": 'T<"clear">lfrtip',
+	      "oTableTools": {
+	       "aButtons": [
+	       "copy",
+	       "print",
+	       {
+	           "sExtends":    "collection",
+	           "sButtonText": "Save",
+	           "aButtons":    [ "csv", "xls",
+	            {
+	           "sExtends": "pdf",
+	           "sPdfOrientation": "landscape",
+	           "sPdfMessage": ""
+	            } ]
+	       } ]
+        }
+		  
+    });    
+} );
+		
+</script>  
 
 <?php
 // paginacao 2
@@ -577,7 +608,7 @@ $total_paginas = ceil($total_paginas);
     }
   }
 // exibir painel na tela
-echo "$prev_link  $painel  $next_link";
+//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
 // fim paginacao 2
 }
@@ -593,9 +624,7 @@ echo "
 </table></div>";
 
 }
-
 }
-
 }
 ?>
 

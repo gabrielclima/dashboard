@@ -116,7 +116,7 @@ function dropdown( $name, array $options, $selected=null )
 
 $res_grp = $DB->query($sql_grp);
 $arr_grp = array();
-$arr_grp[0] = "-- ". __('Select Group','dashboard') . " --" ;
+$arr_grp[0] = "-- ". __('Select a group','dashboard') . " --" ;
 
 $DB->data_seek($result_grp, 0);
 
@@ -145,7 +145,7 @@ $selected = "0";
 <div id="titulo_graf">
 
 	  <?php echo __('Tickets','dashboard') ." ". __('by Group','dashboard'); ?> 
-	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> <?php //echo "&nbsp; ".$total_mes['total'] ; ?> </span> </div>
+	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> </span> </div>
 
 <div id="datas-tec" class="span12 row-fluid" > 
 <form id="form1" name="form1" class="form2" method="post" action="?date1=<?php echo $data_ini ?>&date2=<?php echo $data_fin ?>&con=1" onsubmit="datai();dataf();"> 
@@ -228,26 +228,25 @@ else {
 }  
 
 if(!isset($_POST["sel_grp"])) {
-
-$id_grp = $_GET["grp"];	
+	$id_grp = $_GET["grp"];	
 }
 
 else {
-$id_grp = $_POST["sel_grp"];
+	$id_grp = $_POST["sel_grp"];
 }
 
 if($id_grp == "0") {
-echo '<script language="javascript"> alert(" ' . __('Select Group','dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="graf_grupo.php"; </script>';
+	echo '<script language="javascript"> alert(" ' . __('Select a group','dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="graf_grupo.php"; </script>';
 }
 
 
 if($data_ini == $data_fin) {
-$datas = "LIKE '".$data_ini."%'";	
+	$datas = "LIKE '".$data_ini."%'";	
 }	
 
 else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
+	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
 // nome do grupo
@@ -283,21 +282,21 @@ echo "</div>";
 
 
 <div id="graf_linhas" class="span12" style="height: 450px; margin-top: 25px; margin-left: -5px;">
-<?php include ("./inc/graflinhas_grupo.inc.php"); ?>
+	<?php include ("./inc/graflinhas_grupo.inc.php"); ?>
 </div>
 
 
 <div id="graf2" class="span6" >
-<?php  include ("./inc/grafpie_stat_grupo.inc.php"); ?>
+	<?php  include ("./inc/grafpie_stat_grupo.inc.php"); ?>
 </div>
 
 
 <div id="graf4" class="span6" >
-<?php include ("./inc/grafcat_grupo.inc.php"); ?>
+	<?php include ("./inc/grafcat_grupo.inc.php"); ?>
 </div>
 
 <div id="graf_user" class="span12" style="height: 450px; margin-top:30px; margin-bottom:30px; margin-left: -5px;">
-<?php  include ("./inc/grafbar_user_grupo.inc.php"); ?>
+	<?php  include ("./inc/grafbar_user_grupo.inc.php"); ?>
 </div>
 
 <?php 

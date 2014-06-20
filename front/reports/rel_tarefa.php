@@ -139,7 +139,18 @@ return $return;
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
-<script src="../js/sorttable.js"></script>
+<!-- <script src="../js/sorttable.j"></script> -->
+<script src="../js/media/js/jquery.dataTables.min.js"></script>
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+
+<style type="text/css" title="currentStyle">	
+	@import "../js/media/css/jquery.dataTables_themeroller.css";
+	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
+	
+select { width: 60px; }
+table.dataTable { empty-cells: show; }
+</style>
 
 </head>
 <body style="background-color: #e5e5e5;">
@@ -291,8 +302,8 @@ else {
 }
 
 if($id_tec == 0) {
-echo '<script language="javascript"> alert(" ' . __('Select a technician', 'dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="rel_tarefa.php"; </script>';
+	echo '<script language="javascript"> alert(" ' . __('Select a technician', 'dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="rel_tarefa.php"; </script>';
 }
 
 if($data_ini2 === $data_fin2) {
@@ -315,8 +326,9 @@ AND glpi_tickets.is_deleted = 0
 AND glpi_tickettasks.date ". $datas2 ."
 GROUP BY id
 ORDER BY id DESC
-LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
 ";
+//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
+
 
 $result_cham = $DB->query($sql_cham);
 
@@ -385,7 +397,9 @@ echo "
 </tr>
 </table>
 
-<table class='table table-hover table-striped sortable' style='font-size: 13px; font-weight:bold;' cellpadding = 2px>
+<table id='tarefa' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px>
+<thead>
+<tr>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Ticket') ."  </th>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Date') ." </th>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Description') ."</th>
@@ -393,6 +407,9 @@ echo "
 
 <th style='color: #000; cursor:pointer;'> ". __('Begin') ." </th>
 <th style='color: #000; cursor:pointer;'> ". __('End') ."  </th>
+</tr>
+</thead>
+<tbody>
 ";
 }
 
@@ -417,9 +434,43 @@ echo "
 </tr>";
 }
 
-echo "</table></div>";
+echo "</tbody>
+		</table>
+		</div>"; ?>
 
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    oTable = $('#tarefa').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "bFilter": false,
+        "aaSorting": [[0,'desc']], 
+        "iDisplayLength": 25,
+    	  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], 
 
+        "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+	       "aButtons": [
+	       "copy",
+	       "print",
+	       {
+	           "sExtends":    "collection",
+	           "sButtonText": "Save",
+	           "aButtons":    [ "csv", "xls",
+	            {
+	           "sExtends": "pdf",
+	           "sPdfOrientation": "landscape",
+	           "sPdfMessage": ""
+	            } ]
+	       } ]
+        }
+		  
+    });    
+} );
+		
+</script>  
+
+<?php
 // paginacao 2
 
 echo '<div id=pag align=center class="paginas navigation row-fluid">';
@@ -459,7 +510,7 @@ $total_paginas = ceil($total_paginas);
     }
   }
 // exibir painel na tela
-echo "$prev_link  $painel  $next_link";
+//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
 // fim paginacao 2
 }

@@ -80,7 +80,7 @@ $ent = $DB->fetch_assoc($result_ent);
 
 $res_ent = $DB->query($sql_ent);
 $arr_ent = array();
-$arr_ent[0] = "-- ". __('Select a Entity', 'dashboard') . " --" ;
+$arr_ent[0] = "-- ". __('Select a entity', 'dashboard') . " --" ;
 
 $DB->data_seek($result_ent, 0) ;
 
@@ -125,8 +125,7 @@ $selected = "0";
 <tr>
 	<td align="center" >
 		<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
-
-	<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='select_ent.php'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
+		<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='select_ent.php'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
 	</td>
 </tr>
 	
@@ -148,23 +147,22 @@ $sel = $_GET['sel'];
 if($sel == "1") {
  
 if(!isset($_POST["sel_ent"])) {
-
-$id_ent = $_GET["ent"];	
+	$id_ent = $_GET["ent"];	
 }
 
 else {
-$id_ent = $_POST["sel_ent"];
+	$id_ent = $_POST["sel_ent"];
 }
 
-if($id_ent == "") {
-echo '<script language="javascript"> alert(" ' . __('Select Entity', 'dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="select_ent.php"; </script>';
+if($id_ent == " ") {
+	echo '<script language="javascript"> alert(" ' . __('Select a entity', 'dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="select_ent.php"; </script>';
 }
 
 ?>
 
 <script type="text/javascript" >
-location.href="cham_entidades.php?ent=<?php echo $id_ent; ?>";
+	location.href="cham_entidades.php?ent=<?php echo $id_ent; ?>";
 </script>
 
 <p></p>

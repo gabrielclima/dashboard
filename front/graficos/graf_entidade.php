@@ -64,8 +64,7 @@ global $DB;
 
 if(!empty($_POST['submit']))
 {	
-	$data_ini =  $_POST['date1'];
-	
+	$data_ini =  $_POST['date1'];	
 	$data_fin = $_POST['date2'];
 }
 
@@ -118,7 +117,7 @@ function dropdown( $name, array $options, $selected=null )
 
 $res_ent = $DB->query($sql_ent);
 $arr_ent = array();
-$arr_ent[0] = "-- ". __('Select Entity','dashboard') . " --" ;
+$arr_ent[0] = "-- ". __('Select a entity','dashboard') . " --" ;
 
 $DB->data_seek($result_ent, 0);
 
@@ -146,8 +145,8 @@ $selected = "0";
 
 	<div id="titulo_graf" >
 	
-	  <?php echo __('Tickets','dashboard') ." ". __('by Entity','dashboard');//." - ". $mes ." ".$ano.":" ; ?> 
-	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> <?php //echo "&nbsp; ".$total_mes['total'] ; ?> </span> </div>
+	  <?php echo __('Tickets','dashboard') ." ". __('by Entity','dashboard'); ?> 
+	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> </span> </div>
 
 <div id="datas-tec" class="span12 row-fluid" > 
 <form id="form1" name="form1" class="form2" method="post" action="?date1=<?php echo $data_ini ?>&date2=<?php echo $data_fin ?>&con=1" onsubmit="datai();dataf();"> 
@@ -215,7 +214,6 @@ $con = $_GET['con'];
 
 if($con == "1") {
 		
-//echo $_POST["sel_ent"];
 
 if(!isset($_POST['date1']))
 {	
@@ -229,25 +227,24 @@ else {
 }  
 
 if(!isset($_POST["sel_ent"])) {
-
-$id_ent = $_GET["sel_ent"];	
+	$id_ent = $_GET["sel_ent"];	
 }
 
 else {
-$id_ent = $_POST["sel_ent"];
+	$id_ent = $_POST["sel_ent"];
 }
 
 if($id_ent == " ") {
-echo '<script language="javascript"> alert(" ' . __('Select Entity','dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="graf_entidade.php"; </script>';
+	echo '<script language="javascript"> alert(" ' . __('Select a entity','dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="graf_entidade.php"; </script>';
 }
 
 if($data_ini == $data_fin) {
-$datas = "LIKE '".$data_ini."%'";	
+	$datas = "LIKE '".$data_ini."%'";	
 }	
 
 else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
+	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
 // nome da entidade
@@ -283,17 +280,17 @@ echo $ent_name['name']." - <span style = 'color:#000;'> ".$total['total']." ".__
  ?>
 
 <div id="graf_linhas" class="span12" style="height: 450px; margin-top: 25px; margin-left: -5px;">
-<?php include ("./inc/graflinhas_ent.inc.php"); ?>
+	<?php include ("./inc/graflinhas_ent.inc.php"); ?>
 </div>
 
 
 <div id="graf2" class="span6" >
-<?php include ("./inc/grafpie_stat_ent.inc.php"); ?>
+	<?php include ("./inc/grafpie_stat_ent.inc.php"); ?>
 </div>
 
 
 <div id="graf4" class="span6" >
-<?php include ("./inc/grafcat_ent.inc.php");  ?>
+	<?php include ("./inc/grafcat_ent.inc.php");  ?>
 </div>
 
 <?php 

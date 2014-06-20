@@ -1,11 +1,40 @@
 <?php
 
+//numero de anos para exibição no index
+// number of year to display in index
+//$num_years = 1;
+/*
 //selecionar anos 
 
-$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
-FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = '0'
-ORDER BY year ASC";
+if($num_years == 0) {
+	
+		$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year ASC ";
+}
+
+if($num_years == 1) {
+	
+	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year DESC
+	LIMIT ".$num_years."";
+}
+
+if($num_years > 1) {
+	
+	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year DESC
+	LIMIT ".$num_years."";
+	
+}
 
 $result_y = $DB->query($query_y);
 
@@ -16,12 +45,19 @@ $arr_years = array();
 
 while ($row_y = $DB->fetch_assoc($result_y))		
 	{ 
-	//$v_row_y = $row_y['month_l'];
-	$arr_years[] = $row_y['year'];			
+		$arr_years[] = $row_y['year'];			
 	} 
 
-$years = implode("','", $arr_years);
 
+if($num_years > 1) {
+	$arr_years = array_reverse($arr_years);
+	$years = implode(",", $arr_years);
+}
+else {
+	$years = implode(",", $arr_years);
+}
+*/
+print_r($years);
 
 echo ' <script type="text/javascript">
 
@@ -30,34 +66,35 @@ $(function() {
 		var datasets = {';
 		
 // data series	
-$DB->data_seek($result_y,0);
+//$DB->data_seek($result_y,0);
 
-while ($row_y = $DB->fetch_assoc($result_y)) {
+//while ($row_y = $DB->fetch_assoc($result_y)) {
 
-$query_m = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year, COUNT( id ) AS nb, DATE_FORMAT( date, '%m' ) AS month
-FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = '0'
-AND DATE_FORMAT( date, '%Y' ) = ".$row_y['year']."
-GROUP BY month
-ORDER BY month";
+for($i=0; $i < $conta_y; $i++) {	
 
-$resultm = $DB->query($query_m);
-
-echo '
-"'.$row_y['year'].'": {
-				label: "'.$row_y['year'].'", ';
-
-echo 'data: [';
-
-while ($row_m = $DB->fetch_assoc($resultm)) {
-
- echo '['.$row_m['month'].', '.$row_m['nb'].'],'; 
-}
-
-echo '] }, ';
-
-}
-echo '}; ';
+	$query_m = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year, COUNT( id ) AS nb, DATE_FORMAT( date, '%m' ) AS month
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND DATE_FORMAT( date, '%Y' ) = ". $arr_years[$i] ."
+	GROUP BY month
+	ORDER BY month";
+	
+	$resultm = $DB->query($query_m);
+	
+	echo '
+	"'.$arr_years[$i].'": {
+					label: "'.$arr_years[$i].'", ';
+	
+	echo 'data: [';
+	
+	while ($row_m = $DB->fetch_assoc($resultm)) {
+	
+	 echo '['.$row_m['month'].', '.$row_m['nb'].'],'; 
+	}
+	
+	echo '] }, ';
+}		
+	echo '}; ';
 
 ?>
 

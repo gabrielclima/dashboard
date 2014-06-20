@@ -28,7 +28,7 @@ if($DB->fetch_assoc($query_tec) != '') {
 echo "
 <script type='text/javascript'>
 
-$(function () {
+$(function () {	
 	
         $('#graf1').highcharts({
             chart: {

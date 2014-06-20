@@ -85,7 +85,6 @@ $time = $solvedate; // time duration in seconds
         return '';
     }
 
-
 $days = floor($time / (60 * 60 * 24));
 $time -= $days * (60 * 60 * 24);
 
@@ -133,7 +132,18 @@ return $return;
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
-<script src="../js/sorttable.js"></script>
+<!-- <script src="../js/sorttable.j"></script> -->
+<script src="../js/media/js/jquery.dataTables.min.js"></script>
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+
+<style type="text/css" title="currentStyle">	
+	@import "../js/media/css/jquery.dataTables_themeroller.css";
+	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
+	
+select { width: 60px; }
+table.dataTable { empty-cells: show; }
+</style>
 
 </head>
 
@@ -231,8 +241,6 @@ $selected = 0;
 
 echo dropdown( $name, $options, $selected );
 
-//Dropdown::showFromArray( $name, $options, $selected );
-
 ?>
 </td>
 </tr>
@@ -273,25 +281,24 @@ else {
 }
 
 if(!isset($_POST["sel_tec"])) {
-
-$id_tec = $_GET["tec"];
+	$id_tec = $_GET["tec"];
 }
 
 else {
-$id_tec = $_POST["sel_tec"];
+	$id_tec = $_POST["sel_tec"];
 }
 
 if($id_tec == 0) {
-echo '<script language="javascript"> alert(" ' . __('Select a technician','dashboard') . ' "); </script>';
-echo '<script language="javascript"> location.href="rel_tecnico.php"; </script>';
+	echo '<script language="javascript"> alert(" ' . __('Select a technician','dashboard') . ' "); </script>';
+	echo '<script language="javascript"> location.href="rel_tecnico.php"; </script>';
 }
 
 if($data_ini2 === $data_fin2) {
-$datas2 = "LIKE '".$data_ini2."%'";
+	$datas2 = "LIKE '".$data_ini2."%'";
 }
 
 else {
-$datas2 = "BETWEEN '".$data_ini2." 00:00:00' AND '".$data_fin2." 23:59:59'";
+	$datas2 = "BETWEEN '".$data_ini2." 00:00:00' AND '".$data_fin2." 23:59:59'";
 }
 
 
@@ -299,9 +306,9 @@ $datas2 = "BETWEEN '".$data_ini2." 00:00:00' AND '".$data_fin2." 23:59:59'";
 
 $status = "";
 
-    $status_open = "('1','2','3','4')";
-    $status_close = "('5','6')";
-    $status_all = "('1','2','3','4','5','6')";
+$status_open = "('1','2','3','4')";
+$status_close = "('5','6')";
+$status_all = "('1','2','3','4','5','6')";
 
 
 if(isset($_GET['stat'])) {
@@ -360,7 +367,7 @@ else {
 
 $sql_cham =
 "SELECT glpi_tickets.id AS id, glpi_tickets.name AS name, glpi_tickets.date AS date, glpi_tickets.solvedate as solvedate,
-glpi_tickets.status, FROM_UNIXTIME( UNIX_TIMESTAMP( `glpi_tickets`.`solvedate` ) , '%Y-%m' ) AS date_unix, AVG( glpi_tickets.solve_delay_stat ) AS time
+glpi_tickets.type, glpi_tickets.status, FROM_UNIXTIME( UNIX_TIMESTAMP( `glpi_tickets`.`solvedate` ) , '%Y-%m' ) AS date_unix, AVG( glpi_tickets.solve_delay_stat ) AS time
 FROM `glpi_tickets_users` , glpi_tickets
 WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets_users.type =2
@@ -370,8 +377,8 @@ AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
 GROUP BY id
 ORDER BY id DESC
-LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
 ";
+//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
 
 $result_cham = $DB->query($sql_cham);
 
@@ -402,9 +409,8 @@ if($consulta > 0) {
 
 
 if(!isset($_GET['pagina'])) {
-$primeiro_registro = 0;
-$pagina = 1;
-
+	$primeiro_registro = 0;
+	$pagina = 1;
 }
 else {
     $pagina = $_GET['pagina'];
@@ -467,11 +473,8 @@ $barra = 100 - $perc;
 // cor barra
 
 if($barra == 100) { $cor = "progress-success"; }
-
 if($barra >= 80 and $barra < 100) { $cor = ""; }
-
 if($barra > 51 and $barra < 80) { $cor = "progress-warning"; }
-
 if($barra > 0 and $barra <= 50) { $cor = "progress-danger"; }
 
 }
@@ -493,15 +496,6 @@ $result_nome = $DB->query($sql_nome) ;
 while($row = $DB->fetch_assoc($result_nome)){
 
 echo "
-
-<script>
-function pagina()
-{
-var page=document.getElementById('npage').value;
-location.href = 'rel_tecnico.php?con=1&stat=".$status1."&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec ."&npage='+page;
-}
-</script>
-
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
 <table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
@@ -509,6 +503,7 @@ location.href = 'rel_tecnico.php?con=1&stat=".$status1."&date1=".$data_ini2."&da
  ". $row['firstname'] ." ". $row['realname']. "</td>
 
 <td style='vertical-align:middle; ' colspan=2> <span style='color: #000;'>".__('Tickets','dashboard').": </span>". $conta_cons ."</td>
+<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
 <td style='vertical-align:middle; width: 180px; '>
     <div class='progress ". $cor ." progress-striped active' style='margin-top: 15px;'>
     <div class='bar' style='width:".$barra."%;'><div style='text-align: rigth; margin-top: 3px; margin-top:2px;'>".$barra." % ".__('Closed','dashboard') ." </div></div>
@@ -520,23 +515,12 @@ location.href = 'rel_tecnico.php?con=1&stat=".$status1."&date1=".$data_ini2."&da
 
 if($satisfacao != '' || $satisfacao > 0) {
 
-    echo "
-<table align='right' style='margin-bottom:10px;' width=100%>
+echo "
+<table align='right' style='margin-bottom:10px;' width=100% border='0'>
 <tr>
 
-<td width=5% style='vertical-align:bottom;'>
-<select id='npage' class='chosen-select' style='width:80px' onchange='pagina();'>
-  <option value='0'>".__('Show')."</option>
-  <option value='20'>20</option>
-  <option value='30'>30</option>
-  <option value='50'>50</option>
-  <option value='100'>100</option>
-</select>
-</td>
-
-<td colspan=4 >
-<div id='gauge' style='width:130px; height:100px; margin-left: 120px;'></div>
-
+<td colspan=6 >
+<div id='gauge' style='width:150px; height:100px; margin-left: 120px;'></div>
 
 <!-- gauge -->
     <script>
@@ -557,23 +541,26 @@ if($satisfacao != '' || $satisfacao > 0) {
     });
     </script>
 
-<td></td>
-<td></td>
-<td><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> </td>
-<td><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> </td>
-<td><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> </td>
+<td align='right' width='60px;'><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> </td>
+<td align='right' width='60px;'><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> </td>
+<td width='50px;'><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> </td>
 </tr>
 </table>
 
-<table class='table table-hover table-striped sortable' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
-
+<table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
+<thead>
+<tr>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
 <th></th>
+<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Opening date','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Close date','dashboard') ."</th>
+<th style=' color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
+<th style=' color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
 <th style=' color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
-<th style=' color: #000;' class='sorttable_nosort'> ". __('Satisfaction','dashboard') ."</th>
+<th style=' color: #000;'> ". __('Satisfaction','dashboard') ."</th>
+</tr>
+</thead>
+<tbody>
 ";
 }
 
@@ -583,31 +570,25 @@ echo "
 <table align='right' style='margin-bottom:10px;'>
 <tr><td>&nbsp;</td></tr>
 <tr>
-
-<td width=90%;>
-<select id='npage' class='chosen-select' style='width:80px' onchange='pagina();'>
-  <option value='0'>Select</option>
-  <option value='20'>20</option>
-  <option value='30'>30</option>
-  <option value='50'>50</option>
-  <option value='100'>100</option>
-</select>
-</td>
-
 <td><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> </td>
 <td><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> </td>
 </tr>
 </table>
 
-<table class='table table-hover table-striped sortable' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
-
+<table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
+<thead>
+<tr>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
 <th></th>
+<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
 <th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Opening date','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Close date','dashboard') ."</th>
+<th style=' color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
+<th style=' color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
 <th style=' color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
+</tr>
+</thead>
+<tbody>
 ";
 }
 
@@ -626,6 +607,10 @@ $status1 = $row['status'];
     if($status1 == "5" ) { $status1 = "solved";}
     if($status1 == "6" ) { $status1 = "closed";}
 
+if($row['type'] == 1) { 
+	$type = __('Incident'); }
+else { 
+	$type = __('Request'); }
 
 if($satisfacao != '' || $satisfacao > 0) {
 
@@ -639,40 +624,72 @@ $satc = $DB->fetch_assoc($result_satc);
 
 $satc1 = $satc['sat'];
 
-
-
 echo "
 <tr>
 <td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
 <td style='vertical-align:middle;'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
+<td> ". $type ." </td>
 <td> ". substr($row['name'],0,75) ." </td>
 <td> ". conv_data_hora($row['date']) ." </td>
 <td> ". conv_data_hora($row['solvedate']) ." </td>
 <td> ". time_ext($row['time']) ."</td>
-<td> <img src=./img/s". $satc1 .".png> </td>
+<td> <img src=../img/s". $satc1 .".png> </td>
 </tr>";
     }
 //}
 
 else {
 
-
 echo "
 <tr>
 <td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
 <td style='vertical-align:middle;'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
+<td> ". $type ." </td>
 <td> ". substr($row['name'],0,75) ." </td>
 <td> ". conv_data_hora($row['date']) ." </td>
 <td> ". conv_data_hora($row['solvedate']) ." </td>
 <td> ". time_ext($row['time']) ."</td>
-
 </tr>";
 
     }
 
 }
 
-echo "</table></div>"; ?>
+echo "</tbody>
+		</table>
+		</div>"; ?>
+
+<script type="text/javascript" charset="utf-8">
+$(document).ready(function() {
+    oTable = $('#tec').dataTable({
+        "bJQueryUI": true,
+        "sPaginationType": "full_numbers",
+        "bFilter": false,
+        "aaSorting": [[0,'desc']], 
+        "iDisplayLength": 25,
+    	  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], 
+
+        "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+	       "aButtons": [
+	       "copy",
+	       "print",
+	       {
+	           "sExtends":    "collection",
+	           "sButtonText": "Save",
+	           "aButtons":    [ "csv", "xls",
+	            {
+	           "sExtends": "pdf",
+	           "sPdfOrientation": "landscape",
+	           "sPdfMessage": ""
+	            } ]
+	       } ]
+        }
+		  
+    });    
+} );
+		
+</script>  
 
 <?php
 // paginacao 2
@@ -714,7 +731,7 @@ $total_paginas = ceil($total_paginas);
     }
   }
 // exibir painel na tela
-echo "$prev_link  $painel  $next_link";
+//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
 // fim paginacao 2
 }

@@ -8,29 +8,37 @@ global $DB;
 Session::checkLoginUser();
 Session::checkRight("profile", "r");
 
-    switch (date("m")) {
-	    case "01": $mes = __('January','dashboard'); break;
-	    case "02": $mes = __('February','dashboard'); break;
-	    case "03": $mes = __('March','dashboard'); break;
-	    case "04": $mes = __('April','dashboard'); break;
-	    case "05": $mes = __('May','dashboard'); break;
-	    case "06": $mes = __('June','dashboard'); break;
-	    case "07": $mes = __('July','dashboard'); break;
-	    case "08": $mes = __('August','dashboard'); break;
-	    case "09": $mes = __('September','dashboard'); break;
-	    case "10": $mes = __('October','dashboard'); break;
-	    case "11": $mes = __('November','dashboard'); break;
-	    case "12": $mes = __('December','dashboard'); break;
+//numero de anos para exibição no index
+// 0: mostra todos; 1: mostra ano atual; 2,3,4, etc: exibe o exato numero de anos
+
+// number of year to display in index
+// 0: show all; 1: show current year; 2,3,4,etc: show the exact number of years
+$num_years = 0;
+
+
+     switch (date("m")) {
+    case "01": $mes = __('January','dashboard'); break;
+    case "02": $mes = __('February','dashboard'); break;
+    case "03": $mes = __('March','dashboard'); break;
+    case "04": $mes = __('April','dashboard'); break;
+    case "05": $mes = __('May','dashboard'); break;
+    case "06": $mes = __('June','dashboard'); break;
+    case "07": $mes = __('July','dashboard'); break;
+    case "08": $mes = __('August','dashboard'); break;
+    case "09": $mes = __('September','dashboard'); break;
+    case "10": $mes = __('October','dashboard'); break;
+    case "11": $mes = __('November','dashboard'); break;
+    case "12": $mes = __('December','dashboard'); break;
     }
 
    switch (date("w")) {
-	    case "0": $dia = __('Sunday','dashboard'); break;    
-	    case "1": $dia = __('Monday','dashboard'); break;
-	    case "2": $dia = __('Tuesday','dashboard'); break;
-	    case "3": $dia = __('Wednesday','dashboard'); break;
-	    case "4": $dia = __('Thursday','dashboard'); break;
-	    case "5": $dia = __('Friday','dashboard'); break;
-	    case "6": $dia = __('Saturday','dashboard'); break;  
+    case "0": $dia = __('Sunday','dashboard'); break;    
+    case "1": $dia = __('Monday','dashboard'); break;
+    case "2": $dia = __('Tuesday','dashboard'); break;
+    case "3": $dia = __('Wednesday','dashboard'); break;
+    case "4": $dia = __('Thursday','dashboard'); break;
+    case "5": $dia = __('Friday','dashboard'); break;
+    case "6": $dia = __('Saturday','dashboard'); break;  
     }
 
 ?>
@@ -298,7 +306,13 @@ $('#clock').jclock(options);
                                                 <i class="fa fa-angle-right"></i>
                                                 <span class='hidden-minibar'> <?php echo _n('Ticket','Tickets',2); ?></span>
                                             </a>
-                                        </li>                             
+                                        </li>
+                                        <li class=' '>
+                                              <a href="./reports/rel_assets.php" data-original-title=' Tickets' target="_blank">
+                                                <i class="fa fa-angle-right"></i>
+                                                <span class='hidden-minibar'> <?php echo __('Assets'); ?></span>
+                                            </a>
+                                        </li>                              
                                     </ul>                                    
                                 </li>			                                
                                 
@@ -334,10 +348,16 @@ $('#clock').jclock(options);
                                                 <span class='hidden-minibar'> <?php echo __('Group','dashboard'); ?></span>
                                             </a>
                                         </li>
-                                          <li class=' '>
+                                        <li class=' '>
                                               <a href="./graficos/entidades.php" data-original-title=' Entidades' target="_blank">
                                                 <i class="fa fa-angle-right"></i>
                                                 <span class='hidden-minibar'> <?php echo __('Entity','dashboard'); ?></span>
+                                            </a>
+                                        </li>
+                                        <li class=' '>
+                                              <a href="./graficos/ativos.php" data-original-title=' Ativos' target="_blank">
+                                                <i class="fa fa-angle-right"></i>
+                                                <span class='hidden-minibar'> <?php echo __('Assets'); ?></span>
                                             </a>
                                         </li>
                                          <li class=' '>
@@ -480,71 +500,6 @@ echo '<div class="progress" style="height: 5px;">
     </div>
     <!-- /.left-sidebar -->
 
-    <!-- .right-sidebar
-    <div class="user-details user-details-close animated fadeInLeft">
-        <div class="right-sidebar-holder">
-            <div class="panel-group" id="accordion">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                      Personalize
-                  </a>
-                  <i class="fa fa-times close-right-user text-danger pull-right"></i>
-              </h4>
-          </div>
-          <div id="collapseOne" class="panel-collapse collapse in">
-              <div class="panel-body">
-
-                <hr>
-
-                <h5 class="text-center">
-                    Theme Options
-                    <a  href="#"  class="theme-panel-close text-danger pull-right"><strong><i class="fa fa-times"></i></strong></a>
-                </h5>
-
-                <ul class="list-group theme-options">
-                    <li class="list-group-item" >   
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="fixedTopSide" value=""> Fixed Top Side
-                            </label>
-                        </div>
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="miniSidebar" value=""> Mini Sidebar
-                            </label>
-                        </div>
-                        
-                    </li>
-                    <li class="list-group-item" >Predefined Themes
-                        <ul class="list-inline predefined-themes"> 
-                            <li><a class="badge" style="background-color:#23bab5" data-color-primary="#23bab5" data-color-secondary="#232b2d" data-color-link="#80969c"> &nbsp; </a></li>
-                            <li><a class="badge" style="background-color:#e96363" data-color-primary="#e96363" data-color-secondary="#232b2d" data-color-link="#AFB5AA"> &nbsp; </a></li>
-                            <li><a class="badge" style="background-color:#5cb85c" data-color-primary="#5cb85c" data-color-secondary="#232b2d" data-color-link="#777e88"> &nbsp; </a></li>
-                            <li><a class="badge" style="background-color:#e97436" data-color-primary="#e97436" data-color-secondary="#232b2d" data-color-link="#80969c"> &nbsp; </a></li>
-                            <li><a class="badge" style="background-color:#2FA2D1" data-color-primary="#2FA2D1" data-color-secondary="#232b2d" data-color-link="#A5B1B7"> &nbsp; </a></li>
-                            <li><a class="badge" style="background-color:#2f343b" data-color-primary="#2f343b" data-color-secondary="#FFFFFF" data-color-link="#232b2d"> &nbsp; </a></li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="list-group contact-list  animated fadeInBig">
-                    <a class="list-group-item  text-primary">Profile <i class="fa fa-user pull-right"></i></a>
-                    
-                </div>
-                <hr>
-               
-            </div>
-        </div>
-    </div>    
-</div>
-
-
-</div>
-<!-- /.right-sidebar-holder 
-</div>  -->
-<!-- /.right-sidebar -->
-
 
 <?php     
 
@@ -552,12 +507,67 @@ $ano = date("Y");
 $month = date("Y-m");
 $hoje = date("Y-m-d");
 
+//selecionar anos 
+
+if($num_years == 0) {
+	
+		$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year ASC ";
+}
+
+if($num_years == 1) {
+	
+	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year DESC
+	LIMIT ".$num_years."";
+}
+
+if($num_years > 1) {
+	
+	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	FROM glpi_tickets
+	WHERE glpi_tickets.is_deleted = '0'
+	AND date IS NOT NULL
+	ORDER BY year DESC
+	LIMIT ".$num_years."";
+	
+}
+
+$result_y = $DB->query($query_y);
+
+//numero de anos para eixos Y
+$conta_y = $DB->numrows($result_y);
+
+$arr_years = array();
+
+while ($row_y = $DB->fetch_assoc($result_y))		
+	{ 
+		$arr_years[] = $row_y['year'];			
+	} 
+
+
+if($num_years > 1) {
+	$arr_years = array_reverse($arr_years);
+	$years = implode(",", $arr_years);
+}
+else {
+	$years = implode(",", $arr_years);
+}
+
+
 //chamados ano
 
 $sql_ano =	"SELECT COUNT(glpi_tickets.id) as total        
       FROM glpi_tickets
       LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
-      WHERE glpi_tickets.is_deleted = '0' ";
+      WHERE glpi_tickets.is_deleted = '0' 
+      AND DATE_FORMAT( glpi_tickets.date, '%Y' ) IN (".$years.") ";
 
 $result_ano = $DB->query($sql_ano);
 $total_ano = $DB->fetch_assoc($result_ano);
@@ -905,80 +915,80 @@ setTimeout(function(){
 
 	<div id="logged_users" class="col-sm-6 col-md-6 " style="margin-top:35px;"> 
  	 				              
-		      <div class="widget widget-table action-table">
+		 <div class="widget widget-table action-table">
             <div class="widget-header"> <i class="fa fa-group" style="margin-left:7px;"></i>
- <?php
-//logged users
-
-$path = "../../../files/_sessions/";
-$diretorio = opendir($path);        
-
-$arr_arq = array();
-$arquivos = array();    
-       
-   while($arquivo = readdir($diretorio)){   
-      
-     $arr_arq[] = $path.$arquivo;           
-   }
- //  $diretorio -> close();
-
-
-foreach ($arr_arq as $listar) {
-// retira "./" e "../" para que retorne apenas pastas e arquivos
-
-  
-   if ( is_file($listar) && $listar != '.' && $listar != '..'){ 
-			$arquivos[]=$listar;
-   }
-}
-
-$conta = count($arquivos);
-
-if($conta > 0) {
-
-for($i=0; $i < $conta; $i++) {
-
-$file = $arquivos[$i];
-
-$string = file_get_contents( $file ); 
-// poderia ser um string ao invés de file_get_contents().
-
-$list = preg_match( '/glpiID\|s:[0-9]:"(.+)/', $string, $matches );
-
-$posicao = strpos($matches[0], 'glpiID|s:');
-$string2 = substr($matches[0], $posicao, 25);
-$string3 = explode("\"", $string2); 
-
-$arr_ids[] = $string3[1];
-
-}
-}
-
-$ids = array_values($arr_ids);
-$ids2 = implode("','",$ids);
-
-$query_name = 
-"SELECT firstname AS name, realname AS sname, id AS uid, name AS glpiname 
-FROM glpi_users
-WHERE id IN ('".$ids2."')
-ORDER BY name"; 
-
-$result_name = $DB->query($query_name); 
-$num_users = $DB->numrows($result_name);          
-            
-?>    
+				<?php
+				//logged users
+				
+				$path = "../../../files/_sessions/";
+				$diretorio = opendir($path);        
+				
+				$arr_arq = array();
+				$arquivos = array();    
+				       
+				   while($arquivo = readdir($diretorio)){   
+				      
+				     $arr_arq[] = $path.$arquivo;           
+				   }
+				 //  $diretorio -> close();
+				
+				
+				foreach ($arr_arq as $listar) {
+				// retira "./" e "../" para que retorne apenas pastas e arquivos
+				
+				  
+				   if ( is_file($listar) && $listar != '.' && $listar != '..'){ 
+							$arquivos[]=$listar;
+				   }
+				}
+				
+				$conta = count($arquivos);
+				
+				if($conta > 0) {
+				
+				for($i=0; $i < $conta; $i++) {
+				
+				$file = $arquivos[$i];
+				
+				$string = file_get_contents( $file ); 
+				// poderia ser um string ao invés de file_get_contents().
+				
+				$list = preg_match( '/glpiID\|s:[0-9]:"(.+)/', $string, $matches );
+				
+				$posicao = strpos($matches[0], 'glpiID|s:');
+				$string2 = substr($matches[0], $posicao, 25);
+				$string3 = explode("\"", $string2); 
+				
+				$arr_ids[] = $string3[1];
+				
+				}
+				}
+				
+				$ids = array_values($arr_ids);
+				$ids2 = implode("','",$ids);
+				
+				$query_name = 
+				"SELECT firstname AS name, realname AS sname, id AS uid, name AS glpiname 
+				FROM glpi_users
+				WHERE id IN ('".$ids2."')
+				ORDER BY name"; 
+				
+				$result_name = $DB->query($query_name); 
+				$num_users = $DB->numrows($result_name);          
+				            
+				?>    
            <h3><?php echo __('Logged Users','dashboard')."  :  " .$num_users; ?></h3>
 
             </div>
             <!-- /widget-header -->
-<?php
+				<?php
 	          if($num_users <= 10) {
 	          	echo '<div class="widget-content striped" style="min-height:318px;">'; }
 	          else {
 	          	echo '   <div class="widget-content striped">'; }	          	
-?>        
+				?>        
               <table id="logged_users" class="table table-hover table-bordered table-condensed" >
-        <!--      <th style="text-align: center;"><?php echo __('','dashboard'); ?></th> -->              
+            <!-- <th style="text-align: center;"><?php echo __('','dashboard'); ?></th> -->              
 				<?php
 								
 				while($row_name = $DB->fetch_assoc($result_name)) 
@@ -994,8 +1004,7 @@ $num_users = $DB->numrows($result_name);
             <!-- /widget-content --> 
           </div>
 	</div>          
-          
-			
+          		
           <!-- content row 2 --> 
 	<!-- </div> -->          
           
@@ -1008,17 +1017,16 @@ function scrollWin()
 {
 $('html, body').animate({ scrollTop: 0 }, 'slow');
 }
-</script>
-
-<span class="go-top" onclick="scrollWin()">
-   <i class="fa fa-chevron-up"></i>&nbsp; Top     						
-</span>        
+</script> 
         
-    </div>    
-</div>
-<!-- end main-content -->
-</div>
+   </div>    
+	</div>
+	<!-- end main-content -->
+	</div>
 
+	<div id="go-top" class="go-top" onclick="scrollWin()">
+	   <i class="fa fa-chevron-up"></i>&nbsp; Top     						
+	</div>    
 </div>
 <!-- /.box-holder -->
 </div>
@@ -1028,21 +1036,21 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 
  <!-- Include all compiled plugins (below), or include individual files as needed -->
- <script src="js/jquery-ui-1.10.2.custom.min.js"></script>
- <script src="js/less-1.5.0.min.js"></script>
+<script src="js/jquery-ui-1.10.2.custom.min.js"></script>
+<script src="js/less-1.5.0.min.js"></script>
  
- <script src="js/jquery.storage.js"></script>        
- <script src="js/jquery.accordion.js"></script>
- <script src="js/bootstrap-typeahead.js"></script>                
- <script src="js/bootstrap-progressbar.js"></script>
- <script src="js/galaxy/hovermenu.js" charset="utf-8"></script>
- <script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
- <script src="js/jquery.easy-pie-chart.js"></script>
+<script src="js/jquery.storage.js"></script>        
+<script src="js/jquery.accordion.js"></script>
+<script src="js/bootstrap-typeahead.js"></script>                
+<script src="js/bootstrap-progressbar.js"></script>
+<script src="js/galaxy/hovermenu.js" charset="utf-8"></script>
+<script src="js/jquery.mCustomScrollbar.concat.min.js"></script>
+<script src="js/jquery.easy-pie-chart.js"></script>
 
- <script src="js/bootstrap-switch.js"></script>
- <script src="js/jquery.address-1.6.min.js"></script>
+<script src="js/bootstrap-switch.js"></script>
+<script src="js/jquery.address-1.6.min.js"></script>
  
- <script src="js/highcharts.js" type="text/javascript" ></script>
+<script src="js/highcharts.js" type="text/javascript" ></script>
 <script src="js/highcharts-3d.js" type="text/javascript" ></script>
 <script src="js/modules/exporting.js" type="text/javascript" ></script>
 <script src="js/themes/grid.js" type="text/javascript" ></script>
@@ -1063,16 +1071,16 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
 <link href="css/odometer.css" rel="stylesheet">
 <script src="js/odometer.js"></script>
 
-                <script>
-                    $('document').ready(function(){
-                        $("[name='my-checkbox']").bootstrapSwitch();
-                    });
-                </script>
+       <script>
+           $('document').ready(function(){
+               $("[name='my-checkbox']").bootstrapSwitch();
+           });
+       </script>
 
-                <!-- Remove below two lines in production --> 
-                
-                <script src="js/theme-options.js"></script>
-                
-                <script src="js/core.js"></script> 
-            </body>
-            </html>
+       <!-- Remove below two lines in production --> 
+       
+       <script src="js/theme-options.js"></script>
+       
+       <script src="js/core.js"></script> 
+</body>
+</html>

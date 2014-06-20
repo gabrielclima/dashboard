@@ -68,7 +68,7 @@ msgid "Tickets by Status"
 msgstr "Biglietti di Stato"
 
 msgid "Tickets by Entity"
-msgstr "Biglietti da Entity"
+msgstr "Biglietti da Entità"
 
 msgid "Tickets by Category"
 msgstr "Biglietti per la categoria"
@@ -80,13 +80,13 @@ msgid "Tickets Total"
 msgstr "Biglietti Totale"
 
 msgid "by Entity"
-msgstr "di Entity"
+msgstr "di Entità"
 
 msgid "TOP 10 - Requester"
 msgstr "TOP 10 - Richiedente"
 
 msgid "Entity"
-msgstr "Entity"
+msgstr "Entità"
 
 msgid "Open Tickets"
 msgstr "Biglietti verdi"
@@ -187,11 +187,11 @@ msgstr "Cancellare"
 msgid "No ticket found"
 msgstr "Nessun biglietto trovato"
 
-msgid "Select technician"
-msgstr "Seleziona tecnico"
+msgid "Select a technician"
+msgstr "Seleziona un tecnico"
 
-msgid "Select requester"
-msgstr "Seleziona richiedente"
+msgid "Select a requester"
+msgstr "Seleziona un richiedente"
 
 msgid "Title"
 msgstr "Titolo"
@@ -238,11 +238,11 @@ msgstr "Ultimi 30 giorni"
 msgid "Last 3 months"
 msgstr "Ultimi 3 mesi"
 
-msgid "Select Entity"
-msgstr "Seleziona Entity"
+msgid "Select a entity"
+msgstr "Seleziona una entità"
 
-msgid "Select Group"
-msgstr "Seleziona gruppo"
+msgid "Select a group"
+msgstr "Seleziona un gruppo"
 
 msgid "Version"
 msgstr "Versione"
@@ -317,7 +317,7 @@ msgid "Used"
 msgstr "Usato"
 
 msgid "Assets by Type"
-msgstr "Attività per Tipo"
+msgstr "Assets per Tipo"
 
 msgid "Unknown"
 msgstr "Sconosciuto"
@@ -355,14 +355,20 @@ msgstr "Seleziona"
 msgid "by Category"
 msgstr "per Categoria"
 
-msgid "Select a Category"
+msgid "Select a category"
 msgstr "Seleziona una categoria"
 
 msgid "by Location"
 msgstr "per Posizione"
 
-msgid "Select a Location"
+msgid "Select a location"
 msgstr "Seleziona una posizione"
 
 msgid "Welcome"
 msgstr "Benvenuto"
+
+msgid "Select a asset"
+msgstr "Seleziona un asset"
+
+msgid "by Assets"
+msgstr "per Assets"

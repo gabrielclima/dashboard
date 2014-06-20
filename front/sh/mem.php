@@ -1,8 +1,5 @@
 <?php
 
-//header('Content-Type: application/json; charset=UTF-8');
-//echo (explode(',', $result[1]));
-
 $totalm = exec('/usr/bin/free -tmo | /usr/bin/awk \'{print $1","$2","$3-$6-$7","$4+$6+$7}\' |grep -i mem: |cut -f2 -d,');
 
 $usedm = exec('/usr/bin/free -tmo | /usr/bin/awk \'{print $1","$2","$3-$6-$7","$4+$6+$7}\' |grep -i mem: |cut -f3 -d,');

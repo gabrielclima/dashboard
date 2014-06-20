@@ -96,7 +96,10 @@ $global+=$total;
 <script src="../js/highcharts.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/themes/grid-light.js"></script>  
-<script src="../js/media/js/jquery.dataTables.js"></script>
+
+<script src="../js/media/js/jquery.dataTables.min.js"></script>
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
   
 <style type="text/css" title="currentStyle">	
 	@import "../js/media/css/jquery.dataTables_themeroller.css";
