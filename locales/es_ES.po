@@ -372,3 +372,6 @@ msgstr "Seleccionáis un bien"
 
 msgid "by Assets"
 msgstr "por Bienes"
+
+msgid "Print"
+msgstr "Impresión"

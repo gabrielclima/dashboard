@@ -177,7 +177,7 @@ $('#dp2').datepicker('update');
 // lista de categorias
 
 $sql_cat = "
-SELECT id, name
+SELECT id, completename AS name
 FROM `glpi_itilcategories`
 ORDER BY `name` ASC
 ";
@@ -395,7 +395,7 @@ else { $barra = 0;}
 // nome da categoria
 
 $sql_nm = "
-SELECT id , name AS name
+SELECT id , completename AS name
 FROM `glpi_itilcategories`
 WHERE id = ".$id_cat."";
 
@@ -409,17 +409,19 @@ echo "
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
 <table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
+<tr>
 <td  style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> ".__('Category').": </span>".$ent_name['name']." </td>
-<td  style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> ".__('Tickets', 'dashboard').": </span>".$consulta." </td>
-<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>
-".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)." 
+</tr>
+<tr>
+<td style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> ".__('Tickets', 'dashboard').": </span>".$consulta." </td>
+<td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)." 
 </td>
-
 <td colspan='1' style='width: 150px; vertical-align:middle; padding: 15px 0px 0px 0px;'>
     <div class='progress ". $cor ." progress-striped active' >
     <div class='bar' style='width:".$barra."%;'><div style='text-align: rigth; margin-top:2px;'>".$barra." % ".__('Closed', 'dashboard') ." </div></div>
     </div>    
-</td> 
+</td>
+</tr> 
 </table>
 
 <table align='right' style='margin-bottom:10px;'>
@@ -515,11 +517,18 @@ $(document).ready(function() {
         "sDom": 'T<"clear">lfrtip',
          "oTableTools": {
          "aButtons": [
-             "copy",
-             "print",
+             {
+                 "sExtends": "copy",
+                 "sButtonText": "<?php echo __('Copy'); ?>"
+             },
+             {
+                 "sExtends": "print",
+                 "sButtonText": "<?php echo __('Print','dashboard'); ?>",
+					  "sMessage": "<div class='info_box row-fluid span12' style='margin-top:20px; margin-bottom:12px; margin-left: -1px;'><table class='row-fluid'  style='width: 80%; margin-left: 10%; font-size: 18px; font-weight:bold;' cellpadding = '1px'><tr><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> <?php echo __('Category'); ?> : </span><?php echo $ent_name['name']; ?> </td></tr><tr><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> <?php echo  __('Tickets','dashboard'); ?> : </span><?php echo $consulta ; ?></td><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'> <?php echo  __('Period','dashboard'); ?> : </span> <?php echo conv_data($data_ini2); ?> a <?php echo conv_data($data_fin2); ?> </td></tr></table></div>"
+             },
              {
                  "sExtends":    "collection",
-                 "sButtonText": "Save",
+                 "sButtonText": "<?php echo __('Export'); ?>",
                  "aButtons":    [ "csv", "xls",
                   {
                  "sExtends": "pdf",

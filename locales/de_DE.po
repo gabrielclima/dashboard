@@ -372,3 +372,6 @@ msgstr "Wählen ein vermögenswert"
 
 msgid "by Assets"
 msgstr "nach Vermögenswert"
+
+msgid "Print"
+msgstr "Drucken"

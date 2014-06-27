@@ -8,12 +8,8 @@ else {
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
-//satisfaction 	 
-   		 
-   		 
-$query_sat = "SELECT glpi_users.firstname AS name, glpi_users.realname AS sname, COUNT( glpi_tickets.id ) AS conta, 
-avg(glpi_ticketsatisfactions.satisfaction) AS media
-
+//satisfaction 	    		   		 
+$query_sat = "SELECT glpi_users.firstname AS name, glpi_users.realname AS sname, COUNT( glpi_tickets.id ) AS conta, avg(glpi_ticketsatisfactions.satisfaction) AS media
 FROM glpi_tickets, `glpi_ticketsatisfactions`, glpi_tickets_users, glpi_users
 WHERE glpi_tickets.is_deleted = '0'
 AND `glpi_ticketsatisfactions`.tickets_id = glpi_tickets.id
@@ -29,8 +25,8 @@ $result = $DB->query($query_sat) or die('erro');
 
 $contador = $DB->numrows($result);
 
-//array with satisfaction average
 
+//array with satisfaction average
 $arr_grfsat = array();
 
 while ($row_result = $DB->fetch_assoc($result))		

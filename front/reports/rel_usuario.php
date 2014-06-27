@@ -464,6 +464,8 @@ $result_nome = $DB->query($sql_nome) ;
 
 while($row = $DB->fetch_assoc($result_nome)){
 
+$user = $row['firstname'] ." ". $row['realname'];
+
 echo "
 
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
@@ -547,20 +549,28 @@ $(document).ready(function() {
     	  "aLengthMenu": [[25, 50, 100, -1], [25, 50, 100, "All"]], 
 
         "sDom": 'T<"clear">lfrtip',
-	      "oTableTools": {
-	       "aButtons": [
-	       "copy",
-	       "print",
-	       {
-	           "sExtends":    "collection",
-	           "sButtonText": "Save",
-	           "aButtons":    [ "csv", "xls",
-	            {
-	           "sExtends": "pdf",
-	           "sPdfOrientation": "landscape",
-	           "sPdfMessage": ""
-	            } ]
-	       } ]
+         "oTableTools": {
+         "aButtons": [
+             {
+                 "sExtends": "copy",
+                 "sButtonText": "<?php echo __('Copy'); ?>"
+             },
+             {
+                 "sExtends": "print",
+                 "sButtonText": "<?php echo __('Print','dashboard'); ?>",
+                 "sMessage": "<div class='info_box row-fluid span12' style='margin-top:20px; margin-bottom:12px; margin-left: -1px;'><table class='row-fluid'  style='width: 80%; margin-left: 10%; font-size: 18px; font-weight:bold;' cellpadding = '1px'><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> <?php echo __('Requester', 'dashboard'); ?> : </span><?php echo $user; ?> </td> <td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> <?php echo  __('Tickets','dashboard'); ?> : </span><?php echo $consulta ; ?></td><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'> <?php echo  __('Period','dashboard'); ?> : </span> <?php echo conv_data($data_ini2); ?> a <?php echo conv_data($data_fin2); ?> </td> </table></div>"
+             },
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "<?php echo __('Export'); ?>",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             }
+         ]
         }
 		  
     });    

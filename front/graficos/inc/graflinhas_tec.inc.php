@@ -1,4 +1,3 @@
-
 <?php
 
 if($data_ini == $data_fin) {
@@ -18,8 +17,8 @@ if($interval >= "31") {
 
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 
-//chamados mensais
 
+//chamados mensais
  $querym = "
 SELECT DISTINCT DATE_FORMAT(glpi_tickets.date, '%b-%Y') as day_l,  COUNT(glpi_tickets.id) as nb, DATE_FORMAT(glpi_tickets.date, '%y-%m') as day
 FROM glpi_tickets_users, glpi_tickets
@@ -36,8 +35,8 @@ else {
 	
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 
-//chamados mensais
 
+//chamados mensais
  $querym = "
 SELECT DISTINCT DATE_FORMAT(glpi_tickets.date, '%b-%d') as day_l,  COUNT(glpi_tickets.id) as nb, DATE_FORMAT(glpi_tickets.date, '%Y-%m-%d') as day
 FROM glpi_tickets_users, glpi_tickets
@@ -70,21 +69,14 @@ $grfm3 = "'$grfm2'";
 $quantm2 = implode(',',$quantm);
 
 
-$version = substr($CFG_GLPI["version"],0,5);
-if($version == "0.83") {
-	$status = "('assign','new','plan','waiting')";	
-}	
-
-else {
-	$status = "('2','1','3','4')"	;	
-}
+$status = "('2','1','3','4')"	;	
 
 
 if($interval >= "31") {
 
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
-// fechados mensais
 
+// fechados mensais
 $queryf = "
 SELECT DISTINCT DATE_FORMAT(glpi_tickets.date, '%b-%Y') as day_l,  COUNT(glpi_tickets.id) as nb, DATE_FORMAT(glpi_tickets.date, '%y-%m') as day
 FROM glpi_tickets_users, glpi_tickets
@@ -101,8 +93,8 @@ ORDER BY day
  
 else { 
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
-// fechados mensais
 
+// fechados mensais
 $queryf = "
 SELECT DISTINCT DATE_FORMAT(glpi_tickets.date, '%b-%d') as day_l,  COUNT(glpi_tickets.id) as nb, DATE_FORMAT(glpi_tickets.date, '%Y-%m-%d') as day
 FROM glpi_tickets_users, glpi_tickets

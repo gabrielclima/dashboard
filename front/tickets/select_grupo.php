@@ -68,30 +68,30 @@ function dropdown( $name, array $options, $selected=null )
 }
 
 
-$sql_ent = "
+$sql_grp = "
 SELECT id AS id , name AS name
 FROM `glpi_groups`
 ORDER BY `name` ASC
 ";
 
-$result_ent = $DB->query($sql_ent);
-$ent = $DB->fetch_assoc($result_ent);
+$result_grp = $DB->query($sql_grp);
+$ent = $DB->fetch_assoc($result_grp);
 
 
-$res_ent = $DB->query($sql_ent);
-$arr_ent = array();
-$arr_ent[0] = "-- ". __('Select a group', 'dashboard') . " --" ;
+$res_grp = $DB->query($sql_grp);
+$arr_grp = array();
+$arr_grp[0] = "-- ". __('Select a group', 'dashboard') . " --" ;
 
-$DB->data_seek($result_ent, 0) ;
+$DB->data_seek($result_grp, 0) ;
 
-while ($row_result = $DB->fetch_assoc($result_ent))		
+while ($row_result = $DB->fetch_assoc($result_grp))		
 	{ 
 	$v_row_result = $row_result['id'];
-	$arr_ent[$v_row_result] = $row_result['name'] ;			
+	$arr_grp[$v_row_result] = $row_result['name'] ;			
 	} 
 	
-$name = 'sel_ent';
-$options = $arr_ent;
+$name = 'sel_grp';
+$options = $arr_grp;
 $selected = "0";
 
 //echo dropdown( $name, $options, $selected );
@@ -144,15 +144,15 @@ $sel = $_REQUEST['sel'];
 
 if($sel == "1") {
  
-if(!isset($_POST["sel_ent"])) {
-	$id_ent = $_REQUEST["ent"];	
+if(!isset($_POST["sel_grp"])) {
+	$id_grp = $_REQUEST["ent"];	
 }
 
 else {
-	$id_ent = $_POST["sel_ent"];
+	$id_grp = $_POST["sel_grp"];
 }
 
-if($id_ent == " " || $id_ent == 0) {
+if($id_grp == " " || $id_grp == 0) {
 	echo '<script language="javascript"> alert(" ' . __('Select a group', 'dashboard') . ' "); </script>';
 	echo '<script language="javascript"> location.href="select_grupo.php"; </script>';
 }
@@ -160,7 +160,7 @@ if($id_ent == " " || $id_ent == 0) {
 ?>
 
 <script type="text/javascript" >
-	location.href="cham_grupos.php?ent=<?php echo $id_ent; ?>";
+	location.href="cham_grupos.php?grp=<?php echo $id_grp; ?>";
 </script>
 
 <p></p>

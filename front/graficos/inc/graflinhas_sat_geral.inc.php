@@ -40,26 +40,46 @@ while ($row_result = $DB->fetch_assoc($resultm))
 
 //chamados abertos mensais
 
+$status = "('1','2','3','4')"	;	
 
-$status = "('2','1','3','4')"	;	
-
+// opened tickets
 $querya = "
-SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
+SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
-AND glpi_tickets.status IN ". $status ."
-GROUP BY month
-ORDER BY month
- ";
+GROUP BY MONTH
+ORDER BY MONTH ";
 
 $resulta = $DB->query($querya) or die('erro');
 
 $arr_grfa = array();
+
 while ($row_result = $DB->fetch_assoc($resulta))		
-	{ 
+{ 
+//	$v_row_result = $row_result['month_l'];
+//   $arr_grfs[$v_row_result] = $row_result['nb'];
+	
+$querya2 = "	
+SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH, count(id) AS nb 
+FROM glpi_tickets
+WHERE glpi_tickets.is_deleted = '0'
+AND status IN ".$status."
+AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+GROUP BY MONTH
+ORDER BY MONTH";	
+
+$resulta2 = $DB->query($querya2) or die('erronb');
+$row_result2 = $DB->fetch_assoc($resulta2);
+
 	$v_row_result = $row_result['month_l'];
-	$arr_grfa[$v_row_result] = $row_result['nb'];			
-	} 
+		if($row_result2['nb'] != '') {
+		$arr_grfa[$v_row_result] = $row_result2['nb'];
+		}
+	else {
+		$arr_grfa[$v_row_result] = 0;
+		}			
+	
+}
 
 $arr_open = array_merge($arr_month, $arr_grfa);
 	
@@ -70,16 +90,60 @@ $grfa2 = implode("','",$grfa);
 $grfa3 = "'$grfa2'";
 $quanta2 = implode(',',$quanta);
 
+// solved
+$querys = 
+"SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH
+FROM glpi_tickets
+WHERE glpi_tickets.is_deleted = '0'
+GROUP BY MONTH
+ORDER BY MONTH ";
+
+$results = $DB->query($querys) or die('erro');
+
+$arr_grfs = array();
+
+while ($row_result = $DB->fetch_assoc($results))
+{ 
+	
+$querys2 = "	
+SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH, count(id) AS nb 
+FROM glpi_tickets
+WHERE glpi_tickets.is_deleted = '0'
+AND status = 5
+AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+GROUP BY MONTH
+ORDER BY MONTH";	
+
+$results2 = $DB->query($querys2) or die('erronb');
+$row_result2 = $DB->fetch_assoc($results2);
+
+	$v_row_result = $row_result['month_l'];
+		if($row_result2['nb'] != '') {
+		$arr_grfs[$v_row_result] = $row_result2['nb'];
+		}
+	else {
+		$arr_grfs[$v_row_result] = 0;
+		}			
+	
+}
+	
+$grfs = array_keys($arr_grfs) ;
+$quants = array_values($arr_grfs) ;
+
+$grfs2 = implode("','",$grfs);
+$grfs3 = "'$grfs2'";
+$quants2 = implode(',',$quants);
+
+
 // fechados mensais
 
 $queryf = "
-SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
+SELECT DISTINCT DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
-AND glpi_tickets.status NOT IN ". $status ."
+AND glpi_tickets.status = '6'
 GROUP BY month
-ORDER BY month
- ";
+ORDER BY month ";
 
 $resultf = $DB->query($queryf) or die('erro');
 
@@ -98,11 +162,10 @@ $grff3 = "'$grff2'";
 $quantf2 = implode(',',$quantf);
 
 
-//satisfaction %     
-   		    	   		
+
+//satisfaction %        		   	   		
 $query_sat = 
-"SELECT DISTINCT DATE_FORMAT( glpi_tickets.date, '%b-%y' ) AS month_l, 
-COUNT( glpi_tickets.id ) AS nb, DATE_FORMAT( glpi_tickets.date, '%y-%m' ) AS MONTH , 
+"SELECT DISTINCT DATE_FORMAT( glpi_tickets.date, '%b-%y' ) AS month_l, COUNT( glpi_tickets.id ) AS nb, DATE_FORMAT( glpi_tickets.date, '%y-%m' ) AS MONTH , 
 avg( `glpi_ticketsatisfactions`.satisfaction ) AS media
 FROM glpi_tickets, `glpi_ticketsatisfactions`
 WHERE glpi_tickets.is_deleted = '0'
@@ -259,7 +322,7 @@ if(array_sum($quantsat) != 0) {
                 type: 'column',
                 yAxis: 1,         
           
-          		data: [".$quantsat2."],	
+          		data: [$quantsat2],	
                 tooltip: {
                     valueSuffix: ' %'
                 },
@@ -293,15 +356,28 @@ echo "
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',
                         fontWeight: 'bold'
-                    },
+                    }   
                     },               
                 data: [$quantm2] 
                 },
                                              
                 {
-                name: '".__('Closed','dashboard')."',  
-                          
+                name: '".__('Closed','dashboard')."',                                           
                 data: [$quantf2]
+                }, 
+                
+                {
+                name: '".__('Solved')."',  
+                dataLabels: {
+                    enabled: true,                    
+                    //color: '#000',
+                    style: {
+                        fontSize: '11px',
+                        fontFamily: 'Verdana, sans-serif',
+                        fontWeight: 'bold'
+                    },
+                    },                            
+                data: [$quants2]
                 },  
 
                 {

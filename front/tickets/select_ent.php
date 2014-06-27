@@ -94,10 +94,6 @@ $name = 'sel_ent';
 $options = $arr_ent;
 $selected = "0";
 
-//echo dropdown( $name, $options, $selected );
-//Dropdown::showFromArray( $name, $options, $selected );
-
-
 ?>
 
 <div id='content' >
