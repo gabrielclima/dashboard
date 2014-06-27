@@ -10,7 +10,7 @@ else {
 }
 
 $query4 = "
-SELECT glpi_itilcategories.name as cat_name, COUNT(glpi_tickets.id) as cat_tick
+SELECT glpi_itilcategories.completename as cat_name, COUNT(glpi_tickets.id) as cat_tick, glpi_itilcategories.id
 FROM glpi_tickets, glpi_itilcategories, glpi_tickets_users
 WHERE glpi_itilcategories.id = glpi_tickets.itilcategories_id
 AND glpi_tickets.is_deleted = '0'
@@ -28,7 +28,7 @@ $result4 = $DB->query($query4) or die('erro');
 $arr_grf4 = array();
 while ($row_result = $DB->fetch_assoc($result4))		
 	{ 
-	$v_row_result = $row_result['cat_name'];
+	$v_row_result = $row_result['cat_name']." (".$row_result['id'].")";
 	$arr_grf4[$v_row_result] = $row_result['cat_tick'];			
 	} 
 	
@@ -47,7 +47,7 @@ echo "
 $(function () {
         $('#graf4').highcharts({
             chart: {
-                type: 'column'
+                type: 'bar'
             },
             title: {
                 text: 'Top 5 - ".__('Tickets by Category','dashboard')."'
@@ -56,7 +56,7 @@ $(function () {
             xAxis: {
                 categories: [$grf_3a],
                 labels: {
-                    rotation: -55,
+                    rotation: 0,
                     align: 'right',
                     style: {
                         fontSize: '11px',
@@ -79,7 +79,7 @@ $(function () {
                 useHTML: true
             },
             plotOptions: {
-                column: {
+                bar: {
                     pointPadding: 0.2,
                     borderWidth: 0,  
                     borderWidth: 2,
@@ -95,7 +95,7 @@ $(function () {
                     enabled: true,                    
                     color: '#000099',
                     align: 'center',
-                    x: 1,
+                    x: 12,
                     y: 1,
                     style: {
                         fontSize: '13px',

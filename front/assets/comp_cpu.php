@@ -57,7 +57,7 @@ $(document).ready(function() {
                 "print",
                 {
                     "sExtends":    "collection",
-                    "sButtonText": "Save",
+                    "sButtonText": "Export",
                     "aButtons":    [ "csv", "xls", "pdf" ]
                 }
             ]

@@ -71,8 +71,8 @@ while ($row_result = $DB->fetch_assoc($resultm))
 	$arr_month[$v_row_result] = 0;			
 	} 
 
-//chamados abertos mensais
 
+//chamados abertos mensais
 $querya = "
 SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
 FROM glpi_tickets
@@ -101,8 +101,8 @@ $grfa2 = implode("','",$grfa);
 $grfa3 = "'$grfa2'";
 $quanta2 = implode(',',$quanta);
 
-// fechados mensais
 
+// fechados mensais
 $queryf = "
 SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
 FROM glpi_tickets
@@ -130,11 +130,8 @@ $grff3 = "'$grff2'";
 $quantf2 = implode(',',$quantf);
 
 
-//satisfaction %     
-   		    		 
-   		    		 
-$query_sat = "SELECT DISTINCT DATE_FORMAT( glpi_tickets.date, '%b-%y' ) AS month_l, 
-COUNT( glpi_tickets.id ) AS nb, DATE_FORMAT( glpi_tickets.date, '%y-%m' ) AS MONTH , 
+//satisfaction %       		    		    		    		 
+$query_sat = "SELECT DISTINCT DATE_FORMAT( glpi_tickets.date, '%b-%y' ) AS month_l, COUNT( glpi_tickets.id ) AS nb, DATE_FORMAT( glpi_tickets.date, '%y-%m' ) AS MONTH , 
 avg( `glpi_ticketsatisfactions`.satisfaction ) AS media
 FROM glpi_tickets, `glpi_ticketsatisfactions`
 WHERE glpi_tickets.is_deleted = '0'
@@ -299,8 +296,7 @@ if(array_sum($quantsat) != 0) {
                 name: '".__('Satisfaction','dashboard')."',
                 color: '#C4D9F1',
                 type: 'column',
-                yAxis: 1,
-          //      data: [69.9, 71.5, 99, 100, 74.0, 76.0, 85.6, 83.5, 96.4, 94.1, 95.6, 84.4],
+                yAxis: 1,         
           
           		data: [".$quantsat2."],	
                 tooltip: {

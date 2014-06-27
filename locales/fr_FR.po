@@ -371,3 +371,6 @@ msgstr "Sélectionnez un atout"
 
 msgid "by Assets"
 msgstr "par Atouts"
+
+msgid "Print"
+msgstr "Imprimer"

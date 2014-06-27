@@ -27,6 +27,8 @@ Session::checkRight("profile", "r");
 <script src="../js/jquery.min.js" type="text/javascript" ></script>
 <script src="../js/jquery.jclock.js"></script>
 
+<script src="../js/sorttable.js"></script>
+
 <script type="text/javascript">
 $(function($) {
 var options = {
@@ -41,14 +43,22 @@ $('#clock').jclock(options);
 });
 </script>
 
+<style type="text/css">
+	.up-down a, a:link, a:visited {color: #555555; text-decoration: none;} 
+	.today a, a:link {color:#000099; text-decoration: none;}	
+	.title a, a:link, a:visited {color:#0076CC; text-decoration: none;}
+	.up-down a:visited	{color: #555555; text-decoration: none;}
+	.today a:visited	{color: #000099; text-decoration: none;}
+</style>
+
 </head>
 <body style="background-color: #fff;">
 <?php
 
 $status = "('2','1','3','4')"	;	
 
-$id_grp = $_REQUEST['ent'];
-
+$id_grp = $_REQUEST['grp'];
+$grp = $id_grp;
 
 $sql =
 "SELECT count(glpi_tickets.id) AS total
@@ -74,7 +84,6 @@ VALUES ('3','". $id_grp ."', '" . $abertos ."')  ";
 $result_i = $DB->query($query_i);
 
 // get quantity
-
 $query = "SELECT quant 
 FROM glpi_plugin_dashboard_count
 WHERE id = ".$id_grp." 
@@ -87,7 +96,6 @@ $atual = $quant['quant'];
 
 
 //update tickets count
-
 $query_up = "UPDATE glpi_plugin_dashboard_count 
 SET quant=".$data['total']."
 WHERE id = ".$id_grp." 
@@ -200,7 +208,7 @@ $group_name = $DB->result($result_n, 0, 'name');
 </tr>
 <tr><td></td></tr>
 
-<table style="color:#000099; font-size:25pt; font-weight:bold; width: 100%; margin-left: auto; margin-right: auto;"><tr><td align="center" ><span> <?php echo __('Today Tickets','dashboard'); ?>: 
+<table style="color:#000099; font-size:25pt; font-weight:bold; width: 100%; margin-left: auto; margin-right: auto;"><tr><td align="center" ><span class="today"><a href="cham_grupos.php?grp=<?php echo $grp; ?>"> <?php echo __('Today Tickets','dashboard'); ?>: </a> 
 <a href="../front/ticket.php" target="_blank" style="color:#8b1a1a;"> <?php echo "&nbsp; ".$hoje['total'] ; ?> </a>
 <img src= <?php echo $up_down ;?>  alt="" title= <?php echo __('Yesterday','dashboard'). ':';  echo $ontem['total'] ;?>  > </span> </td></tr>
 </table>
@@ -211,6 +219,28 @@ $group_name = $DB->result($result_n, 0, 'name');
 <div class="well info_box" style="width: 95%; margin-left: auto; margin-right: auto;">
 
 <?php 
+
+if(isset($_REQUEST['order'])) {
+
+	$order1 = $_REQUEST['order'];
+	
+	switch($order1) {
+		 case "td": $order = "ORDER BY glpi_tickets.id DESC"; break;
+		 case "ta": $order = "ORDER BY glpi_tickets.id ASC"; break;
+		 case "sd": $order = "ORDER BY glpi_tickets.status DESC"; break;
+		 case "sa": $order = "ORDER BY glpi_tickets.status ASC"; break;
+		 case "tid": $order = "ORDER BY glpi_tickets.name DESC"; break;
+		 case "tia": $order = "ORDER BY glpi_tickets.name ASC"; break;
+		 case "ted": $order = "ORDER BY glpi_tickets.id DESC"; break;
+		 case "tea": $order = "ORDER BY glpi_tickets.id ASC"; break;
+		 case "pd": $order = "ORDER BY glpi_tickets.priority DESC"; break;
+		 case "pa": $order = "ORDER BY glpi_tickets.priority ASC"; break;	  
+		}	
+	}
+	
+else {
+		$order = "ORDER BY glpi_tickets.date_mod DESC";
+}
 
 //$status = "('2','1','3','4')"	;	
 
@@ -223,16 +253,18 @@ AND glpi_tickets.is_deleted = 0
 AND glpi_groups_tickets.`groups_id` = ".$id_grp."
 AND glpi_groups_tickets.`groups_id` = glpi_groups.id
 AND glpi_groups_tickets.`tickets_id` = glpi_tickets.id
-ORDER BY glpi_tickets.date_mod DESC";
+".$order."";
+
+//ORDER BY glpi_tickets.date_mod DESC";
 
 $result_cham = $DB->query($sql_cham);
 
-echo "<tr>
-<td style='text-align:center; width:65px;'>". __('Tickets','dashboard')."</td>
-<td style='text-align:center; width:240px;'>Status</td>
-<td style='text-align:center;'>". __('Title','dashboard')."</td>
+echo "<tr class='up-down' style='color:#555;'>
+<td style='text-align:center; width:65px;'><a href='cham_grupos.php?grp=".$grp."&order=ta'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Tickets','dashboard')."<a href='cham_grupos.php?grp=".$grp."&order=td'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+<td style='text-align:center; width:240px;'><a href='cham_grupos.php?grp=".$grp."&order=sa'><font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>Status<a href='cham_grupos.php?grp=".$grp."&order=sd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+<td style='text-align:center;'><a href='cham_grupos.php?grp=".$grp."&order=tia'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Title','dashboard')."<a href='cham_grupos.php?grp=".$grp."&order=tid'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
 <td style='text-align:center;'>". __('Technician','dashboard')."</td>
-<td style='text-align:center;'>". __('Priority')."</td>
+<td style='text-align:center;'><a href='cham_grupos.php?grp=".$grp."&order=pa'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Priority')."<a href='cham_grupos.php?grp=".$grp."&order=pd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
 </tr>";
 
 while($row = $DB->fetch_assoc($result_cham)){ 
@@ -247,16 +279,16 @@ if($status1 == "5" ) { $status1 = "solved";}
 if($status1 == "6" ) { $status1 = "closed";}
 
 
-$sql_tec = "SELECT glpi_tickets.id AS id, glpi_users.firstname AS name, glpi_users.realname AS sname
+$sql_grp = "SELECT glpi_tickets.id AS id, glpi_users.firstname AS name, glpi_users.realname AS sname
 FROM `glpi_tickets_users` , glpi_tickets, glpi_users
 WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.id = ". $row['id'] ."
 AND glpi_tickets_users.`users_id` = glpi_users.id
 AND glpi_tickets_users.type = 2
 ";
-$result_tec = $DB->query($sql_tec);	
+$result_grp = $DB->query($sql_grp);	
 
-	$row_tec = $DB->fetch_assoc($result_tec);
+	$row_grp = $DB->fetch_assoc($result_grp);
 
 $sql_prio = "SELECT priority_".$row['priority']." AS priority
 				FROM glpi_configs";
@@ -280,7 +312,7 @@ echo "<tr>
 <td style='text-align:center; vertical-align:middle;'> <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span style='color:#000099';>" . $row['id'] . "</span> </a></td>
 <td style='vertical-align:middle;'><span style='color:#000099';><img src=../../../../pics/".$status1.".png />  ".Ticket::getStatus($row['status'])."</span ></td><td style='vertical-align:middle;'>
 <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span >" . $row['descri'] . "</span> </a></td>
-<td style='vertical-align:middle;'><span >". $row_tec['name'] ." ".$row_tec['sname'] ."</span></td>
+<td style='vertical-align:middle;'><span >". $row_grp['name'] ." ".$row_grp['sname'] ."</span></td>
 <td style='vertical-align:middle; text-align:center; background-color:". $row_prio['priority'] .";'>" . $prio_name . "</td>
 </tr>"; 
  

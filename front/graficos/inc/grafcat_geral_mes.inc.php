@@ -11,7 +11,7 @@ $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
 }
 
 $query4 = "
-SELECT glpi_itilcategories.name as cat_name, COUNT(glpi_tickets.id) as cat_tick
+SELECT glpi_itilcategories.completename as cat_name, COUNT(glpi_tickets.id) as cat_tick
 FROM glpi_tickets,  glpi_itilcategories
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_itilcategories.id = glpi_tickets.itilcategories_id

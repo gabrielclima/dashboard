@@ -31,7 +31,6 @@ ORDER BY day ";
 else {
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
 
-
 $querym = "
 SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day
 FROM glpi_tickets
@@ -57,10 +56,9 @@ $grfm2 = implode("','",$grfm);
 $grfm3 = "'$grfm2'";
 $quantm2 = implode(',',$quantm);
 
+
 //array to compare months
-
 $DB->data_seek($resultm, 0);
-
 $arr_month = array();
 while ($row_result = $DB->fetch_assoc($resultm))		
 	{ 
@@ -68,9 +66,30 @@ while ($row_result = $DB->fetch_assoc($resultm))
 	$arr_month[$v_row_result] = 0;			
 	} 
 
-
+echo 'mes';
+print_r($arr_month);
 
 $status = "('2','1','3','4')"	;	
+
+/*
+SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as day, status
+FROM glpi_tickets
+WHERE glpi_tickets.is_deleted = '0'
+
+UNION ALL
+
+SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as day, status
+FROM glpi_tickets
+WHERE glpi_tickets.is_deleted = '0'
+AND glpi_tickets.date ".$datas."
+AND glpi_tickets.status IN (1,2,3,4)
+GROUP BY day
+ORDER BY day
+
+AND glpi_tickets.date ".$datas."
+AND status IN ".$status."
+
+*/
 
 //chamados abertos mensais
 
@@ -79,11 +98,97 @@ if($interval >= "31") {
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
 
 $querya = "
-SELECT DISTINCT DATE_FORMAT(date, '%b-%Y') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as day
+SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS day_l, DATE_FORMAT( date, '%y-%m' ) AS day
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
-AND glpi_tickets.status IN ". $status ."
+GROUP BY day
+ORDER BY day 
+";
+}
+
+else {
+$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
+
+$querya = "
+SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day
+FROM glpi_tickets
+WHERE glpi_tickets.is_deleted = '0'
+AND glpi_tickets.date ".$datas."
+GROUP BY day
+ORDER BY day  ";
+}
+
+
+$resulta = $DB->query($querya) or die('erro');
+
+$arr_grfa = array();
+
+while ($row_result = $DB->fetch_assoc($resulta))		
+	{ 
+	if($interval >= "31") {
+		
+		$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
+		$querya2 = "	
+		SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS day_l, DATE_FORMAT( date, '%y-%m' ) AS day, count(id) AS nb 
+		FROM glpi_tickets
+		WHERE glpi_tickets.is_deleted = '0'
+		AND glpi_tickets.date ".$datas."
+		AND status IN ".$status."
+		AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['day_l']."' 
+		GROUP BY day
+		ORDER BY day";	
+		}
+	else {
+		
+		$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
+		$querya2 = "	
+		SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day, count(id) AS nb 
+		FROM glpi_tickets
+		WHERE glpi_tickets.is_deleted = '0'
+		AND glpi_tickets.date ".$datas."
+		AND status IN ".$status."
+		AND DATE_FORMAT( date, '%b-%d' ) = '".$row_result['day_l']."' 
+		GROUP BY day
+		ORDER BY day";	
+		}
+
+$resulta2 = $DB->query($querya2) or die('erronb');
+$row_result2 = $DB->fetch_assoc($resulta2);
+
+	$v_row_result = $row_result['day_l'];
+		if($row_result2['nb'] != '') {
+		$arr_grfa[$v_row_result] = $row_result2['nb'];
+		}
+	else {
+		$arr_grfa[$v_row_result] = 0;
+		}
+		
+	} 
+	
+//$arr_open = array_merge($arr_month, $arr_grfa);
+	
+$grfa = array_keys($arr_grfa) ;
+$quanta = array_values($arr_grfa) ;
+
+$grfa2 = implode("','",$grfa);
+$grfa3 = "'$grfa2'";
+$quanta2 = implode(',',$quanta);
+
+echo 'open';
+print_r($quanta);
+
+
+// solucionados
+if($interval >= "31") {
+
+$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
+
+$querys = "
+SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS day_l, DATE_FORMAT( date, '%y-%m' ) AS day
+FROM glpi_tickets
+WHERE glpi_tickets.is_deleted = '0'
+AND glpi_tickets.date ".$datas."
 GROUP BY day
 ORDER BY day ";
 }
@@ -91,35 +196,63 @@ ORDER BY day ";
 else {
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
 
-
-$querya = "
+$querys = "
 SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
-AND glpi_tickets.status IN ". $status ."
 GROUP BY day
-ORDER BY day ";
+ORDER BY day  ";
 }
 
-$resulta = $DB->query($querya) or die('erro');
 
-$arr_grfa = array();
+$resulta = $DB->query($querys) or die('erro');
+
+$arr_grfs = array();
+
 while ($row_result = $DB->fetch_assoc($resulta))		
 	{ 
+	if($interval >= "31") {
+		$querys2 = "	
+		SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS day_l, DATE_FORMAT( date, '%y-%m' ) AS day, count(id) AS nb 
+		FROM glpi_tickets
+		WHERE glpi_tickets.is_deleted = '0'
+		AND glpi_tickets.date ".$datas."
+		AND status = 5
+		AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['day_l']."' 
+		GROUP BY day
+		ORDER BY day";	
+		}
+	else {
+		$querys2 = "	
+		SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day, count(id) AS nb 
+		FROM glpi_tickets
+		WHERE glpi_tickets.is_deleted = '0'
+		AND glpi_tickets.date ".$datas."
+		AND status = 5
+		AND DATE_FORMAT( date, '%b-%d' ) = '".$row_result['day_l']."' 
+		GROUP BY day
+		ORDER BY day";	
+		}
+
+$results2 = $DB->query($querys2) or die('erronb');
+$row_result2 = $DB->fetch_assoc($results2);
+
 	$v_row_result = $row_result['day_l'];
-	$arr_grfa[$v_row_result] = $row_result['nb'];			
+		if($row_result2['nb'] != '') {
+		$arr_grfs[$v_row_result] = $row_result2['nb'];
+		}
+	else {
+		$arr_grfs[$v_row_result] = 0;
+		}	
 	} 
+		
+$grfs = array_keys($arr_grfs) ;
+$quants = array_values($arr_grfs) ;
 
-$arr_open = array_merge($arr_month, $arr_grfa);
-	
-$grfa = array_keys($arr_open) ;
-$quanta = array_values($arr_open) ;
-
-$grfa2 = implode("','",$grfa);
-$grfa3 = "'$grfa2'";
-$quanta2 = implode(',',$quanta);
-
+$grfs2 = implode("','",$grfs);
+$grfs3 = "'$grfs2'";
+$quants2 = implode(',',$quants);
 
 
 // fechados mensais
@@ -129,13 +262,13 @@ if($interval >= "31") {
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
 
 $queryf = "
-SELECT DISTINCT DATE_FORMAT(date, '%b-%Y') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as day
+SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS day_l, DATE_FORMAT( date, '%y-%m' ) AS day
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
-AND glpi_tickets.status NOT IN ". $status ."
 GROUP BY day
-ORDER BY day ";
+ORDER BY day 
+";
 }
 
 else {
@@ -146,31 +279,62 @@ SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORM
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
-AND glpi_tickets.status NOT IN ". $status ."
 GROUP BY day
-ORDER BY day ";
+ORDER BY day  ";
 }
 
-$resultf = $DB->query($queryf) or die('erro');
+
+$resulta = $DB->query($queryf) or die('erro');
 
 $arr_grff = array();
-while ($row_result = $DB->fetch_assoc($resultf))		
+
+while ($row_result = $DB->fetch_assoc($resulta))		
 	{ 
+	if($interval >= "31") {
+		$queryf2 = "	
+		SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS day_l, DATE_FORMAT( date, '%y-%m' ) AS day, count(id) AS nb 
+		FROM glpi_tickets
+		WHERE glpi_tickets.is_deleted = '0'
+		AND glpi_tickets.date ".$datas."
+		AND status = 6
+		AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['day_l']."' 
+		GROUP BY day
+		ORDER BY day";	
+		}
+	else {
+		$queryf2 = "	
+		SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day, count(id) AS nb 
+		FROM glpi_tickets
+		WHERE glpi_tickets.is_deleted = '0'
+		AND glpi_tickets.date ".$datas."
+		AND status = 6
+		AND DATE_FORMAT( date, '%b-%d' ) = '".$row_result['day_l']."' 
+		GROUP BY day
+		ORDER BY day";	
+		}
+
+$resultf2 = $DB->query($queryf2) or die('erronb');
+$row_result2 = $DB->fetch_assoc($resultf2);
+
 	$v_row_result = $row_result['day_l'];
-	$arr_grff[$v_row_result] = $row_result['nb'];			
+		if($row_result2['nb'] != '') {
+		$arr_grff[$v_row_result] = $row_result2['nb'];
+		}
+	else {
+		$arr_grff[$v_row_result] = 0;
+		}	
 	} 
-	
+		
 $grff = array_keys($arr_grff) ;
 $quantf = array_values($arr_grff) ;
 
-$grff2 = implode("','",$grff);
+$grff = implode("','",$grff);
 $grff3 = "'$grff2'";
 $quantf2 = implode(',',$quantf);
 
 
-//satisfaction %     
-   	
-   		 
+
+//satisfaction %       	   		 
 if($interval >= "31") {
 	
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
@@ -184,7 +348,6 @@ AND glpi_tickets.date ".$datas."
 AND `glpi_ticketsatisfactions`.tickets_id = glpi_tickets.id
 GROUP BY day
 ORDER BY day"; 
-
 }  
 
 else {
@@ -351,7 +514,7 @@ if(array_sum($quantsat) != 0) {
                 type: 'column',
                 yAxis: 1,         
           
-          		data: [".$quantsat2."],	
+          		data: [$quantsat2],	
                 tooltip: {
                     valueSuffix: ' %'
                 },
@@ -387,12 +550,34 @@ echo "
                         fontWeight: 'bold'
                     },
                     },               
-                data: [$quantm2] 
+                data: [$quantm2]
                 },
+                
+                {
+                name: '".__('Solved')."', 
+                dataLabels: {
+                    enabled: true,                    
+                    color: '#000',
+                    style: {
+                        fontSize: '11px',
+                        fontFamily: 'Verdana, sans-serif',
+                        fontWeight: 'bold'
+                    },
+                    },                             
+                data: [$quants2]
+                }, 
                                              
                 {
-                name: '".__('Closed','dashboard')."',  
-                          
+                name: '".__('Closed','dashboard')."',   
+                dataLabels: {
+                    enabled: true,                    
+                    //color: '#000',
+                    style: {
+                        fontSize: '11px',
+                        fontFamily: 'Verdana, sans-serif',
+                        fontWeight: 'bold'
+                    },
+                    },                         
                 data: [$quantf2]
                 },  
 

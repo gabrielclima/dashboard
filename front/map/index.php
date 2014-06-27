@@ -251,7 +251,8 @@ echo "['$title', $lat, $lng, '$local', '$color', '$host', $id, $quant, $num_up, 
 function initialize() {
    
 var mapOptions = {
-	mapTypeId: google.maps.MapTypeId.ROADMAP
+	//mapTypeId: google.maps.MapTypeId.ROADMAP
+	mapTypeId: google.maps.MapTypeId.HYBRID
 	};
 	
     var map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);

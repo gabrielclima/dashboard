@@ -372,3 +372,6 @@ msgstr "Seleziona un asset"
 
 msgid "by Assets"
 msgstr "per Assets"
+
+msgid "Print"
+msgstr "Stampa"

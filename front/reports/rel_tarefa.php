@@ -386,14 +386,19 @@ while($row = $DB->fetch_assoc($result_cons1)){
 
 while($row = $DB->fetch_assoc($result_nome)){
 
+$tech = $row['firstname'] ." ". $row['realname'];
+
 echo "
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
 <table class='row-fluid'  style='font-size: 18px; font-weight:bold; margin-bottom: 30px;' cellpadding = 1px>
 <tr>
-<td style='vertical-align:middle; width:45%;'> <span style='color: #000;'>".__('Technician', 'dashboard').": </span>  ". $row['firstname'] ." ". $row['realname']. "</td>
+<td style='vertical-align:middle; width:40%;'> <span style='color: #000;'>".__('Technician', 'dashboard').": </span>  ". $row['firstname'] ." ". $row['realname']. "</td>
 <td style='vertical-align:middle;'> <span style='color: #000;'>"._n('Task', 'Tasks',2).": </span>". $conta_cons ."</td>
 <td style='vertical-align:middle;'> <span style='color: #000;'>".__('Time').": </span>". time_ext($tempoTotal) ."</td>
+<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>
+".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
+</td>
 </tr>
 </table>
 
@@ -450,19 +455,27 @@ $(document).ready(function() {
 
         "sDom": 'T<"clear">lfrtip',
          "oTableTools": {
-	       "aButtons": [
-	       "copy",
-	       "print",
-	       {
-	           "sExtends":    "collection",
-	           "sButtonText": "Save",
-	           "aButtons":    [ "csv", "xls",
-	            {
-	           "sExtends": "pdf",
-	           "sPdfOrientation": "landscape",
-	           "sPdfMessage": ""
-	            } ]
-	       } ]
+         "aButtons": [
+             {
+                 "sExtends": "copy",
+                 "sButtonText": "<?php echo __('Copy'); ?>"
+             },
+             {
+                 "sExtends": "print",
+                 "sButtonText": "<?php echo __('Print','dashboard'); ?>",
+                 "sMessage": "<div class='info_box row-fluid span12' style='margin-top:20px; margin-bottom:12px; margin-left: -1px;'><table class='row-fluid'  style='width: 80%; margin-left: 10%; font-size: 18px; font-weight:bold;' cellpadding = '1px'><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> <?php echo __('Technician','dashboard'); ?> : </span><?php echo $tech; ?> </td> <td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle;'><span style='color:#000;'> <?php echo  _n('Task','Tasks',2); ?> : </span><?php echo $conta_cons ; ?></td><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'><?php echo __('Time'); ?></span> : <?php echo time_ext($tempoTotal); ?></td><td colspan='2' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'> <?php echo  __('Period','dashboard'); ?> : </span> <?php echo conv_data($data_ini2); ?> a <?php echo conv_data($data_fin2); ?> </td> </table></div>"
+             },
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "<?php echo __('Export'); ?>",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             }
+         ]
         }
 		  
     });    

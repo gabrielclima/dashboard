@@ -372,3 +372,6 @@ msgstr "Selecione um ativo"
 
 msgid "by Assets"
 msgstr "por Ativos"
+
+msgid "Print"
+msgstr "Imprimir"

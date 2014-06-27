@@ -42,6 +42,14 @@ $('#clock').jclock(options);
 });
 </script>
 
+<style type="text/css">
+	.up-down a, a:link, a:visited {color: #555555; text-decoration: none;} 
+	.today a, a:link {color:#000099; text-decoration: none;}	
+	.title a, a:link, a:visited {color:#0076CC; text-decoration: none;}
+	.up-down a:visited	{color: #555555; text-decoration: none;}
+	.today a:visited	{color: #000099; text-decoration: none;}
+</style>
+
 </head>
 
 <body style="background-color: #fff;">
@@ -66,9 +74,7 @@ $data = $DB->fetch_assoc($result);
 
 $abertos = $data['total']; 
 
-
 //insert if not exist entity
-
 $query_i = "
 INSERT IGNORE INTO glpi_plugin_dashboard_count (type, id, quant) 
 VALUES ('2','". $ent ."', '" . $abertos ."')  ";
@@ -89,7 +95,6 @@ $atual = $quant['quant'];
 
 
 //update tickets count
-
 $query_up = "UPDATE glpi_plugin_dashboard_count 
 SET quant=".$data['total']."
 WHERE id = ".$ent." 
@@ -130,7 +135,6 @@ else {
 }
 
 }	
-
 
 //contar chamados de hoje - today tickets
 
@@ -197,7 +201,7 @@ $ent_name = $DB->result($result_n, 0, 'name');
 </tr>
 <tr><td></td></tr>
 
-<table style="color:#000099; font-size:25pt; font-weight:bold; width: 100%; margin-left: auto; margin-right: auto;"><tr><td align="center" ><span> <?php echo __('Today Tickets','dashboard'); ?>: 
+<table style="color:#000099; font-size:25pt; font-weight:bold; width: 100%; margin-left: auto; margin-right: auto;"><tr><td align="center"><span class="today"><a href="cham_entidades.php?ent=<?php echo $ent; ?>"> <?php echo __('Today Tickets','dashboard'); ?>: </a> 
 <a href="../front/ticket.php" target="_blank" style="color:#8b1a1a;"> <?php echo "&nbsp; ".$hoje['total'] ; ?> </a>
 <img src= <?php echo $up_down ;?>  alt="" title= <?php echo __('Yesterday','dashboard'). ':';  echo $ontem['total'] ;?>  > </span> </td></tr>
 </table>
@@ -209,8 +213,30 @@ $ent_name = $DB->result($result_n, 0, 'name');
 
 <?php 
 
-$status = "('2','1','3','4')"	;	
+if(isset($_REQUEST['order'])) {
 
+	$order1 = $_REQUEST['order'];
+	
+	switch($order1) {
+		 case "td": $order = "ORDER BY glpi_tickets.id DESC"; break;
+		 case "ta": $order = "ORDER BY glpi_tickets.id ASC"; break;
+		 case "sd": $order = "ORDER BY glpi_tickets.status DESC"; break;
+		 case "sa": $order = "ORDER BY glpi_tickets.status ASC"; break;
+		 case "tid": $order = "ORDER BY glpi_tickets.name DESC"; break;
+		 case "tia": $order = "ORDER BY glpi_tickets.name ASC"; break;
+		 case "ted": $order = "ORDER BY glpi_tickets.id DESC"; break;
+		 case "tea": $order = "ORDER BY glpi_tickets.id ASC"; break;
+		 case "pd": $order = "ORDER BY glpi_tickets.priority DESC"; break;
+		 case "pa": $order = "ORDER BY glpi_tickets.priority ASC"; break;	  
+		}	
+	}
+	
+else {
+		$order = "ORDER BY glpi_tickets.date_mod DESC";
+}
+
+
+$status = "('2','1','3','4')"	;	
 
 echo "<table class='table table-hover table-striped' style='font-size: 18px; font-weight:bold;' cellpadding = 2px >";
 
@@ -219,16 +245,18 @@ FROM glpi_tickets
 WHERE  glpi_tickets.status IN  ".$status." 
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.entities_id = ".$ent."
-ORDER BY glpi_tickets.date_mod DESC";
+".$order."";
+
+//ORDER BY glpi_tickets.date_mod DESC
 
 $result_cham = $DB->query($sql_cham);
 
-echo "<tr>
-<td style='text-align:center; width:65px;'>". __('Tickets','dashboard')."</td>
-<td style='text-align:center; width:240px;'>Status</td>
-<td style='text-align:center;'>". __('Title','dashboard')."</td>
+echo "<tr class='up-down' style='color:#555;'>
+<td style='text-align:center; width:65px;'><a href='cham_entidades.php?ent=".$ent."&order=ta'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Tickets','dashboard')."<a href='cham_entidades.php?ent=".$ent."&order=td'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+<td style='text-align:center; width:240px;'><a href='cham_entidades.php?ent=".$ent."&order=sa'><font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>Status<a href='cham_entidades.php?ent=".$ent."&order=sd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+<td style='text-align:center;'><a href='cham_entidades.php?ent=".$ent."&order=tia'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Title','dashboard')."<a href='cham_entidades.php?ent=".$ent."&order=tid'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
 <td style='text-align:center;'>". __('Technician','dashboard')."</td>
-<td style='text-align:center;'>". __('Priority')."</td>
+<td style='text-align:center;'><a href='cham_entidades.php?ent=".$ent."&order=pa'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Priority')."<a href='cham_entidades.php?ent=".$ent."&order=pd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
 </tr>";
 
 while($row = $DB->fetch_assoc($result_cham)){ 

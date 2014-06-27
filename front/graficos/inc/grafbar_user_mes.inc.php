@@ -58,7 +58,6 @@ GROUP BY glpi_users.firstname
 	$chamado = $DB->fetch_assoc($queryC);
 
 echo "'". $chamado['name']." ". $chamado['sname']."',";
-//echo "'". utf8_encode($chamado['name'])." ". utf8_encode($chamado['sname'])."',";	 
 }   
 
 //zerar rows para segundo while
