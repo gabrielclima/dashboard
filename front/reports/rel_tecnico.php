@@ -52,7 +52,7 @@ function conv_data_hora($data) {
 function dropdown( $name, array $options, $selected=null )
 {
     /*** begin the select ***/
-    $dropdown = '<select class="chosen-select" tabindex="-1" style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
+    $dropdown = '<select id="sel1" style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
 
     $selected = $selected;
     /*** loop over the options ***/
@@ -73,10 +73,8 @@ function dropdown( $name, array $options, $selected=null )
 }
 
 
-
 function time_ext($solvedate)
 {
-// TEST
 // 1 Day 6 Hours 50 Minutes 31 Seconds ~ 111031 seconds
 
 $time = $solvedate; // time duration in seconds
@@ -121,8 +119,8 @@ return $return;
 <link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
 <link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
 <script language="javascript" src="../js/jquery.min.js"></script>
-<link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
-<script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
+<link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
+<script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
 
 <!-- gauge -->
 <script src="../js/raphael.2.1.0.min.js"></script>
@@ -132,22 +130,20 @@ return $return;
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
-<!-- <script src="../js/sorttable.j"></script> -->
 <script src="../js/media/js/jquery.dataTables.min.js"></script>
-<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/media/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet" />  
+<script src="../js/media/js/dataTables.bootstrap.js"></script> 
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
 <style type="text/css" title="currentStyle">	
-	@import "../js/media/css/jquery.dataTables_themeroller.css";
-	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
-	
 select { width: 60px; }
 table.dataTable { empty-cells: show; }
 </style>
 
 </head>
 
-<body style="background-color: #e5e5e5;">
+<body style="background-color: #e5e5e5; margin-left:0%;">
 
 <?php
 
@@ -188,27 +184,32 @@ a:hover {
     <form id="form1" name="form1" class="form_rel" method="post" action="rel_tecnico.php?con=1">
     <table border="0" cellspacing="0" cellpadding="3" bgcolor="#efefef" >
     <tr>
-<td style="width: 250px;">
+<td style="width: 310px;">
 <?php
 $url = $_SERVER['REQUEST_URI'];
 $arr_url = explode("?", $url);
 $url2 = $arr_url[0];
 
-echo'
-<table style="margin-top:6px;" ><tr><td>
-    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date1" value="'.$data_ini.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-</td><td>
-   <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date2" value="'.$data_fin.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    </tr></td>
-    </table>
-    ';
-?>
+			echo'
+			<table>
+				<tr>
+					<td>
+					   <div class="input-group date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date1" value="'.$data_ini.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+					<td>
+				   	<div class="input-group date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date2" value="'.$data_fin.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table> ';
+	?>
 
 <script language="Javascript">
 
@@ -219,10 +220,10 @@ $('#dp2').datepicker('update');
 </td>
 
 <td style="margin-top:2px;">
+
 <?php
 
 // lista de técnicos
-
 $res_tec = $DB->query($sql_tec);
 $arr_tec = array();
 $arr_tec[0] = "-- ". __('Select a technician','dashboard') . " --" ;
@@ -248,8 +249,8 @@ echo dropdown( $name, $options, $selected );
 <tr>
 <td colspan="2" align="center">
 
-<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
+<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
+<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
 </td>
 </tr>
 
@@ -261,8 +262,8 @@ echo dropdown( $name, $options, $selected );
 </div>
 
 <?php
-//tecnico2
 
+//tecnico2
 if(isset($_GET['con'])) {
 
 $con = $_GET['con'];
@@ -301,11 +302,8 @@ else {
 	$datas2 = "BETWEEN '".$data_ini2." 00:00:00' AND '".$data_fin2." 23:59:59'";
 }
 
-
 //status
-
 $status = "";
-
 $status_open = "('1','2','3','4')";
 $status_close = "('5','6')";
 $status_all = "('1','2','3','4','5','6')";
@@ -334,7 +332,6 @@ else {
 
 
 //order
-
 if(isset($_REQUEST['order'])) {
     $order = $_REQUEST['order'];
 }
@@ -342,29 +339,7 @@ else {
     $order = 'id';
 }
 
-
-//paginacao
-
-if(isset($_GET['npage'])) {
-    $num_por_pagina = $_GET['npage']; }
-
-else {
-    $num_por_pagina = 20; }
-
-
-if(!isset($_GET['pagina'])) {
-    $primeiro_registro = 0;
-    $pagina = 1;
-
-}
-else {
-    $pagina = $_GET['pagina'];
-    $primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
-
-
 // Chamados
-
 $sql_cham =
 "SELECT glpi_tickets.id AS id, glpi_tickets.name AS name, glpi_tickets.date AS date, glpi_tickets.solvedate as solvedate,
 glpi_tickets.type, glpi_tickets.status, FROM_UNIXTIME( UNIX_TIMESTAMP( `glpi_tickets`.`solvedate` ) , '%Y-%m' ) AS date_unix, AVG( glpi_tickets.solve_delay_stat ) AS time
@@ -376,13 +351,10 @@ AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
 GROUP BY id
-ORDER BY id DESC
-";
-//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
+ORDER BY id DESC ";
 
 $result_cham = $DB->query($sql_cham);
 
-//fim paginacao 1
 
 $consulta1 =
 "SELECT glpi_tickets.id AS id, glpi_tickets.name, glpi_tickets.date AS adate, glpi_tickets.solvedate AS sdate,
@@ -419,7 +391,6 @@ else {
 
 
 //abertos
-
 $sql_ab = "SELECT count( glpi_tickets.id ) AS total, glpi_tickets_users.`users_id` AS id
 FROM `glpi_tickets_users`, glpi_tickets
 WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
@@ -435,7 +406,6 @@ $abertos = $data_ab['total'];
 
 
 //satisfação por tecnico
-
 $query_sat = "
 SELECT glpi_users.id, avg( `glpi_ticketsatisfactions`.satisfaction ) AS media
 FROM glpi_tickets, `glpi_ticketsatisfactions`, glpi_tickets_users, glpi_users
@@ -455,36 +425,32 @@ $satisfacao = round(($media['media']/5)*100,1);
 $nota = $media['media'];
 
 //barra de porcentagem
-
 if($conta_cons > 0) {
 
 if($status == $status_close ) {
     $barra = 100;
-    $cor = "progress-success";
+    $cor = "progress-bar-success";
 }
 
 else {
 
-//porcentagem
+	//porcentagem
+	$perc = round(($abertos*100)/$conta_cons,1);
+	$barra = 100 - $perc;
+	
+	// cor barra
+	if($barra == 100) { $cor = "progress-bar-success"; }
+	if($barra >= 80 and $barra < 100) { $cor = " "; }
+	if($barra > 51 and $barra < 80) { $cor = "progress-bar-warning"; }
+	if($barra > 0 and $barra <= 50) { $cor = "progress-bar-danger"; }
 
-$perc = round(($abertos*100)/$conta_cons,1);
-$barra = 100 - $perc;
-
-// cor barra
-
-if($barra == 100) { $cor = "progress-success"; }
-if($barra >= 80 and $barra < 100) { $cor = ""; }
-if($barra > 51 and $barra < 80) { $cor = "progress-warning"; }
-if($barra > 0 and $barra <= 50) { $cor = "progress-danger"; }
-
-}
+	}
 }
 else { $barra = 0;}
 
 //$satisfacao = 0;
 
 //nome e total
-
 $sql_nome = "
 SELECT `firstname` , `realname`, `name`
 FROM `glpi_users`
@@ -501,16 +467,18 @@ echo "
 <div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
 
 <table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
-<tr style='width: 450px;'><td style='vertical-align:middle;'> <span style='color: #000;'>".__('Technician','dashboard').": </span>". $row['firstname'] ." ". $row['realname']. "</td>
-
-<td style='vertical-align:middle; ' colspan=2> <span style='color: #000;'>".__('Tickets','dashboard').": </span>". $conta_cons ."</td>
-<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
-<td style='vertical-align:middle; width: 180px; '>
-    <div class='progress ". $cor ." progress-striped active' style='margin-top: 15px;'>
-    <div class='bar' style='width:".$barra."%;'><div style='text-align: rigth; margin-top: 3px; margin-top:2px;'>".$barra." % ".__('Closed','dashboard') ." </div></div>
-    </div>
-</td>
-</tr>
+	<tr style='width: 450px;'><td style='vertical-align:middle;'> <span style='color: #000;'>".__('Technician','dashboard').": </span>". $row['firstname'] ." ". $row['realname']. "</td>
+	
+		<td style='vertical-align:middle; ' colspan=2> <span style='color: #000;'>".__('Tickets','dashboard').": </span>". $conta_cons ."</td>
+		<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
+		<td style='vertical-align:middle; width: 190px; '>
+		<div class='progress' style='margin-top: 19px;'>
+			<div class='progress-bar ". $cor ." progress-bar-striped active' role='progressbar' aria-valuenow='".$barra."' aria-valuemin='0' aria-valuemax='100' style='width: ".$barra."%;'>
+	 			".$barra." % ".__('Closed', 'dashboard') ."	
+	 		</div>		
+		</div>		   
+		</td>
+	</tr>
 
 </table> ";
 
@@ -542,25 +510,27 @@ echo "
     });
     </script>
 
-<td align='right' width='60px;'><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> </td>
-<td align='right' width='60px;'><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> </td>
-<td width='50px;'><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> </td>
+	<td colspan=3 align='right' style='vertical-align:bottom;'>
+		<button class='btn btn-primary btn-sm' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> 
+		<button class='btn btn-primary btn-sm' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> 
+		<button class='btn btn-primary btn-sm' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> 
+	</td>	
 </tr>
 </table>
 
 <table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
-<thead>
-<tr>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
-<th></th>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
-<th style=' color: #000;'> ". __('Satisfaction','dashboard') ."</th>
-</tr>
-</thead>
+	<thead>
+		<tr>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
+			<th></th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
+			<th style='text-align:center; color: #000;'> ". __('Satisfaction','dashboard') ."</th>
+		</tr>
+	</thead>
 <tbody>
 ";
 }
@@ -569,26 +539,33 @@ else {
 
 echo "
 <table align='right' style='margin-bottom:10px;'>
-<tr><td>&nbsp;</td></tr>
-<tr>
-<td><button class='btn btn-primary btn-small' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> </td>
-<td><button class='btn btn-primary btn-small' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> </td>
-<td><button class='btn btn-primary btn-small' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> </td>
-</tr>
+
+	<tr>
+		<td colspan=3 style='vertical-align:bottom;'>
+			<button class='btn btn-primary btn-sm' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> 
+			<button class='btn btn-primary btn-sm' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> 
+			<button class='btn btn-primary btn-sm' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> 
+		</td>	
+	</tr>
+</table>
+
+<table>
+	<tr><td>&nbsp;</td></tr>
+	<tr><td>&nbsp;</td></tr>
 </table>
 
 <table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
-<thead>
-<tr>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
-<th></th>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
-<th style=' color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
-</tr>
-</thead>
+	<thead>
+		<tr>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
+			<th></th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
+		</tr>
+	</thead>
 <tbody>
 ";
 }
@@ -628,13 +605,13 @@ $satc1 = $satc['sat'];
 echo "
 <tr>
 <td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
-<td style='vertical-align:middle;'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
-<td> ". $type ." </td>
-<td> ". substr($row['name'],0,75) ." </td>
-<td> ". conv_data_hora($row['date']) ." </td>
-<td> ". conv_data_hora($row['solvedate']) ." </td>
-<td> ". time_ext($row['time']) ."</td>
-<td> <img src=../img/s". $satc1 .".png> </td>
+<td style='vertical-align:middle;' align='center'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
+<td style='vertical-align:middle;'> ". $type ." </td>
+<td style='vertical-align:middle;'> ". substr($row['name'],0,75) ." </td>
+<td style='vertical-align:middle;'> ". conv_data_hora($row['date']) ." </td>
+<td style='vertical-align:middle;'> ". conv_data_hora($row['solvedate']) ." </td>
+<td style='vertical-align:middle;'> ". time_ext($row['time']) ."</td>
+<td style='vertical-align:middle;'> <img src=../img/s". $satc1 .".png> </td>
 </tr>";
     }
 //}
@@ -644,12 +621,12 @@ else {
 echo "
 <tr>
 <td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
-<td style='vertical-align:middle;'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
-<td> ". $type ." </td>
-<td> ". substr($row['name'],0,75) ." </td>
-<td> ". conv_data_hora($row['date']) ." </td>
-<td> ". conv_data_hora($row['solvedate']) ." </td>
-<td> ". time_ext($row['time']) ."</td>
+<td style='vertical-align:middle;' align='center'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
+<td style='vertical-align:middle;'> ". $type ." </td>
+<td style='vertical-align:middle;'> ". substr($row['name'],0,75) ." </td>
+<td style='vertical-align:middle;'> ". conv_data_hora($row['date']) ." </td>
+<td style='vertical-align:middle;'> ". conv_data_hora($row['solvedate']) ." </td>
+<td style='vertical-align:middle;'> ". time_ext($row['time']) ."</td>
 </tr>";
 
     }
@@ -661,6 +638,12 @@ echo "</tbody>
 		</div>"; ?>
 
 <script type="text/javascript" charset="utf-8">
+
+$('#tec')
+	.removeClass( 'display' )
+	.addClass('table table-striped table-bordered');
+
+
 $(document).ready(function() {
     oTable = $('#tec').dataTable({
         "bJQueryUI": true,
@@ -701,50 +684,11 @@ $(document).ready(function() {
 </script>  
 
 <?php
-// paginacao 2
 
-echo '<div id=pag align=center class="paginas navigation row-fluid">';
-
-$total_paginas = $conta_cons/$num_por_pagina;
-
-$prev = $pagina - 1;
-$next = $pagina + 1;
-// se página maior que 1 (um), então temos link para a página anterior
-
-if ($pagina > 1) {
-    $prev_link = "<a href=".$url2."?con=1&stat=".$stat."&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$prev."&npage=".$num_por_pagina.">". __('Previous','dashboard') ."</a>";
-  }
-  else { // senão não há link para a página anterior
-    $prev_link = "<a href='#'>".__('Previous','dashboard')."</a>";
-  }
-// se número total de páginas for maior que a página corrente,
-// então temos link para a próxima página
-
-if ($total_paginas > $pagina) {
-    $next_link = "<a href=".$url2."?con=1&stat=".$stat."&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$next."&npage=".$num_por_pagina.">".__('Next','dashboard')."</a>";
-  } else {
-// senão não há link para a próxima página
-    $next_link = "<a href='#'> " .__('Next','dashboard')."</a>";
-  }
-
-$total_paginas = ceil($total_paginas);
-  $painel = "";
-  for ($x=1; $x<=$total_paginas; $x++) {
-    if ($x==$pagina) {
-// se estivermos na página corrente, não exibir o link para visualização desta página
-      //$painel .= "$x";
-
-      $painel .= " <a style=color:#000999; href=".$url2."?con=1&stat=".$stat."&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$x."&npage=".$num_por_pagina.">$x</a>";
-    } else {
-      $painel .= " <a href=".$url2."?con=1&stat=".$stat."&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$x."&npage=".$num_por_pagina.">$x</a>";
-    }
-  }
-// exibir painel na tela
-//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
-// fim paginacao 2
+
 }
-//}
+
 
 else {
 
@@ -763,7 +707,7 @@ echo "
 ?>
 
 <script type="text/javascript" >
-$('.chosen-select').chosen({disable_search_threshold: 10});
+$(document).ready(function() { $("#sel1").select2(); });
 </script>
 
 </div>

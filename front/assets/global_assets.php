@@ -10,7 +10,8 @@ SELECT count(id) AS id
 FROM glpi_". strtolower($asset)."s
 WHERE is_deleted = 0
 AND is_template = 0
-";
+AND glpi_". strtolower($asset)."s.entities_id = ".$sel_ent."";
+
 
 $result = $DB->query($query);
 $total = $DB->result($result,0,'id');

@@ -32,7 +32,6 @@ global $DB;
 <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <meta http-equiv="content-language" content="en-us" />
-<!-- <meta http-equiv="refresh" content= "120"/> -->
 
 <link rel="icon" href="../img/dash.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="../img/dash.ico" type="image/x-icon" />
@@ -44,7 +43,7 @@ global $DB;
 
 </head>
 
-<body>
+<body style="background-color:#e5e5e5; margin-left:0%;">
 
 <script src="../js/highcharts.js"></script>
 <script src="../js/highcharts-3d.js"></script>
@@ -71,50 +70,53 @@ $total_mes = $DB->fetch_assoc($result);
 
 ?>
 <div id='content' >
-<div id='container-fluid' style="margin: 0px 8% 0px 8%;"> 
+	<div id='container-fluid' style="margin: 0px 8% 0px 8%;"> 
 
-<div id="pad-wrapper" >
+	<div id="pad-wrapper" >
+		<div id="charts" class="row-fluid chart"> 
+			<div id="head" class="row-fluid" style="padding-bottom:20px;">
+			
+				<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
+				
+				<div id="titulo_graf" style="margin-bottom:10px; margin-top:-15px;">
+				
+				<?php echo __('Tickets Total','dashboard'); ?>: <?php //echo $ano .":" ; ?> 
+				<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> <?php echo " ".$total_mes['total'] ; ?> </span> </div>
+			</div>
 
-<div id="charts" class="row-fluid chart"> 
-<div id="head" class="row-fluid" style="padding-bottom:20px;">
-
-	<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
-	
-	<div id="titulo_graf" style="margin-bottom:15px;">
-	
-	<?php echo __('Tickets Total','dashboard'); ?>: <?php //echo $ano .":" ; ?> 
-	<span style="color:#8b1a1a; font-size:35pt; font-weight:bold;"> <?php echo " ".$total_mes['total'] ; ?> </span> </div>
-</div>
-
-<!-- DIV's -->
-
-<div id="graf_linhas" class="span12" style="margin-bottom: 15px;">
-<?php include ("./inc/graflinhas_sat_geral.inc.php"); ?>
-</div>
-
-<div id="graf2" class="span6" >
-<?php include ("./inc/grafpie_stat_geral.inc.php"); ?>
-</div>
-
-<div id="graf4" class="span6" >
-<?php include ("./inc/grafpie_origem.inc.php");  ?>
-</div>
-
-<div>
-<?php include ("./inc/grafent_geral.inc.php");  ?>
-</div>
-
-<div>
-<?php include ("./inc/grafcat_geral.inc.php"); ?>
-</div>
-
-<div>
-<?php include ("./inc/grafbar_grupo_geral.inc.php");?>
-</div>
-
-
-</div>
-</div>
+			<!-- DIV's -->
+			
+			<div id="graf_linhas" class="span12" style="margin-bottom: 15px;">
+			<?php include ("./inc/graflinhas_sat_geral.inc.php"); ?>
+			</div>
+			
+			<div id="graf2" class="span6" >
+			<?php include ("./inc/grafpie_stat_geral.inc.php"); ?>
+			</div>
+			
+			<div id="graf4" class="span6" >
+			<?php include ("./inc/grafpie_origem.inc.php");  ?>
+			</div>
+			
+			<div id="graf_tipo" class="span12" style="margin-top: 35px;">
+			<?php include ("./inc/grafcol_tipo_geral.inc.php");  ?>
+			</div>
+			
+			<div>
+			<?php include ("./inc/grafent_geral.inc.php");  ?>
+			</div>
+			
+			<div>
+			<?php include ("./inc/grafcat_geral.inc.php"); ?>
+			</div>
+			
+			<div>
+			<?php include ("./inc/grafbar_grupo_geral.inc.php");?>
+			</div>
+			
+			
+			</div>
+		</div>
 </div>
 </body>
 </html>

@@ -55,7 +55,8 @@ global $DB;
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
 </head>
-<body>
+
+<body style="background-color:#e5e5e5; margin-left:0%;">
 
 <?php
 

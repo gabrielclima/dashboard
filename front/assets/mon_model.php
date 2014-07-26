@@ -15,6 +15,7 @@ SELECT glpi_monitormodels.name AS name, count( glpi_monitors.id ) AS conta
 FROM glpi_monitormodels, glpi_monitors
 WHERE glpi_monitors.is_deleted =0
 AND glpi_monitormodels.id = glpi_monitors.monitormodels_id
+".$ent_mon."
 GROUP BY glpi_monitormodels.name
 ORDER BY count( glpi_monitors.id ) DESC ";
 

@@ -375,3 +375,30 @@ msgstr "per Assets"
 
 msgid "Print"
 msgstr "Stampa"
+
+msgid "by SLA"
+msgstr "per SLA"
+
+msgid "Select a SLA"
+msgstr "Seleziona un SLA"
+
+msgid "Current"
+msgstr "Corrente"
+
+msgid "Current year"
+msgstr "Anno in corso"
+
+msgid "Period in index page"
+msgstr "Periodo in pagina di indice"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "by Type"
+msgstr "per Tipo"
+
+msgid "Select a type"
+msgstr "Seleziona un tipo"
+
+msgid "Select a manufacturer"
+msgstr "Seleziona un fabbricante"

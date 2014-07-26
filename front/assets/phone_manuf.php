@@ -4,7 +4,8 @@
 $query_unk = "SELECT count(*) AS total
 FROM `glpi_phones`
 WHERE `is_deleted` = 0
-AND `manufacturers_id` = 0";
+AND `manufacturers_id` = 0
+".$ent_phone." ";
 
 $result = $DB->query($query_unk) or die('erro');
 $unk = $DB->result($result,0,'total');
@@ -24,7 +25,7 @@ $result_os = $DB->query($query_os) or die('erro');
 $arr_grf_os = array();
 
 if($unk != 0) {
-$arr_grf_os[__('Unknow','dashboard')] = $unk;
+$arr_grf_os[__('Unknown','dashboard')] = $unk;
 }
 
 while ($row_result = $DB->fetch_assoc($result_os))		

@@ -41,20 +41,22 @@ global $DB;
 <link href="../css/bootstrap.css" rel="stylesheet" type="text/css" />
 <link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
 <link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
-<link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
     
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
 <script src="../js/highcharts.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/modules/no-data-to-display.js"></script> 
 <script src="../js/themes/grid-light.js"></script>
-<script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
+<link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
+<script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
+
 </head>
-<body>
+
+<body style="background-color: #e5e5e5; margin-left:0%;">
 
 <?php
 
@@ -95,7 +97,7 @@ $tec = $DB->fetch_assoc($result_tec);
 function dropdown( $name, array $options, $selected=null )
 {
     /*** begin the select ***/
-    $dropdown = '<select class="chosen-select" tabindex="-1" style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
+    $dropdown = '<select style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
 
     $selected = $selected;
     /*** loop over the options ***/
@@ -137,7 +139,6 @@ $selected = 0;
 <div id='container-fluid' style="margin: 0px 8% 0px 8%;"> 
 
 <div id="pad-wrapper" >
-
 <div id="charts" class="row-fluid chart"> 
 <div id="head" class="row-fluid">
 
@@ -156,45 +157,44 @@ $selected = 0;
 <tr>
 <td>
 <?php 
-echo'
-<table style="margin-top:6px;" ><tr><td>
-    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date1" value="'.$data_ini.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-</td><td>
-   <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date2" value="'.$data_fin.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    </tr></td>
-    </table>
-    ';
-?>
+	echo'
+			<table>
+				<tr>
+					<td>
+					   <div class="input-group date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date1" value="'.$data_ini.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+					<td>
+				   	<div class="input-group date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date2" value="'.$data_fin.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table> ';
+	?>
 
 <script language="Javascript">
-
 $('#dp1').datepicker('update');
 $('#dp2').datepicker('update');
-
 </script>
 </td>
 
 <td style="margin-top:2px;">
 <?php
-
 echo dropdown( $name, $options, $selected );
-
-//Dropdown::showFromArray( $name, $options, $selected );
-
 ?>
 </td>
 </tr>
 <tr><td height="15px"></td></tr>
 <tr>
 <td colspan="2" align="center" style="">
-<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_usuario.php'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
+<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
+<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_usuario.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
 </td>
 </tr>
 	
@@ -207,7 +207,7 @@ echo dropdown( $name, $options, $selected );
 <!-- DIV's -->
 
 <script type="text/javascript" >
-$('.chosen-select').chosen();
+	$(document).ready(function() { $("#sel_tec").select2(); });
 </script>
 
 <?php
@@ -240,9 +240,7 @@ if($id_tec == 0) {
 	echo '<script language="javascript"> location.href="graf_usuario.php"; </script>';
 }
 
-
 // nome do usuario
-
 $sql_nm = "
 SELECT DISTINCT glpi_users.`id` AS id , glpi_users.`firstname` AS name, glpi_users.`realname` AS sname
 FROM `glpi_users` , glpi_tickets_users
@@ -255,7 +253,6 @@ ORDER BY `glpi_users`.`firstname` ASC
 $result_nm = $DB->query($sql_nm);
 $tec_name = $DB->fetch_assoc($result_nm);
 
-
 if($data_ini == $data_fin) {
 	$datas = "LIKE '".$data_ini."%'";	
 }	
@@ -265,7 +262,6 @@ else {
 }
 
 //quant chamados
-
 $query_total = "SELECT count(*) AS total
 FROM glpi_tickets_users, glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
@@ -295,8 +291,11 @@ echo "</div>";
 	<?php include ("./inc/grafpie_stat_user.inc.php"); ?>
 </div>
 
+<div id="graf_tipo" class="span6" style="margin-left: 2.5%;">
+	<?php include ("./inc/grafpie_tipo_user.inc.php");  ?>
+</div>	
 
-<div id="graf4" class="span6" >
+<div id="graf4" class="span12" style="height: 450px; margin-left: -5px;">
 	<?php include ("./inc/grafcat_user.inc.php"); ?>
 </div>
 

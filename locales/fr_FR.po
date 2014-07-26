@@ -374,3 +374,30 @@ msgstr "par Atouts"
 
 msgid "Print"
 msgstr "Imprimer"
+
+msgid "by SLA"
+msgstr "por SLA"
+
+msgid "Select a SLA"
+msgstr "Sélectionnez un SLA"
+
+msgid "Current"
+msgstr "Courant"
+
+msgid "Current year"
+msgstr "Année en cours"
+
+msgid "Period in index page"
+msgstr "Période dans la page d'index"
+
+msgid "Theme"
+msgstr "Thème"
+
+msgid "by Type"
+msgstr "par Type"
+
+msgid "Select a type"
+msgstr "Sélectionnez un type"
+
+msgid "Select a manufacturer"
+msgstr "Sélectionnez un fabricant"

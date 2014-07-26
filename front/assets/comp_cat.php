@@ -6,6 +6,7 @@ SELECT glpi_computertypes.name AS so, count( glpi_computers.id ) AS conta
 FROM glpi_computertypes, glpi_computers
 WHERE glpi_computers.is_deleted =0
 AND glpi_computertypes.id = glpi_computers.computertypes_id
+".$ent_comp."
 GROUP BY glpi_computertypes.name
 ORDER BY count( glpi_computers.id ) DESC ";
 

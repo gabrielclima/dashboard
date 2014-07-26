@@ -43,8 +43,8 @@ global $DB;
 <link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
 
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
-<link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
-<script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>  
+<link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
+<script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
 
 <script src="../js/highcharts.js"></script>
 <script src="../js/modules/exporting.js"></script>
@@ -56,7 +56,7 @@ global $DB;
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
 </head>
-<body>
+<body style="background-color: #e5e5e5; margin-left:0%;">
 
 <?php
 
@@ -78,7 +78,6 @@ $month = date("Y-m");
 $datahoje = date("Y-m-d");
 
 //seleciona entidade
-
 $sql_ent = "
 SELECT id, name
 FROM `glpi_entities`
@@ -90,11 +89,10 @@ $ent = $DB->fetch_assoc($result_ent);
 
 
 // lista de entidades
-
 function dropdown( $name, array $options, $selected=null )
 {
     /*** begin the select ***/
-    $dropdown = '<select class="chosen-select" tabindex="-1" style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
+    $dropdown = '<select style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
 
     $selected = $selected;
     /*** loop over the options ***/
@@ -155,21 +153,26 @@ $selected = "0";
 <tr>
 <td>
 <?php 
-echo'
-<table style="margin-top:6px;" ><tr><td>
-    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date1" value="'.$data_ini.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-</td><td>
-   <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date2" value="'.$data_fin.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    </tr></td>
-    </table>
-    ';
-?>
+	echo'
+			<table>
+				<tr>
+					<td>
+					   <div class="input-group date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date1" value="'.$data_ini.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+					<td>
+				   	<div class="input-group date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date2" value="'.$data_fin.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table> ';
+	?>
 
 <script language="Javascript">
 
@@ -181,23 +184,19 @@ $('#dp2').datepicker('update');
 
 <td style="margin-top:2px;">
 <?php
-
 echo dropdown( $name, $options, $selected );
-
-//Dropdown::showFromArray( $name, $options, $selected );
-
 ?>
 </td>
 </tr>
 <tr><td height="15px"></td></tr>
 <tr>
-<td colspan="2" align="center" style="">
-<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_entidade.php'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
-</td>
+	<td colspan="2" align="center" style="">
+	<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
+	<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_entidade.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
+	</td>
 </tr>
 	
-	</table>
+</table>
 <?php Html::closeForm(); ?>
 <!-- </form> -->
 </div>
@@ -205,7 +204,7 @@ echo dropdown( $name, $options, $selected );
 <!-- DIV's -->
 
 <script type="text/javascript" >
-$('.chosen-select').chosen();
+$(document).ready(function() { $("#sel_ent").select2(); });
 </script>
 
 <?php
@@ -260,7 +259,6 @@ $ent_name = $DB->fetch_assoc($result_nm);
 
 
 //quant chamados
-
 $query2 = "
 SELECT COUNT(glpi_tickets.id) as total
 FROM glpi_tickets
@@ -288,8 +286,11 @@ echo $ent_name['name']." - <span style = 'color:#000;'> ".$total['total']." ".__
 	<?php include ("./inc/grafpie_stat_ent.inc.php"); ?>
 </div>
 
+<div id="graf_tipo" class="span6" style="margin-left: 2.5%;">
+	<?php include ("./inc/grafpie_tipo_ent.inc.php");  ?>
+</div>
 
-<div id="graf4" class="span6" >
+<div id="graf4" class="span12" style="height: 450px; margin-left: -5px;">
 	<?php include ("./inc/grafcat_ent.inc.php");  ?>
 </div>
 

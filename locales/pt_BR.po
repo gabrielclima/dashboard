@@ -375,3 +375,30 @@ msgstr "por Ativos"
 
 msgid "Print"
 msgstr "Imprimir"
+
+msgid "by SLA"
+msgstr "por SLA"
+
+msgid "Select a SLA"
+msgstr "Selecione um SLA"
+
+msgid "Current"
+msgstr "Atual"
+
+msgid "Current year"
+msgstr "Ano atual"
+
+msgid "Period in index page"
+msgstr "Período para página inicial"
+
+msgid "Theme"
+msgstr "Tema"
+
+msgid "by Type"
+msgstr "por Tipo"
+
+msgid "Select a type"
+msgstr "Selecione um tipo"
+
+msgid "Select a manufacturer"
+msgstr "Selecione um fabricante"

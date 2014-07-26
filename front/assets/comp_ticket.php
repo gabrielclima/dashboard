@@ -6,7 +6,8 @@ SELECT glpi_computers.name AS name, count( glpi_tickets.id ) AS conta, glpi_tick
 FROM glpi_tickets, glpi_computers
 WHERE glpi_tickets.itemtype = 'computer'
 AND glpi_tickets.items_id = glpi_computers.id
-AND glpi_computers.is_deleted =0
+AND glpi_computers.is_deleted = 0
+".$ent_comp."
 GROUP BY items_id
 ORDER BY conta DESC , name ASC ";
 
@@ -45,23 +46,31 @@ $(document).ready(function() {
         "bFilter":false,
         "aaSorting": [[1,'desc'], [0,'asc']],
         "aoColumnDefs": [{ "sWidth": "60%", "aTargets": [1] }],
-        "sDom": 'T<"clear">lfrtip',
-        "sSwfPath": "/js/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-  	     "oTableTools": {
-            "aButtons": [
-                "copy",
-                "print",
-                {
-                    "sExtends":    "collection",
-                    "sButtonText": "Export",
-                    "aButtons":    [ "csv", "xls", "pdf" ]
-                }
-            ]
-        }	        
+         "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+         "aButtons": [
+             {
+                 "sExtends": "copy",
+                 "sButtonText": "<?php echo __('Copy'); ?>"
+             },
+             {
+                 "sExtends": "print",
+                 "sButtonText": "<?php echo __('Print','dashboard'); ?>"
+                 
+             },
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "<?php echo __('Export'); ?>",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             }
+         ]
+        }
         
- 		  //"sScrollY": "250px",
-        //"bPaginate": false,
-        //"bScrollCollapse": true
     });
 } );
 		

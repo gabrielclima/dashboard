@@ -81,23 +81,30 @@ $(document).ready(function() {
         "bFilter":false,
         "aaSorting": [[2,'desc'], [0,'asc']],
         "aoColumnDefs": [{ "sWidth": "45%", "aTargets": [2] }],
-        "sDom": 'T<"clear">lfrtip',
-        "sSwfPath": "/js/extensions/TableTools/swf/copy_csv_xls_pdf.swf",
-  	     "oTableTools": {
-            "aButtons": [
-                "copy",
-                "print",
-                {
-                    "sExtends":    "collection",
-                    "sButtonText": "Export",
-                    "aButtons":    [ "csv", "xls", "pdf" ]
-                }
-            ]
-        }	
-//        "sDom": 'lf<"fixed_height"t>ip'
-        //"sScrollY": "270px",
-        //"bPaginate": false,
-        //"bScrollCollapse": false
+         "sDom": 'T<"clear">lfrtip',
+         "oTableTools": {
+         "aButtons": [
+             {
+                 "sExtends": "copy",
+                 "sButtonText": "<?php echo __('Copy'); ?>"
+             },
+             {
+                 "sExtends": "print",
+                 "sButtonText": "<?php echo __('Print','dashboard'); ?>"
+                 
+             },
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "<?php echo __('Export'); ?>",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             }
+         ]
+        }
     });
 } );
 		

@@ -4,7 +4,7 @@ function plugin_dashboard_install(){
 	
 	global $DB, $LANG;
 	
-    if (! TableExists("glpi_plugin_dashboard_count")) {
+if (! TableExists("glpi_plugin_dashboard_count")) {
         $query = "CREATE TABLE `glpi_plugin_dashboard_count` 
         (`type` INTEGER , `id` INTEGER, `quant` INTEGER, PRIMARY KEY (`id`))
 						ENGINE = InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci; ";
@@ -13,7 +13,7 @@ function plugin_dashboard_install(){
         
         $insert = "INSERT INTO glpi_plugin_dashboard_count (type,quant) VALUES ('1','1')";
         $DB->query($insert);
-    } 	
+     } 	
     
 else {
 
@@ -34,7 +34,6 @@ else {
 
 
 //map
-
    if (! TableExists("glpi_plugin_dashboard_map")) {
 		$query_map = "CREATE TABLE IF NOT EXISTS `glpi_plugin_dashboard_map` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
@@ -49,6 +48,24 @@ else {
 	
 	}	
 	
+	
+//configs
+
+if (! TableExists("glpi_plugin_dashboard_config")) {
+	
+	$query_conf = "CREATE TABLE IF NOT EXISTS `glpi_plugin_dashboard_config` (
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) NOT NULL,
+  `value` varchar(25) NOT NULL,
+  `users_id` varchar(25) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`,`name`,`value`,`users_id`),
+  UNIQUE KEY `name` (`name`,`users_id`),
+  KEY `name_2` (`name`,`users_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ; ";
+
+  $DB->query($query_conf) or die("error creating table glpi_plugin_dashboard_config " . $DB->error());
+ 
+}				
 	return true;
 }
 
@@ -56,11 +73,14 @@ function plugin_dashboard_uninstall(){
 
 	global $DB;
 	
-$drop_count = "DROP TABLE glpi_plugin_dashboard_count";
-$DB->query($drop_count); 	
-
-$drop_map = "DROP TABLE glpi_plugin_dashboard_map";
-$DB->query($drop_map);
+	$drop_count = "DROP TABLE glpi_plugin_dashboard_count";
+	$DB->query($drop_count); 	
+	
+	$drop_map = "DROP TABLE glpi_plugin_dashboard_map";
+	$DB->query($drop_map);
+	
+	$drop_config = "DROP TABLE glpi_plugin_dashboard_config";
+	$DB->query($drop_config);	
 	
 	return true;
 

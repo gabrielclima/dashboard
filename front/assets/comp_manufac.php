@@ -1,11 +1,11 @@
 
 <?php
-
 $query2 = "
 SELECT glpi_manufacturers.name AS name, count( glpi_computers.id ) AS conta
 FROM glpi_manufacturers, glpi_computers
 WHERE glpi_computers.is_deleted = 0
 AND glpi_manufacturers.id = glpi_computers.manufacturers_id
+".$ent_comp."
 GROUP BY glpi_manufacturers.name
 ORDER BY count( glpi_computers.id ) DESC ";
 		
@@ -37,6 +37,7 @@ echo '
 ?>
 
 <script type="text/javascript" >
+
 $(document).ready(function() {
     oTable = $('#manufac').dataTable({
         "bJQueryUI": true,
@@ -44,26 +45,31 @@ $(document).ready(function() {
         "bFilter":false,
         "aaSorting": [[1,'desc'], [0,'asc']],
         "aoColumnDefs": [{ "sWidth": "60%", "aTargets": [1] }],
- 		  "sDom": 'T<"clear">lfrtip',
+         "sDom": 'T<"clear">lfrtip',
          "oTableTools": {
-            "aButtons": [
-                "copy",
-                "print",
-                {
-                    "sExtends":    "collection",
-                    "sButtonText": "Export",
-                    "aButtons":    [ "csv", "xls", "pdf" ]
-                }
-            ]
+         "aButtons": [
+             {
+                 "sExtends": "copy",
+                 "sButtonText": "<?php echo __('Copy'); ?>"
+             },
+             {
+                 "sExtends": "print",
+                 "sButtonText": "<?php echo __('Print','dashboard'); ?>"
+                 
+             },
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "<?php echo __('Export'); ?>",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             }
+         ]
         }
 
-       // "tableTools": {
-       //     "sSwfPath": "../js/extensions/TableTools/swf/copy_csv_xls_pdf.swf"
-       // } 
-//        "sDom": 'lf<"fixed_height"t>ip'
-        //"sScrollY": "270px",
-        //"bPaginate": false,
-        //"bScrollCollapse": false
     });
 } );
 		

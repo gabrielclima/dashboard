@@ -4,7 +4,8 @@
 $query_unk = "SELECT count(*) AS total
 FROM `glpi_computers`
 WHERE `is_deleted` = 0
-AND `operatingsystems_id` = 0";
+AND `operatingsystems_id` = 0
+".$ent_comp."";
 
 $result = $DB->query($query_unk) or die('erro');
 $unk = $DB->result($result,0,'total');
@@ -15,6 +16,7 @@ SELECT glpi_operatingsystems.name AS so, count( glpi_computers.id ) AS conta
 FROM glpi_operatingsystems, glpi_computers
 WHERE glpi_computers.is_deleted =0
 AND glpi_operatingsystems.id = glpi_computers.operatingsystems_id
+".$ent_comp."
 GROUP BY glpi_operatingsystems.name
 ORDER BY count( glpi_computers.id ) DESC ";
 

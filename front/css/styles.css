@@ -21,8 +21,13 @@
 	padding-bottom: 12px;
 }
 
+#graf_tipo {
+	margin-left: 2%;
+	height: 450px; 
+	margin-top:30px; 
+}
 
-#graf2, #graf3, .graf2, #graf_linhas {
+#graf2, #graf3, .graf2, #graf_linhas, #graf_tipo {
 	height: 450px; 
 	margin-top:30px; 
 	margin-left: -5px;
@@ -31,7 +36,7 @@
 #graf4, .graf4 {
 	height: 450px; 
 	margin-top:30px; 
-	margin-left: 2%;
+	margin-left: 2.5%;
 }
 
 #grafent, #grafgrp, #grafcat, #grafsat {
@@ -78,8 +83,6 @@
 	text-shadow:0.0em 0.09em 0.09em #cecece;	
 }
 
-
-
 .titulo_cham {
 	color: #0076CC; 
 	font-size:30pt; 
@@ -95,17 +98,19 @@
 }
 
 #datas {
-	margin-bottom: 12px;
+	margin-bottom: 12px;	
+	margin-top: -15px;
 }
 
 #datas-tec {
 	min-width: 900px;
 	width: 950px;
 	margin-left: -500px;
-	left: 52%; 
+	left: 50%; 
 	position: relative; 
 	text-align: center;
-	margin-bottom: 12px;yyy
+	margin-bottom: 12px;
+	margin-top: -10px;
 }
 
 #datas-cham {
@@ -118,7 +123,6 @@
 	margin-bottom: 12px;	
 }
 
-
 .form1 {
 	/*width: 900px;
 	margin-left: -500px;
@@ -127,11 +131,10 @@
 	text-align: center;
 	margin-bottom: 5px;
 	width: 330px;
-	margin-left: 33%;
+	margin-left: 34.5%;
 	margin-right: auto;
 	margin-top: 25px;
 }
-
 
 .form2 {
 	/*margin-left: -500px;
@@ -144,7 +147,6 @@
 	margin-left: 18%;
 	margin-right: auto;
 }
-
 
 .form_rel {	
 	/*width: 900px;
@@ -174,7 +176,6 @@
 	font-weight: bold;
 	margin-bottom: 50px;
 }
-
 
 #voltar {
    min-width: 800px;
@@ -232,7 +233,6 @@ color: #fff;
 	margin-top: 770px;
 }
 
-
 .assets {
 color: #fff;
 background: #3B7BC8;
@@ -262,7 +262,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', end
   
 }
 
-
 #asset_img {
 	margin: 8px auto 20px auto;
 	width: 75px;
@@ -273,13 +272,11 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', end
 	-moz-border-radius: 50px;
 	/*background: url('http://10.20.0.223/fotos_rh/44404.jpg') no-repeat;
 	background-size: 90px 90px; 
-	background-position: center; */
-		
+	background-position: center; */		
 	box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 	-webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
 	-moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);	
 	}
-
 
 .assets td {
   border: 2px solid white;
@@ -301,7 +298,6 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6db3f2', end
 .assets tr th:last-child {
   border-right: 0;  
 }
-
 
 #foto_pp {
 	margin: 8px auto 20px auto;
@@ -468,17 +464,13 @@ ul li ul li:hover ul li {
 .pagemenu-selected {
   font-weight: bold; 
   background-color: #dfdfdf; 
-
   border: 1px solid #c0c0c0;
   margin: -1px;
-
   padding:3px 8px 4px 8px;
-
   /* Rounded Corners */
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
-
   -webkit-box-shadow: #CCC 0 0 1px;
   -moz-box-shadow: #CCC 0 0 1px;
   box-shadow: #CCC 0 0 1px;
@@ -594,7 +586,6 @@ input,select {
 .content-boxfg {
   background: #e5e5e5;
 }
-
 .box-info {display: block}
 .box-info * {
   display:block;
@@ -638,7 +629,6 @@ input,select {
 .box-infofg {
   background:#aaffaa;
 }
-
 .box-warn {display:block}
 .box-warn * {
   display:block;
@@ -1009,7 +999,6 @@ table { border-collapse: collapse; margin: 0px; }
 form { margin: 0px; padding: 0px; }
 hr { border: 0px; height: 1px; background-color: #ccc; color: #ccc; }
 p { margin: 0px; padding: 0px; }
-
 .vspace { margin-top: 4px; margin-bottom: 4px; }
 p.vspace { padding-top: 3px; padding-bottom: 3px; }
 .content-mat { padding: 0px; margin: auto; display:block; }
@@ -1021,7 +1010,6 @@ p.vspace { padding-top: 3px; padding-bottom: 3px; }
 #header #page-title { color: #555; font: 18pt Arial,sans-serif; font-weight: bold; }
 #header #page-subtitle { color: #555; font: 12pt Arial,sans-serif; font-weight: bold; }
 #header a { color: #eeeeee; }
-
 #main h1 { font-size: 12pt; margin: 0px; padding: 0px; }
 #main h2 { font-size: 11pt; margin: 0px; padding: 0px; }
 #main h3 { font-size: 10pt; margin: 0px; padding: 0px; }
@@ -1107,13 +1095,10 @@ p.vspace { padding-top: 3px; padding-bottom: 3px; }
 
 .graphcell, .ifcell, .devicecell, .datacell { margin: 0px 0px 7px 0px; padding: 7px; border: 0px; background: #e8e8e8; float: left; }
 .ifcell { float: left; clear:right; background:none; }
-
 .datacell { clear: both; }
 .devicecell { margin: 2px auto; }
-
 .sidepane { clear: left; background:none;}
 .mainpane { float: none; clear: right; background:none; }
-
 .nofloat { clear: left; }
 
 .interface, .interface-admindown, a.interface-admindown, a.interface-admindown:visited, .interface-updown, a.interface-updown, a.interface-updown:visited, .interface-upup, a.interface-upup {
@@ -1123,7 +1108,6 @@ p.vspace { padding-top: 3px; padding-bottom: 3px; }
 .interface-lldown, a.interface-lldown{
   color: #ff6600;
 }
-
 
 .interface-updown, a.interface-updown, a.interface-updown:visited {
   color: #cc0000;
@@ -1295,7 +1279,6 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   /* Borders */
 
   border: 1px solid #aaaaaa;
-
   -moz-box-shadow:inset 0px 0px 1px #edf9ff;
   -webkit-box-shadow:inset 0px 0px 1px #edf9ff;
   box-shadow:inset 0px 0px 1px #edf9ff;
@@ -1306,12 +1289,10 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   float:left;
   text-align:center;
   position:relative;
-
   padding-left: 10px;
   padding-right: 10px;
   padding-top: 2px;
   padding-bottom: 2px;
-
   margin:3px 0px 5px 5px;
   border:none;
   /*background:#EEEEEE;*/
@@ -1321,12 +1302,10 @@ a.interface-upup:hover, a.interface-updown:hover, a.interface-admindown:hover {
   z-index: 100;
   border: 1px solid #aaa;
   border-bottom: 1px solid #FBFBFB;
-
   padding-left: 9px;
   padding-right: 9px;
   padding-top: 1px;
   padding-bottom: 4px;
-
   margin-bottom: -1px;
 
   /* Gradient background */
@@ -1843,38 +1822,4 @@ table.sortable thead {
 
 #go-top i{
 	color:#fff;
-}
-
-
-.label1 {
-    border-radius: 0;
-    font-weight: normal;
-    padding: 0.5em 0.6em;
-	 margin: 30px 15px 15px 15px; 
-	 width:190px;
-	 background-color: #c1c1c1;
-	 
-}
-
-.data-row .data-name, .data-row .data-value {
-    display: inline-block;
-    padding: 5px;
-    vertical-align: middle;
-    margin-left: 25px;
-}
-
-.data-row .data-name {    
-    color: #33455A;
-    font-size: 0.93em;
-    vertical-align: top;
-    width: 12px;
-}
-
-.data-value {       
-    font-size: 0.89em;
-    vertical-align: top;    
-}
-
-.data-row {
-height: 30px;
-}
+}    

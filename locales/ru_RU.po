@@ -373,3 +373,30 @@ msgstr "Выберите оборудование"
 
 msgid "by Assets"
 msgstr "по оборудованию"
+
+msgid "by SLA"
+msgstr "по SLA"
+
+msgid "Select a SLA"
+msgstr "Выберите SLA"
+
+msgid "Current"
+msgstr "ток"
+
+msgid "Current year"
+msgstr "текущий год"
+
+msgid "Period in index page"
+msgstr "Период в индексной странице"
+
+msgid "Theme"
+msgstr "тема"
+
+msgid "by Type"
+msgstr "по типу"
+
+msgid "Select a type"
+msgstr "Выберите тип"
+
+msgid "Select a manufacturer"
+msgstr "Выберите производителя"

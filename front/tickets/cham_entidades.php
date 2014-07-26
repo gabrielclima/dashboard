@@ -107,13 +107,11 @@ if($abertos > $atual) {
 if($_SESSION['glpilanguage'] == "pt_BR") {	
 
     // IE
-
     echo '<!--[if IE]>';
     echo '<embed src="../sounds/novo_chamado.mp3" autostart="true" width="0" height="0" type="application/x-mplayer2"></embed>';
     echo '<![endif]-->';
 
     // Browser HTML5
-
     echo '<audio preload="auto" autoplay>';
     echo '<source src="../sounds/novo_chamado.ogg" type="audio/ogg"><source src="sounds/novo_chamado.mp3" type="audio/mpeg">';
     echo '</audio>';
@@ -122,13 +120,11 @@ if($_SESSION['glpilanguage'] == "pt_BR") {
 else {
 
     // IE
-
     echo '<!--[if IE]>';
     echo '<embed src="../sounds/new_ticket.mp3" autostart="true" width="0" height="0" type="application/x-mplayer2"></embed>';
     echo '<![endif]-->';
 
     // Browser HTML5
-
     echo '<audio preload="auto" autoplay>';
     echo '<source src="../sounds/new_ticket.ogg" type="audio/ogg"><source src="sounds/new_ticket.mp3" type="audio/mpeg">';
     echo '</audio>';
@@ -167,8 +163,8 @@ $ontem = $DB->fetch_assoc($result);
 
 //$cham_ontem = "'Chamados de ontem: " . $ontem['total'] . "'";
 
-if ($ontem['total'] > $hoje['total']) { $up_down = "../img/down.gif"; }
-if ($ontem['total'] < $hoje['total']) { $up_down = "../img/up.gif"; }
+if ($ontem['total'] > $hoje['total']) { $up_down = "../img/down.png"; }
+if ($ontem['total'] < $hoje['total']) { $up_down = "../img/up.png"; }
 if ($ontem['total'] == $hoje['total']) { $up_down = "../img/blank.gif"; }
 
 //entity name
@@ -220,14 +216,14 @@ if(isset($_REQUEST['order'])) {
 	switch($order1) {
 		 case "td": $order = "ORDER BY glpi_tickets.id DESC"; break;
 		 case "ta": $order = "ORDER BY glpi_tickets.id ASC"; break;
-		 case "sd": $order = "ORDER BY glpi_tickets.status DESC"; break;
-		 case "sa": $order = "ORDER BY glpi_tickets.status ASC"; break;
+		 case "sd": $order = "ORDER BY glpi_tickets.status DESC, glpi_tickets.id ASC"; break;
+		 case "sa": $order = "ORDER BY glpi_tickets.status ASC, glpi_tickets.id ASC"; break;
 		 case "tid": $order = "ORDER BY glpi_tickets.name DESC"; break;
 		 case "tia": $order = "ORDER BY glpi_tickets.name ASC"; break;
 		 case "ted": $order = "ORDER BY glpi_tickets.id DESC"; break;
 		 case "tea": $order = "ORDER BY glpi_tickets.id ASC"; break;
-		 case "pd": $order = "ORDER BY glpi_tickets.priority DESC"; break;
-		 case "pa": $order = "ORDER BY glpi_tickets.priority ASC"; break;	  
+		 case "pd": $order = "ORDER BY glpi_tickets.priority DESC, glpi_tickets.date ASC"; break;
+		 case "pa": $order = "ORDER BY glpi_tickets.priority ASC, glpi_tickets.date ASC"; break;	  	
 		}	
 	}
 	
@@ -289,14 +285,25 @@ $row_prio = $DB->fetch_assoc($result_prio);
 
 $priority = $row['priority'];
 
+if($priority == 1) {
+	$prio_name = _x('priority', 'Very low'); }
+
 if($priority == 2) {
 	$prio_name = _x('priority', 'Low'); }
 	
 if($priority == 3) {
 	$prio_name = _x('priority', 'Medium'); } 		
 	
-if($priority == 4) {
-	$prio_name = _x('priority', 'High'); } 				 		
+if($priority == 4) {	
+	$prio_name = _x('priority', 'High'); }
+	
+if($priority == 5) {
+	$prio_name = _x('priority', 'Very high'); } 	
+	
+if($priority == 6) {
+	$prio_name = _x('priority', 'Major'); } 			 				 		
+
+			 		
 
 
 echo "<tr>

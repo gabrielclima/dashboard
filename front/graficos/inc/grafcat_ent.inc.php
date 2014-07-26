@@ -93,7 +93,7 @@ $(function () {
                     enabled: true,                    
                     color: '#000099',
                     align: 'center',
-                    x: 12,
+                    x: 15,
                     y: 1,
                     style: {
                         fontSize: '13px',

@@ -7,16 +7,50 @@ include (GLPI_ROOT . "/config/config.php");
 Session::checkLoginUser();
 Session::checkRight("profile", "r");
 
-function conta($asset) {
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$ent_comp = "";
+	$ent_mon="";
+	$ent_print="";
+	$ent_net = "";
+	$ent_peri="";
+	$ent_phone="";
+	//$ent_global="";	
+}	
+
+else {
+	$ent_comp = "AND glpi_computers.entities_id = ".$sel_ent.""; 
+	$ent_mon = "AND glpi_monitors.entities_id = ".$sel_ent."";
+	$ent_print = "AND glpi_printers.entities_id = ".$sel_ent."";
+	$ent_net = "AND glpi_networkequipments.entities_id = ".$sel_ent."";
+	$ent_peri = "AND glpi_peripherals.entities_id = ".$sel_ent."";
+	$ent_phone = "AND glpi_phones.entities_id = ".$sel_ent."";
+	//$ent_global = "AND glpi_".$asset.".entities_id = ".$sel_ent."";
+	}
+
+
+function conta($asset, $sel_ent) {
 
 global $DB;
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$ent_global="";	
+}
+else {
+	$ent_global = "AND entities_id = ".$sel_ent."";
+}
 
 $query = "
 SELECT count(id) AS id
 FROM glpi_".$asset."
 WHERE is_deleted = 0
-AND is_template = 0
-";
+AND is_template = 0 
+".$ent_global." ";
 
 $result = $DB->query($query);
 $total = $DB->result($result,0,'id');
@@ -31,15 +65,21 @@ else {
 }	
 
 //cartridges and consumables
-
 function conta1($asset) {
 
 global $DB;
 
+if($sel_ent == '' || $sel_ent == -1) {
+	$ent_global="";	
+}
+else {
+	$ent_global = "AND entities_id = ".$sel_ent."";
+}
+
 $query = "
 SELECT count(id) AS id
-FROM glpi_".$asset."
-";
+FROM glpi_".$asset." 
+".$ent_global." ";
 
 $result = $DB->query($query);
 $total = $DB->result($result,0,'id');
@@ -50,23 +90,28 @@ if($total != "") {
 
 else {
 	return "0";
-    }
-	
+    }	
 }	
 
 //all assets
-
 $arr_assets =  array('computers', 'monitors', 'printers', 'networkequipments', 'phones', 'peripherals');
 $global = 0;
 
 foreach($arr_assets as $asset) {
+	
+if($sel_ent == '' || $sel_ent == -1) {
+	$ent_global="";	
+}
+else {
+	$ent_global = "AND entities_id = ".$sel_ent."";
+}	
 
 $query = "
 SELECT count(id) AS id
 FROM glpi_".$asset."
 WHERE is_deleted = 0
-AND is_template = 0
-";
+AND is_template = 0 
+".$ent_global." ";
 
 $result = $DB->query($query);
 $total = $DB->result($result,0,'id');
@@ -113,7 +158,7 @@ select
 </style>
 </head>
 
-<body>
+<body style="background-color: #e5e5e5; margin-left:0%;">
 
 <div id='content' >
 <div id='container-fluid' style="margin: 0px 12% 0px 12%;"> 
@@ -123,14 +168,14 @@ select
 	<div id="head" class="row-fluid span12" style="margin-bottom: 35px; margin-top:20px;;">
 	
 	<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px; color: #0088CC;"></i><span></span></a>
-	<div id="titulo" style="margin-top: 5px; margin-bottom: 30px;"> <?php echo __('Assets'); ?> </div> 
+	<div id="titulo" style="margin-top: -10px; margin-bottom: 20px;"> <?php echo __('Assets'); ?> </div> 
 	 
 </div>
         
       <div id="pad-wrapper" >
 		<div id="charts" class="row-fluid chart">
              
-        <table id="assets" class="assets" border="0" cellpadding="3" >
+        <table id="assets" class="assets" border="0" cellpadding="3" style="font-size:14px;">
           <tbody>
          
             <tr>
@@ -170,30 +215,30 @@ select
             <tr>
             <?php echo '
             	<td> <a href="assets.php#" onclick=showDiv(\'computers\')>
-            	'._n('Computer','Computers',2).'<br>'. conta(computers) .'</a></td>
+            	'._n('Computer','Computers',2).'<br>'. conta(computers,$sel_ent) .'</a></td>
             	
             	<td> <a href="assets.php#" onclick=showDivM(\'monitors\')>
-            	'._n('Monitor','Monitors',2).'<br>'. conta(monitors) .'</a></td>
+            	'._n('Monitor','Monitors',2).'<br>'. conta(monitors,$sel_ent) .'</a></td>
             	
             	<td> <a href="assets.php#" onclick=showDivP(\'printers\')>
-            	'._n('Printer','Printers',2).'<br>'. conta(printers) .'</a></td>
+            	'._n('Printer','Printers',2).'<br>'. conta(printers,$sel_ent) .'</a></td>
             	
             	<td> <a href="assets.php#" onclick=showDivN(\'net\')>
-            	'._n('Network','Networks',2).'<br>'. conta(networkequipments) .'</a></td>
+            	'._n('Network','Networks',2).'<br>'. conta(networkequipments,$sel_ent) .'</a></td>
             	
             	<td> <a href="assets.php#" onclick=showDivT(\'phone\')>
-            	'._n('Phone','Phones',2).'<br>'. conta(phones) .' </a></td>
+            	'._n('Phone','Phones',2).'<br>'. conta(phones,$sel_ent) .' </a></td>
             	
             	<td> <a href="assets.php#" onclick=showDivD(\'peripheral\')>
-            	'._n('Device','Devices',2).'<br>'. conta(peripherals) .' </a></td>
+            	'._n('Device','Devices',2).'<br>'. conta(peripherals,$sel_ent) .' </a></td>
             	
             	<td> <a href="assets.php#" onclick=showDivS(\'soft\')>
-            	'._n('Software','Softwares',2).'<br>'. conta(softwares) .'</a></td>
+            	'._n('Software','Softwares',2).'<br>'. conta(softwares,$sel_ent) .'</a></td>
             	
             	<td> <a href="assets.php#" onclick=showDivC(\'cart\')>
-            	'._n('Cartridge','Cartridges',2).'<br>'. conta1(cartridges) .'</a></td>
+            	'._n('Cartridge','Cartridges',2).'<br>'. conta1(cartridges,$sel_ent) .'</a></td>
             	
-            	<td> '._n('Consumable','Consumables',2).'<br>'. conta1(consumables) .' </td>
+            	<td> '._n('Consumable','Consumables',2).'<br>'. conta1(consumables,$sel_ent) .' </td>
             	
             	<td> <a href="assets.php#" onclick=showDivG(\'global\')>
             	'.__('Global').'<br>'. $global .' </a></td> ';
@@ -243,7 +288,7 @@ else {
 				</div>
 				
 				<div id="graf_cpu" class="row-fluid" style="margin-left: -1px;">
-					<?php  include('./comp_cpu.php'); ?>		
+					<?php  //include('./comp_cpu.php'); ?>		
 				</div>
 						
 			</div>

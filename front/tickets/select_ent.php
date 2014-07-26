@@ -23,11 +23,11 @@ Session::checkRight("profile", "r");
   <script src="../js/jquery.min.js" type="text/javascript" ></script>
   <script src="../js/jquery.jclock.js"></script>
   
-  <link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
-  <script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
+	<link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
+	<script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
 
 </head>
-<body>
+<body style="background-color: #e5e5e5; margin-left:0%;">
 
 <?php
 
@@ -47,7 +47,7 @@ $abertos = $data['total'];
 function dropdown( $name, array $options, $selected=null )
 {
     /*** begin the select ***/
-    $dropdown = '<select class="chosen-select" tabindex="-1" style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
+    $dropdown = '<select style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
 
     $selected = $selected;
     /*** loop over the options ***/
@@ -120,8 +120,8 @@ $selected = "0";
 
 <tr>
 	<td align="center" >
-		<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
-		<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='select_ent.php'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
+		<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
+		<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='select_ent.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
 	</td>
 </tr>
 	
@@ -133,7 +133,7 @@ $selected = "0";
 </div>
 
 <script type="text/javascript" >
-$('.chosen-select').chosen();
+$(document).ready(function() { $("#sel_ent").select2(); });
 </script>
 
 <?php

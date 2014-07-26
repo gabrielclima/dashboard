@@ -1,22 +1,22 @@
 
-Versão 0.4.5:
+Versão 0.4.8:
 
-- Todos os relatório podem ser exportados em pdf, csv ou excel;
+- Na página da configuração é possível selecionar a entidade para ser exibida na tela inicial;
 
-- Relatório de chamados por ativos;
+- Correção na ordenação do painel de chamados;
 
-- Gráfico de chamados por ativos;
+- Atualização para o bootstrap 3;
 
 - Correção de pequenos bugs.
 
 
 
-Version 0.4.5:
+Version 0.4.8:
 
-- All reports can be exported in pdf, csv or excel;
+- In configuration page you can select the entity to be displayed on the index;
 
-- Tickets report by assets;
+- Fixed the ordering of the tickets panel;
 
-- Tickets by assets chart;
+- Update to bootstrap 3;
 
 - Fixed minor bugs.

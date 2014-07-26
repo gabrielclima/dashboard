@@ -39,7 +39,6 @@ Session::checkRight("profile", "r");
 <?php
 
 //Add locations to dashboard map
-
 $query_id =	"
 SELECT id, address, town, state, country, name
 FROM glpi_entities gt
@@ -52,7 +51,6 @@ $result_id = $DB->query($query_id) or die ("erro id");
 
 
 // check if any entity has address
-
 $query1 = "SELECT entities_id FROM glpi_plugin_dashboard_map";
 $result1 = $DB->query($query1);
 
@@ -112,9 +110,7 @@ while ($row = $DB->fetch_assoc($result_del))
 	echo '<script type="text/javascript">alert("'.$row['location'].' removido!");</script>';
 }
 
-
 $status = "";
-
 $status_open = "('1','2','3','4')";
 $status_close = "('5','6')";	
 $status_all = "('1','2','3','4','5','6')";
@@ -457,39 +453,31 @@ else
 <div id='content'  style="margin-top: -25px;">
 	<div id='container-fluid' style="margin: 0px 0px 0px 1%; min-height: 680px;" > 
 		<div id="pad-wrapper" >
-			<div id="charts" class="row-fluid chart"> 
-			
-	<!-- <form id="form" action="#" method="post"> 
-  
-<div id="status" style="margin: 0px 2% 0px 2%;"><span style="margin-left: 0%;"><b><?php echo __('Status'); ?></b></span><span style="margin-left: 14%;"><b><?php echo __('Period'); ?></b></span>  </div> 
-	-->    
+			<div id="charts" class="row-fluid chart"> 		  
 
 <div id="titulo"><?php echo __('Tickets Map','dashboard'); ?></div>
     
-<div class="btn-toolbar" role="toolbar" style="margin: 45px 2% 0px 2%;">
+<div class="btn-toolbar" role="toolbar" style="margin: 30px 2% 0px 2%;">
           
-    <div class="btn-group" data-toggle-name="radius_options" data-toggle="buttons-radio">
-		            
-        <button type="button" value="open" 	data-toggle="button" name="stat" class="btn btn0" onclick="document.getElementById('stat_option').value='open';"><?php echo __('Opened'); ?></button>
-        <button type="button" value="closed" data-toggle="button" name="stat" class="btn btn1" onclick="document.getElementById('stat_option').value='closed';" ><?php echo __('Closed'); ?></button>
-        <button type="button" value="all" 	data-toggle="button" name="stat" class="btn btn2" onclick="document.getElementById('stat_option').value='all';" ><?php echo __('All','dashboard'); ?></button>        
+    <div class="btn-group" data-toggle-name="radius_options" data-toggle="buttons-radio">		            
+        <button type="button" value="open" 	data-toggle="button" name="stat" class="btn btn-default btn0" onclick="document.getElementById('stat_option').value='open';"><?php echo __('Opened'); ?></button>
+        <button type="button" value="closed" data-toggle="button" name="stat" class="btn btn-default btn1" onclick="document.getElementById('stat_option').value='closed';" ><?php echo __('Closed'); ?></button>
+        <button type="button" value="all" 	data-toggle="button" name="stat" class="btn btn-default btn2" onclick="document.getElementById('stat_option').value='all';" ><?php echo __('All','dashboard'); ?></button>        
     </div>
     
     <input type="hidden" id="stat_option" name="stat_option" value="<?php echo $stat; ?>">
-
     
     <div class="btn-group" data-toggle-name="sort_options" data-toggle="buttons-radio" style="margin-left: 25px;;">
-
-        <button type="button" value="today" 	data-toggle="button" name="period" class="btn btna" onclick="document.getElementById('period_option').value='today';"><?php echo __('Today'); ?></button>
-        <button type="button" value="week" 	data-toggle="button" name="period" class="btn btnb" onclick="document.getElementById('period_option').value='week';"><?php echo __('Last 7 days','dashboard'); ?></button>
-        <button type="button" value="month"  data-toggle="button" name="period" class="btn btnc" onclick="document.getElementById('period_option').value='month';"><?php echo __('Last 30 days','dashboard'); ?></button>
-        <button type="button" value="all" 	data-toggle="button" name="period" class="btn btnd" onclick="document.getElementById('period_option').value='all';"><?php echo __('All', 'dashboard'); ?></button>
+        <button type="button" value="today" 	data-toggle="button" name="period" class="btn btn-default btna" onclick="document.getElementById('period_option').value='today';"><?php echo __('Today'); ?></button>
+        <button type="button" value="week" 	data-toggle="button" name="period" class="btn btn-default btnb" onclick="document.getElementById('period_option').value='week';"><?php echo __('Last 7 days','dashboard'); ?></button>
+        <button type="button" value="month"  data-toggle="button" name="period" class="btn btn-default btnc" onclick="document.getElementById('period_option').value='month';"><?php echo __('Last 30 days','dashboard'); ?></button>
+        <button type="button" value="all" 	data-toggle="button" name="period" class="btn btn-default btnd" onclick="document.getElementById('period_option').value='all';"><?php echo __('All', 'dashboard'); ?></button>
     </div>
     
     <input type="hidden"  id="period_option" name="period_option" value="<?php echo $period; ?>">   
 	 
 	 <div class="btn-group" style="margin-left: 25px; ">
-    	<?php echo "<button class='btn btn-primary' style='margin-top: 0px;' type='button' name='atualiza' value='Atualizar' onclick=\"mapa();\" > ".__('Update')." </button>"; ?>
+    	<?php echo "<button class='btn btn-primary' style='margin-top: 0px;' type='button' name='atualiza' value='Atualizar' onclick=\"mapa();\" ><i class='fa fa-refresh'></i> ".__('Update')." </button>"; ?>
     </div>	 
 </div>	 	       
 

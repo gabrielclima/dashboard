@@ -11,6 +11,7 @@ function plugin_init_dashboard() {
    //$PLUGIN_HOOKS['helpdesk_menu_entry']['dashboard']     = $menuentry;
    
    $PLUGIN_HOOKS['config_page']['dashboard'] = 'front/index.php';
+   //$PLUGIN_HOOKS['config_page']['dashboard'] = 'front/config.php';
                 
 }
 
@@ -19,7 +20,7 @@ function plugin_version_dashboard(){
 	global $DB, $LANG;
 
 	return array('name'			=> __('Dashboard','dashboard'),
-					'version' 			=> '0.4.6',
+					'version' 			=> '0.4.9',
 					'author'			   => '<a href="mailto:stevenesdonato@gmail.com"> Stevenes Donato </b> </a>',
 					'license'		 	=> 'GPLv2+',
 					'homepage'			=> 'https://sourceforge.net/projects/glpidashboard/',

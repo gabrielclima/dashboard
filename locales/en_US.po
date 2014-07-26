@@ -375,3 +375,30 @@ msgstr "by Assets"
 
 msgid "Print"
 msgstr "Print"
+
+msgid "by SLA"
+msgstr "by SLA"
+
+msgid "Select a SLA"
+msgstr "Select a SLA"
+
+msgid "Current"
+msgstr "Current"
+
+msgid "Current year"
+msgstr "Current year"
+
+msgid "Period in index page"
+msgstr "Period in index page"
+
+msgid "Theme"
+msgstr "Theme"
+
+msgid "by Type"
+msgstr "by Type"
+
+msgid "Select a type"
+msgstr "Select a type"
+
+msgid "Select a manufacturer"
+msgstr "Select a manufacturer"

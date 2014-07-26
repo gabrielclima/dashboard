@@ -4,7 +4,8 @@
 $query_unk = "SELECT count(*) AS total
 FROM `glpi_phones`
 WHERE `is_deleted` = 0
-AND `phonemodels_id` = 0";
+AND `phonemodels_id` = 0
+".$ent_phone." ";
 
 $result = $DB->query($query_unk) or die('erro');
 $unk = $DB->result($result,0,'total');

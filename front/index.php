@@ -8,13 +8,40 @@ global $DB;
 Session::checkLoginUser();
 Session::checkRight("profile", "r");
 
-//numero de anos para exibição no index
-// 0: mostra todos; 1: mostra ano atual; 2,3,4, etc: exibe o exato numero de anos
+# entity in index
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
 
-// number of year to display in index
-// 0: show all; 1: show current year; 2,3,4,etc: show the exact number of years
-$num_years = 0;
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$ent_name = __('Tickets Statistics','dashboard');
+}
 
+else {
+	$query = "SELECT name FROM glpi_entities WHERE id = ".$sel_ent."";
+	$result = $DB->query($query);
+	$ent_name1 = $DB->result($result,0,'name');
+	$ent_name = __('Tickets Statistics','dashboard')." :  ". $ent_name1 ;
+	}
+
+# years in index
+$sql_y = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'num_years' AND users_id = ".$_SESSION['glpiID']."";
+$result_y = $DB->query($sql_y);
+$num_years = $DB->result($result_y,0,'value');
+
+if($num_years == '') {
+	$num_years = 0;
+}
+
+# color theme
+$sql_theme = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'theme' AND users_id = ".$_SESSION['glpiID']."";
+$result_theme = $DB->query($sql_theme);
+$theme = $DB->result($result_theme,0,'value');
+
+if($theme == '') {
+	$theme = 'skin-default.css';
+}
 
      switch (date("m")) {
     case "01": $mes = __('January','dashboard'); break;
@@ -40,7 +67,7 @@ $num_years = 0;
     case "5": $dia = __('Friday','dashboard'); break;
     case "6": $dia = __('Saturday','dashboard'); break;  
     }
-
+    
 ?>
 
 <!DOCTYPE html>
@@ -54,17 +81,15 @@ $num_years = 0;
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     <link rel="icon" href="img/dash.ico" type="image/x-icon" />
-	 <link rel="shortcut icon" href="img/dash.ico" type="image/x-icon" />
-    
-    <!-- Bootstrap 
-   <link href="css/bootstrap-responsive.css" rel="stylesheet" />
-    <link href="css/bootstrap-overrides.css" type="text/css" rel="stylesheet" />    
-    -->
-    <link href="css/bootstrap3.css" rel="stylesheet">
+	 <link rel="shortcut icon" href="img/dash.ico" type="image/x-icon" />    
+    <link href="css/bootstrap.css" rel="stylesheet">
  
 
-    <!-- Styles -->
-    <link href="css/styled.css" rel="stylesheet">
+    <!-- Styles -->   
+    <!-- Color theme -->      
+    <!-- <link href="css/skin-default.css" rel="stylesheet"> -->
+ 	 <?php echo '<link rel="stylesheet" type="text/css" title="skin-default" href="./css/'.$theme.'">'; ?>     
+		   
     <link rel="stylesheet" type="text/css" href="css/layout.css">
     <link rel="stylesheet" type="text/css" href="css/elements.css">
     <link rel="stylesheet" type="text/css" href="css/icons.css">
@@ -87,20 +112,15 @@ $num_years = 0;
     <link href="css/styles.css" rel="stylesheet" type="text/css" />
     <link href="css/style-dash.css" rel="stylesheet" type="text/css" />
     <link href="css/dashboard.css" rel="stylesheet" type="text/css" />
-
-
     <link href="less/style.less" rel="stylesheet"  title="lessCss" id="lessCss">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
-              <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-              <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-              <![endif]-->
-              <script src="js/jquery.js"></script>
-
-        </head>
-        <body>
+     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+     <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+     <![endif]-->
+     <script src="js/jquery.js"></script>
 
 <script type="text/javascript">
 $(function($) {
@@ -114,8 +134,7 @@ foreground: '#FFF'
 $('#clock').jclock(options);
 });
 </script> 
-
-        </head>
+</head>
         <body style="background-color: #FFF;" >
 
             <div class="site-holder">
@@ -136,7 +155,7 @@ $('#clock').jclock(options);
 					    <li class="dropdown">
 					        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="margin-top: 6px;">           
 					            <span class="name" style="color:#FFF; font-size:14pt;">
-					                <?php echo __('Tickets Statistics','dashboard'); ?>  
+					                <?php echo $ent_name; ?>  
 					            </span>            
 					        </a>
 					        <ul class="dropdown-menu skins">
@@ -181,7 +200,7 @@ $('#clock').jclock(options);
                                 </li>
                             </ul>
                         </div>
-                        <!-- /.navbar-collapse -->                                                                      
+                        <!-- /.navbar-collapse -->                         
                     </nav>
 
                     <!-- .box-holder -->
@@ -191,25 +210,23 @@ $('#clock').jclock(options);
                         <div class="left-sidebar">
                             <div class="sidebar-holder">
                                 <!-- User   -->
-                                <div class="user-menu">
-                                   
+                                <div class="user-menu">                                   
                                     <div class="user-info" style="margin-left: 30px;">
                                         <div class="welcome"><?php echo __('Welcome','dashboard'); ?> , </div>
-                                        <div class="username"><?php echo $_SESSION["glpifirstname"]; ?></div>
-                                    </div>
-                                  
+                                        <div class="username"><a href="<?php echo $CFG_GLPI['root_doc']; ?>/front/user.form.php?id=<?php echo $_SESSION['glpiID']; ?>" target="_blank"><?php echo $_SESSION["glpifirstname"]; ?></a></div>
+                                    </div>                                  
                                 </div>
                                 <!-- /.User   -->
 
                                 <!-- Menu -->
                                 <ul class="nav  nav-list">
                                 
-                                  <li class=''>
+                                  <li class=' '>
                                     <a href='./index.php' data-original-title='Dashboard'>
                                         <i class='fa fa-home'></i>
                                         <span class='hidden-minibar'>Dashboard</span>
                                     </a>
-                                    <li class='submenu  '>
+                                    <li class='submenu'>
                                     <a class='dropdown' onClick='return false;' href='#' data-original-title='Chamados'>
                                         <i class='fa fa-edit'></i>
                                         <span class='hidden-minibar'><?php echo __('Tickets','dashboard');?>
@@ -294,7 +311,13 @@ $('#clock').jclock(options);
                                                 <i class="fa fa-angle-right"></i>
                                                 <span class='hidden-minibar'> <?php echo __('by Date','dashboard'); ?> </span>
                                             </a>
-                                        </li> 
+                                        </li>
+                                       <li class=' '>
+                                            <a href="./reports/rel_sla.php" data-original-title=' por SLA' target="_blank">
+                                                <i class="fa fa-angle-right"></i>
+                                                <span class='hidden-minibar'> <?php echo __('by SLA','dashboard'); ?> </span>
+                                            </a>
+                                        </li>  
                                         <li class=' '>
                                               <a href="./reports/rel_tarefa.php" data-original-title=' Tarefas' target="_blank">
                                                 <i class="fa fa-angle-right"></i>
@@ -402,6 +425,12 @@ $('#clock').jclock(options);
                                                 <span class='hidden-minibar'> <?php echo __('by Date','dashboard'); ?></span>
                                             </a>
                                         </li>
+                                       <li class=' '>
+                                              <a href="./graficos/slas.php" data-original-title=' por SLA' target="_blank">
+                                                <i class="fa fa-angle-right"></i>
+                                                <span class='hidden-minibar'> <?php echo __('by SLA','dashboard'); ?></span>
+                                            </a>
+                                        </li>
                            
                                     </ul>
                                 </li><!-- delighted pages -->  
@@ -418,6 +447,13 @@ $('#clock').jclock(options);
                                     <a href='info.php' target="_blank" data-original-title='Info'>
                                         <i class='fa fa-info-circle'></i>
                                         <span class='hidden-minibar'>Info
+                                        </span>
+                                    </a>  
+                                </li>                                
+                                <li class=' '>
+                                    <a href='config.php' target="_blank" data-original-title='Config'>
+                                        <i class='fa fa-gears'></i>
+                                        <span class='hidden-minibar'><?php echo __('Setup'); ?>
                                         </span>
                                     </a>  
                                 </li>
@@ -459,21 +495,21 @@ echo '<h5 class="label1 label-default"> <i class="fa fa-info-circle"></i>  Serve
 	
 	<ul class="list-unstyled list-info-sidebar" style="color: #cecece;">
 		<li class="data-row">
-			<span class="data-name" style="color: #cecece;">OS:</span>
+			<span class="data-name" >OS:</span>
 			<span class="data-value">'; include './sh/issue.php'; 
 		
 echo		'</span>
 		</li>
 
 		<li class="data-row">
-			<span class="data-name" style="color: #cecece;">UP:</span>
+			<span class="data-name" >UP:</span>
 			<span class="data-value">'; include './sh/uptime.php'; 
 			
 echo		'</span>
 		</li>
 
 		<li class="data-row">
-			<span class="data-name" style="color: #cecece;">MEM:</span>
+			<span class="data-name" >MEM:</span>
 			<span class="data-value">'; include './sh/mem.php'; 
 
 echo '<div class="progress" style="height: 5px;">
@@ -483,38 +519,55 @@ echo '<div class="progress" style="height: 5px;">
 		</li>
 
 		<li class="data-row">
-			<span class="data-name" style="color: #cecece;">DISK:</span>
+			<span class="data-name" >DISK:</span>
 			<span class="data-value">'; include './sh/df.php'; 
 
 echo '<div class="progress" style="height: 5px;">
     		<div class="progress-bar  progress-striped '.$cord.'" style="width: '.$udisk.'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'.$udisk.'" role="progressbar"></div>
 		</div>
 			</span>			
-		</li>		
+		</li>	';	
 		
-	</ul>';  
+/*		   <li class="data-row">
+			<span class="data-name" >LOAD:</span>
+			<span class="data-value">'; include './sh/load.php'; 
 
+echo '<div class="progress" style="height: 5px;">
+    		<div class="progress-bar  progress-striped '.$corl.'" style="width: '.$load.'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'.$load.'" role="progressbar"></div>
+		</div>
+			</span>			
+		</li>		
+	</ul>';  */
 }
 
 ?>	                              
-    </div>
-    <!-- /.left-sidebar -->
-
+ </div>
+ <!-- /.left-sidebar -->
 
 <?php     
-
 $ano = date("Y");
 $month = date("Y-m");
 $hoje = date("Y-m-d");
 
-//selecionar anos 
 
+//select entity
+if ($sel_ent == 0) {
+	$entity = "";
+	$entity_u = "";
+}
+
+else {
+	$entity = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+	$entity_u = "AND glpi_users.entities_id = ".$sel_ent." ";
+}
+
+//selecionar anos 
 if($num_years == 0) {
 	
-		$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
+	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
-	AND date IS NOT NULL
+	AND date IS NOT NULL	
 	ORDER BY year ASC ";
 }
 
@@ -562,44 +615,44 @@ else {
 
 
 //chamados ano
-
 $sql_ano =	"SELECT COUNT(glpi_tickets.id) as total        
       FROM glpi_tickets
       LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
       WHERE glpi_tickets.is_deleted = '0' 
-      AND DATE_FORMAT( glpi_tickets.date, '%Y' ) IN (".$years.") ";
+      AND DATE_FORMAT( glpi_tickets.date, '%Y' ) IN (".$years.") 
+      ".$entity." ";
 
 $result_ano = $DB->query($sql_ano);
 $total_ano = $DB->fetch_assoc($result_ano);
       
 //chamados mes
-
 $sql_mes =	"SELECT COUNT(glpi_tickets.id) as total        
       FROM glpi_tickets
       LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
       WHERE glpi_tickets.date LIKE '$month%'      
-      AND glpi_tickets.is_deleted = '0' ";
+      AND glpi_tickets.is_deleted = '0' 
+      ".$entity." ";
 
 $result_mes = $DB->query($sql_mes);
 $total_mes = $DB->fetch_assoc($result_mes);
 
 //chamados dia
-
 $sql_hoje =	"SELECT COUNT(glpi_tickets.id) as total        
       FROM glpi_tickets
       LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
       WHERE glpi_tickets.date like '$hoje%'      
-      AND glpi_tickets.is_deleted = '0'";
+      AND glpi_tickets.is_deleted = '0'
+      ".$entity." ";
 
 $result_hoje = $DB->query($sql_hoje);
 $total_hoje = $DB->fetch_assoc($result_hoje);
 
 // total users
-
 $sql_users = "SELECT COUNT(id) AS total
-FROM `glpi_users`
-WHERE is_deleted = 0
-AND is_active = 1";
+				FROM `glpi_users`
+				WHERE is_deleted = 0
+				".$entity_u."
+				AND is_active = 1";
 
 $result_users = $DB->query($sql_users);
 $total_users = $DB->fetch_assoc($result_users);
@@ -646,7 +699,7 @@ $total_users = $DB->fetch_assoc($result_users);
 								  <div class="col-sm-3 col-md-3">
 									 <div class="dashbox panel panel-default">
 										<div class="panel-body">
-										   <div class="panel-left red">
+										   <div class="panel-left yellow">
 												<i class="fa fa-plus-square fa-3x" style="color:#F1B119;"></i>
 										   </div>
 										   <div class="panel-right">
@@ -660,7 +713,7 @@ $total_users = $DB->fetch_assoc($result_users);
 								  <div class="col-sm-3 col-md-3">
 									 <div class="dashbox panel panel-default">
 										<div class="panel-body">
-										   <div class="panel-left blue">
+										   <div class="panel-left green">
 												<i class="fa fa-users fa-3x" style="color:#008F3A;"></i>
 										   </div>
 								   		<div class="panel-right">
@@ -749,6 +802,7 @@ setTimeout(function(){
 				FROM glpi_tickets
 				WHERE glpi_tickets.is_deleted = 0
 				AND glpi_tickets.status IN $status
+				".$entity."
 				ORDER BY id DESC
 				LIMIT 10 ";
             
@@ -786,7 +840,7 @@ setTimeout(function(){
             <div class="widget-content" style="height:322px;">
             <?php
                                 
-            $query_op = "
+            $query_tec = "
             SELECT DISTINCT glpi_users.id AS id, glpi_users.`firstname` AS name, glpi_users.`realname` AS sname, count(glpi_tickets_users.tickets_id) AS tick
 				FROM `glpi_users` , glpi_tickets_users, glpi_tickets
 				WHERE glpi_tickets_users.users_id = glpi_users.id
@@ -794,11 +848,12 @@ setTimeout(function(){
 				AND glpi_tickets.is_deleted = 0
 				AND glpi_tickets.id = glpi_tickets_users.tickets_id
 				AND glpi_tickets.status IN ".$status."
+				".$entity."
 				GROUP BY `glpi_users`.`firstname` ASC
 				ORDER BY tick DESC
 				LIMIT 10 ";
             
-            $result_op = $DB->query($query_op);			            
+            $result_tec = $DB->query($query_tec);			            
             
             ?>    
               <table id="open_tickets" class="table table-hover table-bordered table-condensed" >
@@ -806,7 +861,7 @@ setTimeout(function(){
               <?php echo __('Open Tickets','dashboard'); ?></th>
               
 				<?php
-					while($row = $DB->fetch_assoc($result_op)) 
+					while($row = $DB->fetch_assoc($result_tec)) 
 					{					
 						echo "<tr><td><a href=./reports/rel_tecnico.php?con=1&tec=".$row['id']."&stat=open target=_blank style='color: #526273;'>
 						".$row['name']." ".$row['sname']."</a></td><td style='text-align: center;' >".$row['tick']."</td></tr>";											
@@ -969,7 +1024,7 @@ setTimeout(function(){
 				
 				$query_name = 
 				"SELECT firstname AS name, realname AS sname, id AS uid, name AS glpiname 
-				FROM glpi_users
+				FROM glpi_users				
 				WHERE id IN ('".$ids2."')
 				ORDER BY name"; 
 				
@@ -1003,13 +1058,10 @@ setTimeout(function(){
             </div>
             <!-- /widget-content --> 
           </div>
-	</div>          
-          		
+	</div>                    		
           <!-- content row 2 --> 
-	<!-- </div> -->          
-          
-   </div>   
-    
+	<!-- </div> -->                    
+   </div>       
 	</div> 
  
 <script>
@@ -1021,7 +1073,7 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
         
    </div>    
 	</div>
-	<!-- end main-content -->
+	<!-- end main-content -->	
 	</div>
 
 	<div id="go-top" class="go-top" onclick="scrollWin()">
@@ -1079,8 +1131,7 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
 
        <!-- Remove below two lines in production --> 
        
-       <script src="js/theme-options.js"></script>
-       
-       <script src="js/core.js"></script> 
+       <script src="js/theme-options.js"></script>       
+       <script src="js/core.js"></script>
 </body>
 </html>

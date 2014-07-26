@@ -236,7 +236,7 @@ $('.nav-input-search').typeahead({
         });
 
   
-        $('.progress .progress-bar').progressbar(); 
+        //$('.progress .progress-bar').progressbar(); 
         $('.fa-hover').click(function(e){
           e.preventDefault();
           var valued= $(this).find('i').attr('class');

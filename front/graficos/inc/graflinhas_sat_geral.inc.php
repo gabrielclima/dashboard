@@ -1,7 +1,7 @@
 
 <?php
 
-//chamados mensais
+//chamados abertos (opened)
 
 $querym = "
 SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
@@ -27,6 +27,8 @@ $grfm2 = implode("','",$grfm);
 $grfm3 = "'$grfm2'";
 $quantm2 = implode(',',$quantm);
 
+$opened = array_sum($quantm);
+
 //array to compare months
 
 $DB->data_seek($resultm, 0);
@@ -38,35 +40,24 @@ while ($row_result = $DB->fetch_assoc($resultm))
 	$arr_month[$v_row_result] = 0;			
 	} 
 
-//chamados abertos mensais
 
-$status = "('1','2','3','4')"	;	
-
-// opened tickets
-$querya = "
-SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH
-FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = '0'
-GROUP BY MONTH
-ORDER BY MONTH ";
-
-$resulta = $DB->query($querya) or die('erro');
+// late tickets
 
 $arr_grfa = array();
 
-while ($row_result = $DB->fetch_assoc($resulta))		
+$DB->data_seek($resultm, 0);
+while ($row_result = $DB->fetch_assoc($resultm))		
 { 
-//	$v_row_result = $row_result['month_l'];
-//   $arr_grfs[$v_row_result] = $row_result['nb'];
 	
 $querya2 = "	
 SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH, count(id) AS nb 
 FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = '0'
-AND status IN ".$status."
+WHERE solvedate IS NOT NULL
+AND due_date IS NOT NULL
+AND solvedate > due_date
 AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
 GROUP BY MONTH
-ORDER BY MONTH";	
+ORDER BY MONTH";
 
 $resulta2 = $DB->query($querya2) or die('erronb');
 $row_result2 = $DB->fetch_assoc($resulta2);
@@ -90,29 +81,25 @@ $grfa2 = implode("','",$grfa);
 $grfa3 = "'$grfa2'";
 $quanta2 = implode(',',$quanta);
 
-// solved
-$querys = 
-"SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH
-FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = '0'
-GROUP BY MONTH
-ORDER BY MONTH ";
+$late = array_sum($quanta);
 
-$results = $DB->query($querys) or die('erro');
+
+// solved
 
 $arr_grfs = array();
 
-while ($row_result = $DB->fetch_assoc($results))
+$DB->data_seek($resultm, 0);
+while ($row_result = $DB->fetch_assoc($resultm))
 { 
 	
 $querys2 = "	
 SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-%m' ) AS MONTH, count(id) AS nb 
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
-AND status = 5
+AND glpi_tickets.solvedate IS NOT NULL
 AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
-GROUP BY MONTH
-ORDER BY MONTH";	
+GROUP BY month
+ORDER BY month";	
 
 $results2 = $DB->query($querys2) or die('erronb');
 $row_result2 = $DB->fetch_assoc($results2);
@@ -134,32 +121,48 @@ $grfs2 = implode("','",$grfs);
 $grfs3 = "'$grfs2'";
 $quants2 = implode(',',$quants);
 
+$solved = array_sum($quants);
+
 
 // fechados mensais
 
+$arr_grff = array();
+
+$DB->data_seek($resultm, 0);
+while ($row_result = $DB->fetch_assoc($resultm))
+{ 
+	
 $queryf = "
-SELECT DISTINCT DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
+SELECT DISTINCT DATE_FORMAT(date, '%b-%y') as month_l, DATE_FORMAT(date, '%y-%m') as month, COUNT(id) as nb
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
-AND glpi_tickets.status = '6'
+AND glpi_tickets.closedate IS NOT NULL
+AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
 GROUP BY month
 ORDER BY month ";
 
-$resultf = $DB->query($queryf) or die('erro');
-
-$arr_grff = array();
-while ($row_result = $DB->fetch_assoc($resultf))		
-	{ 
-	$v_row_result = $row_result['month_l'];
-	$arr_grff[$v_row_result] = $row_result['nb'];			
-	} 
+$resultf = $DB->query($queryf) or die('errof');
 	
+$row_resultf = $DB->fetch_assoc($resultf);
+
+	$v_row_result = $row_result['month_l'];
+		if($row_resultf['nb'] != '') {
+		$arr_grff[$v_row_result] = $row_resultf['nb'];
+		}
+	else {
+		$arr_grff[$v_row_result] = 0;
+		}			
+	
+}
+
 $grff = array_keys($arr_grff) ;
 $quantf = array_values($arr_grff) ;
 
 $grff2 = implode("','",$grff);
 $grff3 = "'$grff2'";
 $quantf2 = implode(',',$quantf);
+
+$closed = array_sum($quantf);
 
 
 
@@ -183,7 +186,6 @@ while ($row_result1 = $DB->fetch_assoc($result_sat))
 	$v_row_result1 = $row_result1['month_l'];
 	$arr_grfsat[$v_row_result1] = round(($row_result1['media']/5)*100,1);			
 	} 
-
 
 $arr_sat = array_merge($arr_month, $arr_grfsat);
 
@@ -347,7 +349,7 @@ if(array_sum($quantsat) != 0) {
 
 echo "
           		 {
-                name: '".__('Opened','dashboard')."', 
+                name: '".__('Opened','dashboard')." (".$opened.")',
                
                  dataLabels: {
                     enabled: true,                    
@@ -359,17 +361,11 @@ echo "
                     }   
                     },               
                 data: [$quantm2] 
-                },
-                                             
+                },                                                              
                 {
-                name: '".__('Closed','dashboard')."',                                           
-                data: [$quantf2]
-                }, 
-                
-                {
-                name: '".__('Solved')."',  
+                name: '".__('Solved')." (".$solved.")',
                 dataLabels: {
-                    enabled: true,                    
+                    enabled: false,                    
                     //color: '#000',
                     style: {
                         fontSize: '11px',
@@ -381,7 +377,7 @@ echo "
                 },  
 
                 {
-                name: '".__('Late','dashboard')."',
+                name: '".__('Late','dashboard')." (".$late.")',
                
                 dataLabels: {
                     enabled: true,                    
@@ -393,7 +389,12 @@ echo "
                     },
                     },   
                 data: [$quanta2] 
-                }]
+                },
+					 {
+                name: '".__('Closed','dashboard')." (".$closed.")',                                    
+                data: [$quantf2]
+                },                 
+                ]
         });
     });
   </script>  

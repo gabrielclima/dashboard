@@ -95,10 +95,9 @@ if($_SESSION['glpilanguage'] == "pt_BR") {
     echo '<!--[if IE]>';
     echo '<embed src="../sounds/novo_chamado.mp3" autostart="true" width="0" height="0" type="application/x-mplayer2"></embed>';
     echo '<![endif]-->';
-
     // Browser HTML5
     echo '<audio preload="auto" autoplay>';
-    echo '<source src="../sounds/novo_chamado.ogg" type="audio/ogg"><source src="sounds/novo_chamado.mp3" type="audio/mpeg">';
+    echo '<source src="../sounds/novo_chamado.ogg" type="audio/ogg"><source src="sounds/novo_chamado.ogg" type="audio/mpeg">';
     echo '</audio>';
 }
 
@@ -110,15 +109,13 @@ else {
     echo '<![endif]-->';
     // Browser HTML5
     echo '<audio preload="auto" autoplay>';
-    echo '<source src="../sounds/new_ticket.ogg" type="audio/ogg"><source src="sounds/new_ticket.mp3" type="audio/mpeg">';
+    echo '<source src="../sounds/new_ticket.ogg" type="audio/ogg"><source src="sounds/new_ticket.ogg" type="audio/mpeg">';
     echo '</audio>';
 }
-
 }	
 
 
 //contar chamados do dia 
-
 $datahoje = date("Y-m-d");
 
 $sql = "
@@ -131,7 +128,6 @@ $result = $DB->query($sql);
 $hoje=$DB->fetch_assoc($result);
 
 // chamados de ontem - yesterday tickets
-
 $dataontem = date('Y-m-d', strtotime('-1 day'));
 
 $sql = "
@@ -145,30 +141,27 @@ $ontem = $DB->fetch_assoc($result);
 
 
 //$cham_ontem = __('Yesterday','dashboard') .': '. $ontem['total'] ;
-
-if ($ontem['total'] > $hoje['total']) { $up_down = "../img/down.gif"; }
-if ($ontem['total'] < $hoje['total']) { $up_down = "../img/up.gif"; }
+if ($ontem['total'] > $hoje['total']) { $up_down = "../img/down.png"; }
+if ($ontem['total'] < $hoje['total']) { $up_down = "../img/up.png"; }
 if ($ontem['total'] == $hoje['total']) { $up_down = "../img/blank.gif"; }
 
 
 ?>
 <div id="clock" style="align:right; position:absolute; margin-top:5px;"></div>
-
 <div id='content'>
 <div id='container-fluid' > 
 
 <table style="width: 100%; margin-left: auto; margin-right: auto;">
-<tr><td>&nbsp;</td></tr>
-<tr>
-<td align="center"><span class="titulo_cham">GLPI - <?php echo __('Open Tickets','dashboard'); ?>:</span> 
-<span style="color:#8b1a1a; font-size:45pt; font-weight:bold;"> <?php echo "&nbsp; ".$data['total'] ; ?> </span> </td>
-
-</tr>
-<tr><td></td></tr>
+	<tr><td>&nbsp;</td></tr>
+	<tr>
+	<td align="center"><span class="titulo_cham">GLPI - <?php echo __('Open Tickets','dashboard'); ?>:</span> 
+	<span style="color:#8b1a1a; font-size:45pt; font-weight:bold;"> <?php echo "&nbsp; ".$data['total'] ; ?> </span> </td>
+	</tr>
+	<tr><td></td></tr>
 
 <table style="color:#000099; font-size:25pt; font-weight:bold; width: 100%; margin-left: auto; margin-right: auto;"><tr><td align="center"><span class="today"><a href="chamados.php"> <?php echo __('Today Tickets','dashboard'); ?>: </a> 
-<a href="../front/ticket.php" target="_blank" style="color:#8b1a1a;"> <?php echo "&nbsp; ".$hoje['total'] ; ?> </a>
-<img src= <?php echo $up_down ;?>  alt="" title= <?php echo __('Yesterday','dashboard'). ':';  echo $ontem['total'] ;?>  > </span> </td></tr>
+	<a href="../front/ticket.php" target="_blank" style="color:#8b1a1a;"> <?php echo "&nbsp; ".$hoje['total'] ; ?> </a>
+	<img src= <?php echo $up_down ;?>  alt="" title= <?php echo __('Yesterday','dashboard'). ':';  echo $ontem['total'] ;?>  > </span> </td></tr>
 </table>
 
 </table>
@@ -177,7 +170,6 @@ if ($ontem['total'] == $hoje['total']) { $up_down = "../img/blank.gif"; }
 <div class="well info_box" style="width: 95%; margin-left: auto; margin-right: auto;">
 
 <?php 
-
 if(isset($_REQUEST['order'])) {
 
 	$order1 = $_REQUEST['order'];
@@ -185,21 +177,20 @@ if(isset($_REQUEST['order'])) {
 	switch($order1) {
 		 case "td": $order = "ORDER BY glpi_tickets.id DESC"; break;
 		 case "ta": $order = "ORDER BY glpi_tickets.id ASC"; break;
-		 case "sd": $order = "ORDER BY glpi_tickets.status DESC"; break;
-		 case "sa": $order = "ORDER BY glpi_tickets.status ASC"; break;
+		 case "sd": $order = "ORDER BY glpi_tickets.status DESC, glpi_tickets.id ASC"; break;
+		 case "sa": $order = "ORDER BY glpi_tickets.status ASC, glpi_tickets.id ASC"; break;
 		 case "tid": $order = "ORDER BY glpi_tickets.name DESC"; break;
 		 case "tia": $order = "ORDER BY glpi_tickets.name ASC"; break;
 		 case "ted": $order = "ORDER BY glpi_tickets.id DESC"; break;
 		 case "tea": $order = "ORDER BY glpi_tickets.id ASC"; break;
-		 case "pd": $order = "ORDER BY glpi_tickets.priority DESC"; break;
-		 case "pa": $order = "ORDER BY glpi_tickets.priority ASC"; break;	  
+		 case "pd": $order = "ORDER BY glpi_tickets.priority DESC, glpi_tickets.date ASC"; break;
+		 case "pa": $order = "ORDER BY glpi_tickets.priority ASC, glpi_tickets.date ASC"; break;	  
 		}	
 	}
 	
 else {
 		$order = "ORDER BY glpi_tickets.date_mod DESC";
 }
-
 
 $status = "('2','1','3','4')"	;	
 
@@ -212,15 +203,14 @@ AND glpi_tickets.is_deleted = 0
 ".$order."";
 
 //ORDER BY glpi_tickets.date_mod DESC
-
 $result_cham = $DB->query($sql_cham);
 
 echo "<tr class='up-down' style='color:#555;'>
-<td style='text-align:center; width:65px;'><a href='chamados.php?order=ta'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Tickets','dashboard')."<a href='chamados.php?order=td'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
-<td style='text-align:center; width:240px;'><a href='chamados.php?order=sa'><font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>Status<a href='chamados.php?order=sd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
-<td style='text-align:center;'><a href='chamados.php?order=tia'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Title','dashboard')."<a href='chamados.php?order=tid'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
-<td style='text-align:center;'>". __('Technician','dashboard')."</td>
-<td style='text-align:center;'><a href='chamados.php?order=pa'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Priority')."<a href='chamados.php?order=pd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+	<td style='text-align:center; width:65px;'><a href='chamados.php?order=ta'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Tickets','dashboard')."<a href='chamados.php?order=td'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+	<td style='text-align:center; width:240px;'><a href='chamados.php?order=sa'><font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>Status<a href='chamados.php?order=sd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+	<td style='text-align:center;'><a href='chamados.php?order=tia'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Title','dashboard')."<a href='chamados.php?order=tid'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
+	<td style='text-align:center;'>". __('Technician','dashboard')."</td>
+	<td style='text-align:center;'><a href='chamados.php?order=pa'>&nbsp<font size=2.5pt; face='webdings'>&#x25BE;&nbsp;</font></a>". __('Priority')."<a href='chamados.php?order=pd'><font size=2.5pt; face='webdings'>&nbsp;&#x25B4;</font></a></td>
 </tr>";
 
 while($row = $DB->fetch_assoc($result_cham)){ 
@@ -254,23 +244,32 @@ $row_prio = $DB->fetch_assoc($result_prio);
 
 $priority = $row['priority'];
 
+if($priority == 1) {
+	$prio_name = _x('priority', 'Very low'); }
+
 if($priority == 2) {
 	$prio_name = _x('priority', 'Low'); }
 	
 if($priority == 3) {
 	$prio_name = _x('priority', 'Medium'); } 		
 	
-if($priority == 4) {
-	$prio_name = _x('priority', 'High'); } 				 		
+if($priority == 4) {	
+	$prio_name = _x('priority', 'High'); }
+	
+if($priority == 5) {
+	$prio_name = _x('priority', 'Very high'); } 	
+	
+if($priority == 6) {
+	$prio_name = _x('priority', 'Major'); } 			 				 		
 
 
 echo "
 <tr class='title'>
-<td style='text-align:center; vertical-align:middle;'> <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span style='color:#000099';>" . $row['id'] . "</span> </a></td>
-<td style='vertical-align:middle;'><span style='color:#000099';><img src=../../../../pics/".$status1.".png />  ".Ticket::getStatus($row['status'])."</span ></td>
-<td style='vertical-align:middle;'><a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span >" . $row['descri'] . "</span> </a></td>
-<td style='vertical-align:middle;'><span >". $row_tec['name'] ." ".$row_tec['sname'] ."</span> </td>
-<td style='vertical-align:middle; text-align:center; background-color:". $row_prio['priority'] .";'>" . $prio_name . "</td>
+	<td style='text-align:center; vertical-align:middle;'> <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span style='color:#000099';>" . $row['id'] . "</span> </a></td>
+	<td style='vertical-align:middle;'><span style='color:#000099';><img src=../../../../pics/".$status1.".png />  ".Ticket::getStatus($row['status'])."</span ></td>
+	<td style='vertical-align:middle;'><a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span >" . $row['descri'] . "</span> </a></td>
+	<td style='vertical-align:middle;'><span >". $row_tec['name'] ." ".$row_tec['sname'] ."</span> </td>
+	<td style='vertical-align:middle; text-align:center; background-color:". $row_prio['priority'] .";'>" . $prio_name . "</td>
 </tr>"; 
  
  } 

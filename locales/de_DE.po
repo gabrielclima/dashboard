@@ -375,3 +375,30 @@ msgstr "nach Vermögenswert"
 
 msgid "Print"
 msgstr "Drucken"
+
+msgid "by SLA"
+msgstr "nach SLA"
+
+msgid "Select a SLA"
+msgstr "Wählen ein SLA"
+
+msgid "Current"
+msgstr "Strom"
+
+msgid "Current year"
+msgstr "Laufenden Jahr"
+
+msgid "Period in index page"
+msgstr "Zeitraum im Index-Seite"
+
+msgid "Theme"
+msgstr "Thema"
+
+msgid "by Type"
+msgstr "nach Tipo"
+
+msgid "Select a type"
+msgstr "Wählen ein typ"
+
+msgid "Select a manufacturer"
+msgstr "Wählen ein Hersteller"

@@ -1,74 +1,11 @@
 <?php
 
-//numero de anos para exibição no index
-// number of year to display in index
-//$num_years = 1;
-/*
-//selecionar anos 
-
-if($num_years == 0) {
-	
-		$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
-	FROM glpi_tickets
-	WHERE glpi_tickets.is_deleted = '0'
-	AND date IS NOT NULL
-	ORDER BY year ASC ";
-}
-
-if($num_years == 1) {
-	
-	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
-	FROM glpi_tickets
-	WHERE glpi_tickets.is_deleted = '0'
-	AND date IS NOT NULL
-	ORDER BY year DESC
-	LIMIT ".$num_years."";
-}
-
-if($num_years > 1) {
-	
-	$query_y = "SELECT DISTINCT DATE_FORMAT( date, '%Y' ) AS year
-	FROM glpi_tickets
-	WHERE glpi_tickets.is_deleted = '0'
-	AND date IS NOT NULL
-	ORDER BY year DESC
-	LIMIT ".$num_years."";
-	
-}
-
-$result_y = $DB->query($query_y);
-
-//numero de anos para eixos Y
-$conta_y = $DB->numrows($result_y);
-
-$arr_years = array();
-
-while ($row_y = $DB->fetch_assoc($result_y))		
-	{ 
-		$arr_years[] = $row_y['year'];			
-	} 
-
-
-if($num_years > 1) {
-	$arr_years = array_reverse($arr_years);
-	$years = implode(",", $arr_years);
-}
-else {
-	$years = implode(",", $arr_years);
-}
-*/
-print_r($years);
-
 echo ' <script type="text/javascript">
 
 $(function() {
 
 		var datasets = {';
 		
-// data series	
-//$DB->data_seek($result_y,0);
-
-//while ($row_y = $DB->fetch_assoc($result_y)) {
 
 for($i=0; $i < $conta_y; $i++) {	
 
@@ -76,6 +13,7 @@ for($i=0; $i < $conta_y; $i++) {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND DATE_FORMAT( date, '%Y' ) = ". $arr_years[$i] ."
+	".$entity."
 	GROUP BY month
 	ORDER BY month";
 	
@@ -136,15 +74,16 @@ function plotAccordingToChoices() {
                                 label: {show:true}
                              },
 
-                        points: { show: true, 
-                                 lineWidth: 2,
-                                 radius: 4
-                             },
+                     points: { show: true, 
+                              lineWidth: 2,
+                              radius: 4
+                          },
               
                     grid: { hoverable: true, 
                            clickable: true, 
                            tickColor: "#f9f9f9",
-                           borderWidth: 0
+                           borderWidth: 0,
+                           backgroundColor: "#fff",
                         },
                     legend: {
                             show: true,

@@ -28,13 +28,12 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 <link href="../inc/calendar/calendar.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
-<script language="javascript" src="../inc/calendar/calendar.js"></script>
 <script src="../js/highcharts.js"></script>
 <script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/exporting.js"></script>
 
-<link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
-<script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
+<link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
+<script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
 
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
@@ -42,7 +41,7 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 
 </head>
 
-<body>
+<body style="background-color: #e5e5e5; margin-left:0%;">
 
 <?php
 
@@ -72,47 +71,50 @@ $datahoje = date("Y-m-d");
 
 	<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
 
-	<div id="titulo" style="margin-bottom:45px;"> <?php echo __('Tickets') .'  '. __('by Assets','dashboard');  ?>  
+<div id="titulo" style="margin-bottom:45px;"> <?php echo __('Tickets') .'  '. __('by Assets','dashboard');  ?>  
 
-<div id="datas" class="span12 row-fluid" > 
+<div id="datas" class="span12 row-fluid" style="margin-left:-25px;"> 
+
 <form id="form1" name="form1" class="form1" method="post" action="?con=1&date1=<?php echo $data_ini ?>&date2=<?php echo $data_fin ?>" style="width:360px;"> 
-
-<table border="0" cellspacing="0" cellpadding="2" width="430px">
+<table border="0" cellspacing="0" cellpadding="2" width="350px">
 <tr>
-<td>
-<?php
-    
-echo'
-<table style="margin-left: 16px; margin-top:6px; align:right;" border=0><tr><td>
-    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
-    <input class="span8" size="14" type="text" name="date1" value="'.$data_ini.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-	 </td>
-	 <td>
-    <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
-    <input class="span8" size="14" type="text" name="date2" value="'.$data_fin.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    </tr></td>
-</table>
-    ';
+	<td style="width: 300px;">			
+	<?php			    
+	echo'
+	<table style="margin-top:16px;" border=0>
+		<tr>
+			<td>
+			   <div class="input-group date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
+			    	<input class="col-md-9 form-control" size="13" type="text" name="date1" value="'.$data_ini.'" >		    	
+			    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+		    	</div>
+			</td>
+			<td>&nbsp;</td>
+			<td>
+		   	<div class="input-group date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
+			    	<input class="col-md-9 form-control" size="13" type="text" name="date2" value="'.$data_fin.'" >		    	
+			    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+		    	</div>
+			</td>
+			<td>&nbsp;</td>
+		</tr>
+	</table> ';
 ?>
 
 <script language="Javascript">
-$('#dp1').datepicker('update');
-$('#dp2').datepicker('update');
+	$('#dp1').datepicker('update');
+	$('#dp2').datepicker('update');
 </script>
 
 </td>
 </tr>
-
+<tr height="12px" ><td></td></tr>
 <tr>
-<td style="margin-top:2px; width:100px;">
+<td style="margin-top:0px; width:100px;">
 
 <?php echo __('Type').":  
 
-<select id='sel_item' name='sel_item' class='chosen-select' tabindex='-1' style='width: 300px; height: 27px;' autofocus onChange='javascript: document.form1.submit.focus()' >
+<select id='sel_item' name='sel_item' style='width: 300px; height: 27px;' autofocus onChange='javascript: document.form1.submit.focus()' >
 	<option value='0'> -- ".__('Select a asset','dashboard')." -- </option>
 	<option value='1'>".__('Computer')."</option>
 	<option value='2'>".__('Monitor')."</option>
@@ -127,19 +129,18 @@ $('#dp2').datepicker('update');
 </td>
 </tr>
 <tr><td>&nbsp;</td></tr>
-<tr align="center">
-<td>
-	<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-refresh"></i>&nbsp; <?php echo __('Consult','dashboard'); ?> </button>
-	<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='ativos.php'" ><i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button>
-</td>
-</tr>
-
+	<tr height="12px" ><td></td></tr>
+	<tr align="center">
+	<td>
+		<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?> </button>
+		<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" ><i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button>
+	</td>
+	</tr>
 </table>
 <p></p>
 <?php Html::closeForm(); ?>
 
 </div>
-
 </div>
 </div>
 
@@ -179,7 +180,7 @@ include ("./inc/grafbar_ativo_mes.inc.php");
 </div>
 
 <script type="text/javascript" >
-$('.chosen-select').chosen({disable_search_threshold: 10});
+$(document).ready(function() { $("#sel_item").select2(); });
 </script>
 
 

@@ -387,14 +387,16 @@ a {
   font-size: 12px;
   line-height: 12px;
 }
-.left-sidebar .user-menu .user-info .username {
+.left-sidebar .user-menu .user-info .username a {
   font-family: 'Droid Sans', sans-serif;
   font-size: 18px;
   font-weight: 700;
   overflow: hidden;
   height: 20px;
   color: #80969c;
+  text-decoration: none;
 }
+
 .left-sidebar .user-menu .user-status {
   display: inline-block;
   font-size: 12px;
@@ -4350,4 +4352,39 @@ ANIMATIONS
 }
 * {
     outline: medium none !important;
+}
+
+
+.label1 {
+    border-radius: 0;
+    font-weight: normal;
+    padding: 0.5em 0.6em;
+	 margin: 30px 15px 15px 15px; 
+	 width:190px;
+	 background-color: #c1c1c1;
+	 
+}
+
+.data-row .data-name, .data-row .data-value {
+    display: inline-block;
+    padding: 5px;
+    vertical-align: middle;
+    margin-left: 25px;
+}
+
+.data-row .data-name {    
+    color: #cecece;
+    font-size: 0.93em;
+    vertical-align: top;
+    width: 12px;
+}
+
+.data-value { 
+	 color: #cecece;      
+    font-size: 0.89em;
+    vertical-align: top;    
+}
+
+.data-row {
+height: 30px;
 }

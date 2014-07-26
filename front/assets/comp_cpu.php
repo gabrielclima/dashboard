@@ -5,7 +5,8 @@ $query2 = "
 SELECT glpi_deviceprocessors.designation AS name, glpi_items_deviceprocessors.frequency AS freq, count( glpi_items_deviceprocessors.id ) AS conta
 FROM glpi_items_deviceprocessors
 LEFT JOIN glpi_deviceprocessors ON ( glpi_deviceprocessors.id = glpi_items_deviceprocessors.deviceprocessors_id )
-WHERE glpi_items_deviceprocessors.is_deleted =0
+WHERE glpi_items_deviceprocessors.is_deleted = 0
+
 GROUP BY name
 ORDER BY `conta` DESC ";
 
@@ -50,21 +51,30 @@ $(document).ready(function() {
         "bFilter":false,
         "aaSorting": [[2,'desc'], [0,'asc']],
         "aoColumnDefs": [{ "sWidth": "45%", "aTargets": [1] }],
-        "sDom": 'T<"clear">lfrtip',
+         "sDom": 'T<"clear">lfrtip',
          "oTableTools": {
-            "aButtons": [
-                "copy",
-                "print",
-                {
-                    "sExtends":    "collection",
-                    "sButtonText": "Export",
-                    "aButtons":    [ "csv", "xls", "pdf" ]
-                }
-            ]
+         "aButtons": [
+             {
+                 "sExtends": "copy",
+                 "sButtonText": "<?php echo __('Copy'); ?>"
+             },
+             {
+                 "sExtends": "print",
+                 "sButtonText": "<?php echo __('Print','dashboard'); ?>"
+                 
+             },
+             {
+                 "sExtends":    "collection",
+                 "sButtonText": "<?php echo __('Export'); ?>",
+                 "aButtons":    [ "csv", "xls",
+                  {
+                 "sExtends": "pdf",
+                 "sPdfOrientation": "landscape",
+                 "sPdfMessage": ""
+                  } ]
+             }
+         ]
         }
-		  //"sScrollY": "270px",
-        //"bPaginate": false,
-        //"bScrollCollapse": true
     });    
 } );
 		

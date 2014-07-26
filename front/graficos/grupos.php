@@ -28,7 +28,6 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 <link href="../inc/calendar/calendar.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
-<script language="javascript" src="../inc/calendar/calendar.js"></script>
 <script src="../js/highcharts.js"></script>
 <script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/exporting.js"></script>
@@ -39,7 +38,7 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 
 </head>
 
-<body>
+<body style="background-color: #e5e5e5; margin-left:0%;">
 
 <?php
 
@@ -59,73 +58,79 @@ $datahoje = date("Y-m-d");
 	  
 ?>
 <div id='content' >
-<div id='container-fluid' style="margin: 0px 8% 0px 8%;"> 
-
- <div id="pad-wrapper" >
-
-<div id="charts" class="row-fluid chart"> 
-<div id="head" class="row-fluid">
-
-	<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
-
-	<div id="titulo" style="margin-bottom:45px;"> <?php echo __('Tickets','dashboard') .'  '. __('by Group','dashboard');  ?>  
-
-<div id="datas" class="span12" > 
-<form id="form1" name="form1" class="form1" method="post" action="?date1=<?php echo $data_ini ?>&date2=<?php echo $data_fin ?>" onsubmit="datai();dataf();"> 
-<table border="0" cellspacing="0" cellpadding="2">
-<tr>
-<td>
-<?php
-    
-echo'
-<table style="margin-left: 16px; margin-top:6px; align:right;" border=0><tr><td>
-    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
-    <input class="span8" size="14" type="text" name="date1" value="'.$data_ini.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-</td><td>
-   <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
-    <input class="span8" size="14" type="text" name="date2" value="'.$data_fin.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    </tr></td>
-    </table>
-    ';
-?>
-
-<script language="Javascript">
-
-$('#dp1').datepicker('update');
-$('#dp2').datepicker('update');
-
-</script>
-</td>
-
-<td style="margin-top:2px;">
-</tr>
-<tr align="center">
-<td><button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-refresh"></i>&nbsp; <?php echo __('Consult','dashboard'); ?> </button>
-<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" ><i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
-</tr>
-</table>
-<p>
-</p>
-<?php Html::closeForm(); ?>
-<!-- </form> -->
-</div>
-
-</div>
-</div>
-
-<div id="graf1" class="row-fluid">
-<?php 
-include ("./inc/grafbar_grupo_mes.inc.php");
-?>
-</div>
-
-</div>
-
-</div>
-</div>
+	<div id='container-fluid' style="margin: 0px 8% 0px 8%;"> 
+	
+		<div id="pad-wrapper" >
+		
+			<div id="charts" class="row-fluid chart"> 
+				<div id="head" class="row-fluid">
+				
+					<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
+				
+						<div id="titulo" style="margin-bottom:45px;"> <?php echo __('Tickets','dashboard') .'  '. __('by Group','dashboard');  ?>  
+					
+							<div id="datas" class="span12" > 
+								<form id="form1" name="form1" class="form1" method="post" action="?date1=<?php echo $data_ini ?>&date2=<?php echo $data_fin ?>" onsubmit="datai();dataf();"> 
+									<table border="0" cellspacing="0" cellpadding="2">
+									<tr>
+										<td style="width: 300px;">		
+										<?php
+										    
+										echo'
+											<table style="margin-top:6px;" border=0>
+												<tr>
+													<td>
+													   <div class="input-group date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
+													    	<input class="col-md-9 form-control" size="13" type="text" name="date1" value="'.$data_ini.'" >		    	
+													    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+												    	</div>
+													</td>
+													<td>&nbsp;</td>
+													<td>
+												   	<div class="input-group date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
+													    	<input class="col-md-9 form-control" size="13" type="text" name="date2" value="'.$data_fin.'" >		    	
+													    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+												    	</div>
+													</td>
+													<td>&nbsp;</td>
+												</tr>
+											</table> ';
+										?>
+										
+										<script language="Javascript">										
+											$('#dp1').datepicker('update');
+											$('#dp2').datepicker('update');										
+										</script>
+										</td>
+									
+										<td style="margin-top:2px;">
+									</tr>
+									<tr height="12px" ><td></td></tr>
+									<tr align="center">
+										<td>
+											<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?> </button>
+											<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" ><i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button>
+										</td>
+									</tr>
+									</table>
+								<p>
+								</p>
+								<?php Html::closeForm(); ?>
+								<!-- </form> -->
+							</div>
+					
+					</div>
+				</div>
+			
+			<div id="graf1" class="row-fluid">
+			<?php 
+			include ("./inc/grafbar_grupo_mes.inc.php");
+			?>
+			</div>
+			
+			</div>
+		
+		</div>
+	</div>
 </div>
 </body> </html>

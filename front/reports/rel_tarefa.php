@@ -28,18 +28,6 @@ else {
     $id_tec = $_POST["sel_tec"];
 }
 
-//paginacao
-
-$num_por_pagina = 20;
-
-if(!isset($_GET['pagina'])) {
-    $primeiro_registro = 0;
-    $pagina = 1;
-}
-else {
-    $pagina = $_GET['pagina'];
-    $primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
 
 function conv_data($data) {
     if($data != "") {
@@ -64,7 +52,7 @@ function conv_data_hora($data) {
 function dropdown( $name, array $options, $selected=null )
 {
     /*** begin the select ***/
-    $dropdown = '<select class="chosen-select" tabindex="-1" style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
+    $dropdown = '<select id="sel1" style="width: 300px; height: 27px;" autofocus onChange="javascript: document.form1.submit.focus()" name="'.$name.'" id="'.$name.'">'."\n";
 
     $selected = $selected;
     /*** loop over the options ***/
@@ -87,8 +75,6 @@ function dropdown( $name, array $options, $selected=null )
 
 function time_ext($solvedate)
 {
-// TEST
-// 1 Day 6 Hours 50 Minutes 31 Seconds ~ 111031 seconds
 
 $time = $solvedate; // time duration in seconds
 
@@ -96,21 +82,21 @@ $time = $solvedate; // time duration in seconds
         return '';
     }
 
-$days = floor($time / (60 * 60 * 24));
-$time -= $days * (60 * 60 * 24);
-
-$hours = floor($time / (60 * 60));
-$time -= $hours * (60 * 60);
-
-$minutes = floor($time / 60);
-$time -= $minutes * 60;
-
-$seconds = floor($time);
-$time -= $seconds;
-
-$return = "{$days}d {$hours}h {$minutes}m {$seconds}s"; // 1d 6h 50m 31s
-
-return $return;
+	$days = floor($time / (60 * 60 * 24));
+	$time -= $days * (60 * 60 * 24);
+	
+	$hours = floor($time / (60 * 60));
+	$time -= $hours * (60 * 60);
+	
+	$minutes = floor($time / 60);
+	$time -= $minutes * 60;
+	
+	$seconds = floor($time);
+	$time -= $seconds;
+	
+	$return = "{$days}d {$hours}h {$minutes}m {$seconds}s"; // 1d 6h 50m 31s
+	
+	return $return;
 
 }
 
@@ -132,28 +118,26 @@ return $return;
 <link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
 <link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
 <script language="javascript" src="../js/jquery.min.js"></script>
-<link href="../inc/chosen/chosen.css" rel="stylesheet" type="text/css">
-<script src="../inc/chosen/chosen.jquery.js" type="text/javascript" language="javascript"></script>
+<link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
+<script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
 
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
-<!-- <script src="../js/sorttable.j"></script> -->
 <script src="../js/media/js/jquery.dataTables.min.js"></script>
-<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
+<link href="../js/media/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet" />  
+<script src="../js/media/js/dataTables.bootstrap.js"></script> 
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
 <style type="text/css" title="currentStyle">	
-	@import "../js/media/css/jquery.dataTables_themeroller.css";
-	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
-	
 select { width: 60px; }
 table.dataTable { empty-cells: show; }
 </style>
-
 </head>
-<body style="background-color: #e5e5e5;">
+
+<body style="background-color: #e5e5e5; margin-left:0%;">
 <?php
 
 $sql_tec = "
@@ -190,46 +174,48 @@ a:hover {
 
     <div id="titulo_graf"> <?php echo _n('Task','Tasks',2) .'  '. __('by Technician','dashboard') ?>  </div>
 
-        <div id="datas-tec" class="span12 row-fluid" >
-
+    <div id="datas-tec" class="span12 row-fluid" >
     <form id="form1" name="form1" class="form_rel" method="post" action="rel_tarefa.php?con=1">
     <table border="0" cellspacing="0" cellpadding="3" bgcolor="#efefef">
     <tr>
-<td style="width: 250px;">
+<td style="width: 310px;">
 <?php
 $url = $_SERVER['REQUEST_URI'];
 $arr_url = explode("?", $url);
 $url2 = $arr_url[0];
 
 echo'
-<table style="margin-top:6px;" ><tr><td>
-    <div class="input-append date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date1" value="'.$data_ini.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-</td><td>
-   <div class="input-append date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
-    <input class="span9" size="16" type="text" name="date2" value="'.$data_fin.'">
-    <span class="add-on"><i class="icon-th"></i></span>
-    </div>
-    </tr></td>
-    </table>
-    ';
+			<table>
+				<tr>
+					<td>
+					   <div class="input-group date" id="dp1" data-date="'.$data_ini.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date1" value="'.$data_ini.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+					<td>
+				   	<div class="input-group date" id="dp2" data-date="'.$data_fin.'" data-date-format="yyyy-mm-dd">
+					    	<input class="col-md-9 form-control" size="13" type="text" name="date2" value="'.$data_fin.'" >		    	
+					    	<span class="input-group-addon add-on"><i class="fa fa-calendar"></i></span>	    	
+				    	</div>
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table> ';
 ?>
 
 <script language="Javascript">
-
 $('#dp1').datepicker('update');
 $('#dp2').datepicker('update');
-
 </script>
+
 </td>
 
 <td style="margin-top:2px;">
 <?php
 
 // lista de técnicos
-
 $res_tec = $DB->query($sql_tec);
 $arr_tec = array();
 $arr_tec[0] = "-- ". __('Select a technician', 'dashboard') . " --" ;
@@ -248,8 +234,6 @@ $selected = 0;
 
 echo dropdown( $name, $options, $selected );
 
-//Dropdown::showFromArray( $name, $options, $selected );
-
 ?>
 </td>
 </tr>
@@ -257,8 +241,8 @@ echo dropdown( $name, $options, $selected );
 <tr>
 <td colspan="2" align="center">
 
-<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="icon-white icon-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
-<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="icon-white icon-trash"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
+<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
+<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
 </td>
 </tr>
 
@@ -271,7 +255,7 @@ echo dropdown( $name, $options, $selected );
 </div>
 
 <script type="text/javascript" >
-$('.chosen-select').chosen();
+$(document).ready(function() { $("#sel1").select2(); });
 </script>
 
 <?php
@@ -325,14 +309,10 @@ AND glpi_tickettasks.users_id_tech = ". $id_tec ."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickettasks.date ". $datas2 ."
 GROUP BY id
-ORDER BY id DESC
-";
-//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
-
+ORDER BY id DESC ";
 
 $result_cham = $DB->query($sql_cham);
 
-//fim paginacao 1
 
 $consulta1 =
 "SELECT glpi_tickets.id AS id, glpi_tickettasks.taskcategories_id AS tipo, glpi_tickettasks.date AS date, glpi_tickettasks.content,
@@ -365,7 +345,6 @@ else {
 
 
 //nome e total
-
 $sql_nome = "
 SELECT `firstname` , `realname`, `name`
 FROM `glpi_users`
@@ -403,17 +382,16 @@ echo "
 </table>
 
 <table id='tarefa' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px>
-<thead>
-<tr>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Ticket') ."  </th>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Date') ." </th>
-<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Description') ."</th>
-<th style='color: #000; cursor:pointer;'> ". __('Duration') ." </th>
-
-<th style='color: #000; cursor:pointer;'> ". __('Begin') ." </th>
-<th style='color: #000; cursor:pointer;'> ". __('End') ."  </th>
-</tr>
-</thead>
+	<thead>
+		<tr>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Ticket') ."  </th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Date') ." </th>
+			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Description') ."</th>
+			<th style='text-align:center color: #000; cursor:pointer;'> ". __('Duration') ." </th>
+			<th style='text-align:center color: #000; cursor:pointer;'> ". __('Begin') ." </th>
+			<th style='text-align:center color: #000; cursor:pointer;'> ". __('End') ."  </th>
+		</tr>
+	</thead>
 <tbody>
 ";
 }
@@ -444,6 +422,11 @@ echo "</tbody>
 		</div>"; ?>
 
 <script type="text/javascript" charset="utf-8">
+
+$('#tarefa')
+	.removeClass( 'display' )
+	.addClass('table table-striped table-bordered');
+
 $(document).ready(function() {
     oTable = $('#tarefa').dataTable({
         "bJQueryUI": true,
@@ -484,50 +467,10 @@ $(document).ready(function() {
 </script>  
 
 <?php
-// paginacao 2
 
-echo '<div id=pag align=center class="paginas navigation row-fluid">';
-
-$total_paginas = $conta_cons/$num_por_pagina;
-
-$prev = $pagina - 1;
-$next = $pagina + 1;
-// se página maior que 1 (um), então temos link para a página anterior
-
-if ($pagina > 1) {
-    $prev_link = "<a href=".$url2."?con=1&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$prev.">". __('Previous', 'dashboard') ."</a>";
-  }
-  else { // senão não há link para a página anterior
-    $prev_link = "<a href='#'>".__('Previous', 'dashboard')."</a>";
-  }
-// se número total de páginas for maior que a página corrente,
-// então temos link para a próxima página
-
-if ($total_paginas > $pagina) {
-    $next_link = "<a href=".$url2."?con=1&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$next.">".__('Next', 'dashboard')."</a>";
-  } else {
-// senão não há link para a próxima página
-    $next_link = "<a href='#'> " .__('Next', 'dashboard')."</a>";
-  }
-
-$total_paginas = ceil($total_paginas);
-  $painel = "";
-  for ($x=1; $x<=$total_paginas; $x++) {
-    if ($x==$pagina) {
-// se estivermos na página corrente, não exibir o link para visualização desta página
-      //$painel .= "$x";
-
-      $painel .= " <a style=color:#000999; href=".$url2."?con=1&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$x.">$x</a>";
-    } else {
-      $painel .= " <a href=".$url2."?con=1&date1=".$data_ini2."&date2=".$data_fin2."&tec=".$id_tec."&pagina=".$x.">$x</a>";
-    }
-  }
-// exibir painel na tela
-//echo "$prev_link  $painel  $next_link";
 echo '</div><br>';
-// fim paginacao 2
+
 }
-//}
 
 else {
 
@@ -539,17 +482,13 @@ echo "
 </table></div>";
 
 }
-
 }
-
 }
 ?>
 
 </div>
-
 </div>
 </div>
-
 </body>
 </html>
 
