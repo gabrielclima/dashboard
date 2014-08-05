@@ -2,11 +2,11 @@
 <?php
 
 if($data_ini == $data_fin) {
-$datas = "LIKE '".$data_ini."%'";	
+	$datas = "LIKE '".$data_ini."%'";	
 }	
 
 else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
+	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
 $sql_tec = "
@@ -17,10 +17,10 @@ AND glpi_tickets.date ".$datas."
 AND glpi_tickets_users.type = 1
 AND glpi_tickets_users.`users_id` NOT IN (SELECT DISTINCT users_id FROM glpi_tickets_users WHERE glpi_tickets_users.type=2)
 AND glpi_tickets.is_deleted = 0
+".$entidade."
 GROUP BY `users_id`
 ORDER BY conta DESC
-LIMIT 40
-";
+LIMIT 40 ";
 
 $query_tec = $DB->query($sql_tec);
 
@@ -93,9 +93,9 @@ echo "    ],
                         enabled: true                                                
                     },
                      borderWidth: 1,
-                	borderColor: 'white',
-                	shadow:true,           
-                	showInLegend: false
+                		borderColor: 'white',
+                		shadow:true,           
+                		showInLegend: false
                 }
             },
             legend: {
@@ -106,7 +106,7 @@ echo "    ],
                 y: 100,
                 floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 shadow: true,
                 enabled: false
             },
@@ -115,7 +115,7 @@ echo "    ],
             },
             series: [{
             	 dataLabels: {
-            	 	color: '#000099'
+            	 	//color: '#000099'
             	 	},
                 name: '". __('Tickets','dashboard')."',
                 data: [  

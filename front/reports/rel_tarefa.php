@@ -97,7 +97,25 @@ $time = $solvedate; // time duration in seconds
 	$return = "{$days}d {$hours}h {$minutes}m {$seconds}s"; // 1d 6h 50m 31s
 	
 	return $return;
+}
 
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+	$entidade_t = "";
+	$entidade_tw = "";
+	$entidade_u = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+	$entidade_t = "AND entities_id = ".$sel_ent." ";
+	$entidade_tw = "WHERE entities_id = ".$sel_ent." ";
+	$entidade_u = "AND glpi_users.entities_id = ".$sel_ent." ";
 }
 
 ?>
@@ -131,10 +149,14 @@ $time = $solvedate; // time duration in seconds
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 <script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
-<style type="text/css" title="currentStyle">	
-select { width: 60px; }
-table.dataTable { empty-cells: show; }
+<style type="text/css">	
+	select { width: 60px; }
+	table.dataTable { empty-cells: show; }
+   a:link, a:visited, a:active { text-decoration: none;}
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
+
 </head>
 
 <body style="background-color: #e5e5e5; margin-left:0%;">
@@ -147,7 +169,8 @@ WHERE glpi_tickets_users.users_id = glpi_users.id
 AND glpi_tickets_users.type = 2
 AND glpi_users.is_deleted = 0
 AND glpi_users.is_active = 1
-ORDER BY `glpi_users`.`firstname` ASC
+".$entidade_u."
+ORDER BY name ASC
 ";
 
 $result_tec = $DB->query($sql_tec);
@@ -206,8 +229,8 @@ echo'
 ?>
 
 <script language="Javascript">
-$('#dp1').datepicker('update');
-$('#dp2').datepicker('update');
+	$('#dp1').datepicker('update');
+	$('#dp2').datepicker('update');
 </script>
 
 </td>
@@ -239,11 +262,10 @@ echo dropdown( $name, $options, $selected );
 </tr>
 <tr><td height="15px"></td></tr>
 <tr>
-<td colspan="2" align="center">
-
-<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
-<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
-</td>
+	<td colspan="2" align="center">
+		<button class="btn btn-primary btn-small" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult', 'dashboard'); ?></button>
+		<button class="btn btn-primary btn-small" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean', 'dashboard'); ?> </button></td>
+	</td>
 </tr>
 
     </table>
@@ -308,6 +330,7 @@ WHERE glpi_tickets.id = glpi_tickettasks.`tickets_id`
 AND glpi_tickettasks.users_id_tech = ". $id_tec ."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickettasks.date ". $datas2 ."
+".$entidade."
 GROUP BY id
 ORDER BY id DESC ";
 
@@ -322,6 +345,7 @@ WHERE glpi_tickets.id = glpi_tickettasks.`tickets_id`
 AND glpi_tickettasks.users_id_tech = ". $id_tec ."
 AND glpi_tickets.is_deleted =0
 AND glpi_tickettasks.date ". $datas2 ."
+".$entidade."
 GROUP BY id
 ORDER BY id DESC
 ";
@@ -333,67 +357,52 @@ $consulta = $conta_cons;
 
 if($consulta > 0) {
 
-if(!isset($_GET['pagina'])) {
-    $primeiro_registro = 0;
-    $pagina = 1;
-
-}
-else {
-    $pagina = $_GET['pagina'];
-    $primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
-
-
 //nome e total
 $sql_nome = "
 SELECT `firstname` , `realname`, `name`
 FROM `glpi_users`
-WHERE `id` = ".$id_tec."
-";
+WHERE `id` = ".$id_tec." ";
 
 $result_nome = $DB->query($sql_nome) ;
 
 
 //total time of tasks
-
 while($row = $DB->fetch_assoc($result_cons1)){
     $tempoTotal += $row['actiontime'];
 }
 
-
 //table thread
-
 while($row = $DB->fetch_assoc($result_nome)){
 
-$tech = $row['firstname'] ." ". $row['realname'];
-
-echo "
-<div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
-
-<table class='row-fluid'  style='font-size: 18px; font-weight:bold; margin-bottom: 30px;' cellpadding = 1px>
-<tr>
-<td style='vertical-align:middle; width:40%;'> <span style='color: #000;'>".__('Technician', 'dashboard').": </span>  ". $row['firstname'] ." ". $row['realname']. "</td>
-<td style='vertical-align:middle;'> <span style='color: #000;'>"._n('Task', 'Tasks',2).": </span>". $conta_cons ."</td>
-<td style='vertical-align:middle;'> <span style='color: #000;'>".__('Time').": </span>". time_ext($tempoTotal) ."</td>
-<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>
-".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
-</td>
-</tr>
-</table>
-
-<table id='tarefa' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px>
-	<thead>
-		<tr>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Ticket') ."  </th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Date') ." </th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Description') ."</th>
-			<th style='text-align:center color: #000; cursor:pointer;'> ". __('Duration') ." </th>
-			<th style='text-align:center color: #000; cursor:pointer;'> ". __('Begin') ." </th>
-			<th style='text-align:center color: #000; cursor:pointer;'> ". __('End') ."  </th>
-		</tr>
-	</thead>
-<tbody>
-";
+	$tech = $row['firstname'] ." ". $row['realname'];
+	
+	echo "
+	<div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
+	
+	<table class='row-fluid'  style='font-size: 18px; font-weight:bold; margin-bottom: 30px;' cellpadding = 1px>
+	<tr>
+	<td style='vertical-align:middle; width:40%;'> <span style='color: #000;'>".__('Technician', 'dashboard').": </span>  ". $row['firstname'] ." ". $row['realname']. "</td>
+	<td style='vertical-align:middle;'> <span style='color: #000;'>"._n('Task', 'Tasks',2).": </span>". $conta_cons ."</td>
+	<td style='vertical-align:middle;'> <span style='color: #000;'>".__('Time').": </span>". time_ext($tempoTotal) ."</td>
+	<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>
+	".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
+	</td>
+	</tr>
+	</table>
+	
+	<table id='tarefa' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px>
+		<thead>
+			<tr>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Ticket') ."  </th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Date') ." </th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Description') ."</th>
+				<th style='text-align:center color: #000; cursor:pointer;'> ". __('Duration') ." </th>
+				<th style='text-align:center color: #000; cursor:pointer;'> ". __('Begin') ." </th>
+				<th style='text-align:center color: #000; cursor:pointer;'> ". __('End') ."  </th>
+			</tr>
+		</thead>
+	<tbody>
+	";
 }
 
 
@@ -401,20 +410,18 @@ echo "
 
 $DB->data_seek($result_cham, 0);
 while($row = $DB->fetch_assoc($result_cham)){
-
-echo "
-<tr>
-<td style='text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
-<td> ". conv_data_hora($row['date']) ." </td>
-<td> ". $row['content'] ." </td>
-<td> ". time_ext($row['actiontime']) ."</td>";
-
-
-
-echo "
-<td> ". $row['begin'] ."</td>
-<td> ". $row['end'] ."</td>
-</tr>";
+	
+	echo "
+	<tr>
+	<td style='text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
+	<td> ". conv_data_hora($row['date']) ." </td>
+	<td> ". $row['content'] ." </td>
+	<td> ". time_ext($row['actiontime']) ."</td>";
+	
+	echo "
+	<td> ". $row['begin'] ."</td>
+	<td> ". $row['end'] ."</td>
+	</tr>";
 }
 
 echo "</tbody>
@@ -474,12 +481,12 @@ echo '</div><br>';
 
 else {
 
-echo "
-<div class='well info_box row-fluid span12' style='margin-top:30px; margin-left: -3px;'>
-<table class='table' style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
-<tr><td style='vertical-align:middle; text-align:center;'> <span style='color: #000;'>" . __('No ticket found', 'dashboard') . "</td></tr>
-<tr></tr>
-</table></div>";
+	echo "
+	<div class='well info_box row-fluid span12' style='margin-top:30px; margin-left: -3px;'>
+	<table class='table' style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
+	<tr><td style='vertical-align:middle; text-align:center;'> <span style='color: #000;'>" . __('No ticket found', 'dashboard') . "</td></tr>
+	<tr></tr>
+	</table></div>";
 
 }
 }

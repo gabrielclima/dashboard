@@ -92,9 +92,9 @@ $(function () {
                         enabled: true                                                
                     },
                      borderWidth: 1,
-                	borderColor: 'white',
-                	shadow:true,           
-                	showInLegend: false
+                		borderColor: 'white',
+                		shadow:true,           
+                		showInLegend: false
                 }
             },
             series: [{
@@ -102,7 +102,7 @@ $(function () {
                 data: [$quant_2],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     style: {
                         fontSize: '13px',
                         fontFamily: 'Verdana, sans-serif'

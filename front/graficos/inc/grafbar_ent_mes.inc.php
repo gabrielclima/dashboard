@@ -9,6 +9,7 @@ else {
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
+
 $sql_tec = "
 SELECT count(glpi_tickets.id) AS conta, glpi_entities.name AS name
 FROM `glpi_entities`, glpi_tickets
@@ -100,7 +101,7 @@ echo "    ],
             },
             series: [{            	
             	 dataLabels: {
-            	 	color: '#000099'
+            	 	//color: '#000099'
             	 	},
                 name: '". __('Tickets','dashboard') ."',
                 data: [  

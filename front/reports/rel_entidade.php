@@ -72,7 +72,6 @@ function dropdown( $name, array $options, $selected=null )
     return $dropdown;
 }
 
-
 ?>
 
 <html>
@@ -106,10 +105,13 @@ function dropdown( $name, array $options, $selected=null )
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 <script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
   
-<style type="text/css" title="currentStyle">	
+<style type="text/css">	
 	select { width: 60px; }
 	table.dataTable { empty-cells: show; }
+   a:link, a:visited, a:active { text-decoration: none;}
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
 
@@ -121,15 +123,6 @@ function dropdown( $name, array $options, $selected=null )
 <div id="charts" class="row-fluid chart">
 <div id="pad-wrapper" >
 <div id="head" class="row-fluid">
-
-<style type="text/css">
-a:link, a:visited, a:active {
-    text-decoration: none
-    }
-a:hover {
-    color: #000099;
-    }
-</style>
 
 <a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
 
@@ -313,17 +306,7 @@ $consulta = $conta_cons;
 
 
 if($consulta > 0) {
-
-if(!isset($_GET['pagina'])) {
-$primeiro_registro = 0;
-$pagina = 1;
-
-}
-else {
-    $pagina = $_GET['pagina'];
-    $primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
-
+	
 //montar barra
 
 $sql_ab = "SELECT glpi_tickets.id AS total

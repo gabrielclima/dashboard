@@ -73,6 +73,24 @@ function dropdown( $name, array $options, $selected=null )
     return $dropdown;
 }
 
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+	$entidade_d = "";
+	$entidade_dw = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+	$entidade_d = "AND entities_id = ".$sel_ent." ";
+	$entidade_dw = "WHERE entities_id = ".$sel_ent." ";
+}
+
+
 ?>
 
 <html>
@@ -106,10 +124,13 @@ function dropdown( $name, array $options, $selected=null )
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 <script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
-<style type="text/css" title="currentStyle">	
-select { width: 60px; }
-table.dataTable { empty-cells: show; }
+<style type="text/css">	
+	select { width: 60px; }
+	table.dataTable { empty-cells: show; }
+   a:link, a:visited, a:active { text-decoration: none;}
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
 
@@ -303,6 +324,7 @@ FROM glpi_tickets
 WHERE glpi_tickets.date ".$sel_date."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.status IN ".$status."
+".$entidade."
 ORDER BY id DESC ";
 
 $result_cham = $DB->query($sql_cham);
@@ -314,7 +336,8 @@ $sql_cham2 =
 FROM glpi_tickets
 WHERE date ".$sel_date."
 AND glpi_tickets.status IN ".$status."
-AND glpi_tickets.is_deleted = 0";
+AND glpi_tickets.is_deleted = 0
+".$entidade." ";
 
 $result_cham2 = $DB->query($sql_cham2);
 
@@ -328,7 +351,8 @@ $sql_ab = "SELECT COUNT(glpi_tickets.id) AS total
 FROM glpi_tickets
 WHERE glpi_tickets.date ".$sel_date."
 AND glpi_tickets.is_deleted = 0
-AND glpi_tickets.status IN ".$status_open ;
+AND glpi_tickets.status IN ".$status_open."
+".$entidade." ";
 
 $result_ab = $DB->query($sql_ab) or die ("erro_ab");
 $data_ab = $DB->fetch_assoc($result_ab);
@@ -429,7 +453,8 @@ WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.id = ". $row['id'] ."
 AND glpi_tickets_users.`users_id` = glpi_users.id
 AND glpi_tickets_users.type = 1
-";
+".$entidade." ";
+
 $result_user = $DB->query($sql_user);
 
     $row_user = $DB->fetch_assoc($result_user);
@@ -442,7 +467,8 @@ WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.id = ". $row['id'] ."
 AND glpi_tickets_users.`users_id` = glpi_users.id
 AND glpi_tickets_users.type = 2
-";
+".$entidade." ";
+
 $result_tec = $DB->query($sql_tec);
 
     $row_tec = $DB->fetch_assoc($result_tec);

@@ -20,6 +20,7 @@ SELECT DISTINCT   DATE_FORMAT(date, '%b-%d') AS day_l,  COUNT(id) AS nb, DATE_FO
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND date ".$datas."
+".$entidade."
 GROUP BY day
 ORDER BY day ";
 
@@ -35,14 +36,10 @@ while ($row_result = $DB->fetch_assoc($resultd))
 $days = array_keys($arr_days) ;
 $quantd = array_values($arr_days) ;
 
-//echo "dias";
-//print_r($arr_days);
-//print_r($days);
 }
 
 
 //chamados mensais
-
 $arr_grfm = array();
 
 if($interval >= "31") {
@@ -52,6 +49,7 @@ SELECT DISTINCT DATE_FORMAT(date, '%b-%Y') as day_l,  COUNT(id) as nb, DATE_FORM
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY day
 ORDER BY day ";
 
@@ -76,6 +74,7 @@ else {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND DATE_FORMAT( date, '%Y-%m-%d' ) = '".$row_result['day']."' 
+	".$entidade."
 	GROUP BY day
 	ORDER BY day ";
 	
@@ -113,40 +112,7 @@ while ($row_result = $DB->fetch_assoc($resultm))
 	$arr_month[$v_row_result] = 0;			
 	} 
 
-//$status = "('2','1','3','4')"	;	
-
-//late tickets
-
 $arr_grfa = array();
-/*
-if($interval >= "31") {
-
-//$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
-
-$querya = "
-SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS day_l, DATE_FORMAT( date, '%y-%m' ) AS day
-FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = '0'
-AND glpi_tickets.date ".$datas."
-GROUP BY day
-ORDER BY day 
-";
-}
-
-else {
-//$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
-
-$querya = "
-SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day
-FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = '0'
-AND glpi_tickets.date ".$datas."
-GROUP BY day
-ORDER BY day  ";
-}
-
-$resulta = $DB->query($querya) or die('erro');
-*/
 
 if($interval >= "31") {
 
@@ -155,6 +121,7 @@ if($interval >= "31") {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day  ";
 	
@@ -167,12 +134,12 @@ else {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day  ";
 	
 	$resulta = $DB->query($querya) or die('erro');
 }	
-
 
 	if($interval >= "31") {
 
@@ -188,6 +155,7 @@ else {
 			AND is_deleted = 0
 			AND glpi_tickets.date ".$datas."
 			AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['day_l']."' 
+			".$entidade."
 			GROUP BY day
 			ORDER BY day";	
 					
@@ -218,6 +186,7 @@ else {
 		AND solvedate > due_date		
 		AND glpi_tickets.date ".$datas."
 		AND DATE_FORMAT( solvedate, '%Y-%m-%d' ) = '".$row_result['day']."' 
+		".$entidade."
 		GROUP BY day
 		ORDER BY day";	
 
@@ -257,6 +226,7 @@ if($interval >= "31") {
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.solvedate ".$datas." 
 	AND glpi_tickets.solvedate IS NOT NULL
+	".$entidade."
 	GROUP BY day
 	ORDER BY day ";
 	
@@ -289,6 +259,7 @@ WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.solvedate ".$datas."
 AND DATE_FORMAT( solvedate, '%Y-%m-%d' ) = '".$row_result['day']."'
 AND glpi_tickets.solvedate IS NOT NULL
+".$entidade."
 GROUP BY day
 ORDER BY day  ";
 
@@ -326,6 +297,7 @@ SELECT DISTINCT DATE_FORMAT( closedate, '%b-%y' ) AS day_l, DATE_FORMAT( closeda
 FROM glpi_tickets
 WHERE glpi_tickets.closedate ".$datas."
 AND glpi_tickets.closedate IS NOT NULL
+".$entidade."
 GROUP BY day
 ORDER BY day ";
 
@@ -357,6 +329,7 @@ FROM glpi_tickets
 WHERE glpi_tickets.closedate ".$datas."
 AND DATE_FORMAT( closedate, '%Y-%m-%d' ) = '".$row_result['day']."'
 AND glpi_tickets.closedate IS NOT NULL
+".$entidade."
 GROUP BY day
 ORDER BY day  ";
 
@@ -392,6 +365,7 @@ FROM glpi_tickets, `glpi_ticketsatisfactions`
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
 AND `glpi_ticketsatisfactions`.tickets_id = glpi_tickets.id
+".$entidade."
 GROUP BY day
 ORDER BY day"; 
 }  
@@ -406,6 +380,7 @@ FROM glpi_tickets, `glpi_ticketsatisfactions`
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
 AND `glpi_ticketsatisfactions`.tickets_id = glpi_tickets.id
+".$entidade."
 GROUP BY day
 ORDER BY day"; 
 
@@ -461,7 +436,7 @@ echo           "height: 460
                 y: 0,
                 //floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 adjustChartSize: true
             },
             xAxis: {
@@ -498,13 +473,13 @@ if(array_sum($quantsat) != 0) {
                 title: {
                     text: '".__('Satisfaction','dashboard')."',
                     style: {
-                        color: '#4572A7'
+                       // color: '#4572A7'
                     }
                 },
                 labels: {
                     format: '{value} %',
                     style: {
-                        color: '#4572A7'
+                       // color: '#4572A7'
                     }
                 },                       	 	
                 opposite: true
@@ -566,7 +541,7 @@ if(array_sum($quantsat) != 0) {
                 },
                     dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
                     x: 1,
                     y: 1,  
@@ -589,7 +564,7 @@ echo "
                
                  dataLabels: {
                     enabled: true,                    
-                    color: '#000',
+                    //color: '#000',
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',
@@ -603,7 +578,7 @@ echo "
                 name: '".__('Solved')." (".$solved.")',
                 dataLabels: {
                     enabled: false,                    
-                    color: '#000',
+                    //color: '#000',
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',
@@ -618,7 +593,7 @@ echo "
                
                 dataLabels: {
                     enabled: true,                    
-                    color: '#800000',
+                    //color: '#800000',
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',

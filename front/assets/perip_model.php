@@ -16,6 +16,7 @@ SELECT glpi_peripheralmodels.name AS name, count( glpi_peripherals.id ) AS conta
 FROM glpi_peripheralmodels, glpi_peripherals
 WHERE glpi_peripherals.is_deleted =0
 AND glpi_peripheralmodels.id = glpi_peripherals.peripheralmodels_id
+".$ent_peri."
 GROUP BY glpi_peripheralmodels.name
 ORDER BY count( glpi_peripherals.id ) DESC ";
 

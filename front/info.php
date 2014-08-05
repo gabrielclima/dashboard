@@ -30,7 +30,7 @@ $ver = explode(" ",implode(" ",plugin_version_dashboard()));
 	</style>    
     
   </head>
-<body style="background-color: #fff;">
+<body style="background-color: #fff;" background="./img/back.jpg" >
 
 <video autoplay loop poster="wave.jpg" id="bgvid">
 	<source src="./img/wave.mp4" type="video/mp4">

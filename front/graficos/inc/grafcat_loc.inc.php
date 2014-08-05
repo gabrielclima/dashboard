@@ -83,9 +83,9 @@ $(function () {
                     pointPadding: 0.2,
                     borderWidth: 0,  
                     borderWidth: 2,
-                borderColor: 'white',
-                shadow:true,         
-                showInLegend: false,
+                	  borderColor: 'white',
+                	  shadow:true,         
+                	  showInLegend: false,
                 }
             },
             series: [{
@@ -93,13 +93,13 @@ $(function () {
                 data: [$quant_2a],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                   // color: '#000099',
                     align: 'center',
                     x: 12,
                     y: 1,
                     style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                    //    fontSize: '13px',
+                    //    fontFamily: 'Verdana, sans-serif'
                     }
                 }    
             }]

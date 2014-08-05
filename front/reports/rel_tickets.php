@@ -102,10 +102,13 @@ function dropdown( $name, array $options, $selected=null )
 	<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 	<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 	
-	<style type="text/css" title="currentStyle">		
+<style type="text/css">	
 	select { width: 60px; }
 	table.dataTable { empty-cells: show; }
-	</style>
+   a:link, a:visited, a:active { text-decoration: none;}
+</style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
    
 </head>
 
@@ -434,16 +437,6 @@ $consulta = $conta_cons;
 
 
 if($consulta > 0) {
-
-if(!isset($_GET['pagina'])) {
-$primeiro_registro = 0;
-$pagina = 1;
-
-}
-else {
-	$pagina = $_GET['pagina'];
-	$primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
 
 // nome da entidade
 $sql_nm = "

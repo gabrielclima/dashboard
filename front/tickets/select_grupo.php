@@ -25,6 +25,8 @@ Session::checkRight("profile", "r");
   
 	<link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
 	<script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
+	
+	<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
 <body style="background-color: #e5e5e5; margin-left:0%;">

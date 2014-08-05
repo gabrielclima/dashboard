@@ -90,7 +90,7 @@ echo "    ],
                 y: 100,
                 floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+               // backgroundColor: '#FFFFFF',
                 shadow: true,
                 enabled: false
             },
@@ -99,7 +99,7 @@ echo "    ],
             },
             series: [{            	
             	 dataLabels: {
-            	 	color: '#000099'
+            	 	//color: '#000099'
             	 	},
                 name: '". __('Tickets','dashboard')."',
                 data: [  

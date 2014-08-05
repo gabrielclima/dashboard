@@ -49,11 +49,13 @@ global $DB;
 <script src="../js/highcharts.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/modules/no-data-to-display.js"></script>
-<script src="../js/themes/grid-light.js"></script>
 
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?>
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
 
 </head>
 <body style="background-color: #e5e5e5; margin-left:0%;">
@@ -191,8 +193,8 @@ echo dropdown( $name, $options, $selected );
 <tr><td height="15px"></td></tr>
 <tr>
 	<td colspan="2" align="center" style="">
-	<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-	<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_entidade.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
+		<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
+		<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_entidade.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
 	</td>
 </tr>
 	

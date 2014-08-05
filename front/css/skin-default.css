@@ -14,9 +14,10 @@
 @import "../css/icheck/skins/polaris/polaris.css";
 @import "../css/bootstrap-switch.css";
 @import "../css/bootstrap-dialog.min.css";
-@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
+@import url(../fonts/fonts.css);
+/*@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700);
 @import url(http://fonts.googleapis.com/css?family=Droid+Sans:400,700);
-@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900);
+@import url(http://fonts.googleapis.com/css?family=Lato:100,300,400,700,900);*/
 /*
 *	 Author: Vijay Kumar
 *	 Template: Delighted - Flat & Responsive Bootstrap Admin Template
@@ -4427,8 +4428,6 @@ height: 30px;
 	/*text-shadow:0.1em 0.0em 0.1em rgba(4,4,4,.5);*/
 	text-shadow:0.0em 0.09em 0.09em #cecece;	
 }
-
-
 
 .titulo_cham {
 	color: #0076CC; 

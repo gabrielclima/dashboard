@@ -53,33 +53,37 @@ function conv_data_hora($data) {
 
 <html>
 <head>
-<title> GLPI - <?php echo __('Assets'). " - ".__('Tickets'); ?> </title>
-<!-- <base href= "<?php $_SERVER['SERVER_NAME'] ?>" > -->
-<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
-<meta http-equiv="content-language" content="en-us" />
-<meta charset="utf-8">
+	<title> GLPI - <?php echo __('Assets'). " - ".__('Tickets'); ?> </title>
+	<!-- <base href= "<?php $_SERVER['SERVER_NAME'] ?>" > -->
+	<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+	<meta http-equiv="content-language" content="en-us" />
+	<meta charset="utf-8">
+	
+	<link rel="icon" href="../img/dash.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="../img/dash.ico" type="image/x-icon" />
+	<link href="../css/styles.css" rel="stylesheet" type="text/css" />
+	<link href="../css/bootstrap.css" rel="stylesheet" type="text/css" />
+	<link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
+	<link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
+	<script language="javascript" src="../js/jquery.min.js"></script>
+	
+	<script src="../js/media/js/jquery.dataTables.min.js"></script>
+	<link href="../js/media/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet" />  
+	<script src="../js/media/js/dataTables.bootstrap.js"></script> 
+	<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
+	<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
-<link rel="icon" href="../img/dash.ico" type="image/x-icon" />
-<link rel="shortcut icon" href="../img/dash.ico" type="image/x-icon" />
-<link href="../css/styles.css" rel="stylesheet" type="text/css" />
-<link href="../css/bootstrap.css" rel="stylesheet" type="text/css" />
-<link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
-<link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
-<script language="javascript" src="../js/jquery.min.js"></script>
+	<style type="text/css">	
+		select { width: 60px; }
+		table.dataTable { empty-cells: show; }
+	   a:link, a:visited, a:active { text-decoration: none;}
+	</style>
 
-<script src="../js/media/js/jquery.dataTables.min.js"></script>
-<link href="../js/media/css/dataTables.bootstrap.css" type="text/css" rel="stylesheet" />  
-<script src="../js/media/js/dataTables.bootstrap.js"></script> 
-<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
-<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
-
-<style type="text/css" title="currentStyle">	
-select { width: 60px; }
-table.dataTable { empty-cells: show; }
-</style>
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
+
 <body style="background-color: #e5e5e5; margin-left:0%;">
 
 <div id='content' >
@@ -239,21 +243,6 @@ $consulta = $conta_cons;
 
 if($consulta > 0) {
 	
-if(isset($_GET['npage'])) {
-    $num_por_pagina = $_GET['npage']; }
-
-else {
-    $num_por_pagina = 20; }
-
-if(!isset($_GET['pagina'])) {
-    $primeiro_registro = 0;
-    $pagina = 1;
-
-}
-else {
-    $pagina = $_GET['pagina'];
-    $primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
 
 //chamados abertos
 $sql_abertos =

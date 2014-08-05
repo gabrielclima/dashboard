@@ -12,64 +12,7 @@ $unix_data2 = strtotime($data2);
 
 $interval = ($unix_data2 - $unix_data1) / 86400;
 
-
-//chamados mensais
-/*
-if($interval >= "31") {
-
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
-
- $querym = "
-	SELECT DISTINCT DATE_FORMAT(date, '%b-%Y') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as day
-	FROM glpi_tickets
-	WHERE glpi_tickets.is_deleted = '0'
-	AND glpi_tickets.date ".$datas."
-	GROUP BY day
-	ORDER BY day ";
-}
-
-else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
-
-$querym = "
-	SELECT DISTINCT DATE_FORMAT(date, '%b-%d') as day_l,  COUNT(id) as nb, DATE_FORMAT(date, '%Y-%m-%d') as day
-	FROM glpi_tickets
-	WHERE glpi_tickets.is_deleted = '0'
-	AND glpi_tickets.date ".$datas."
-	GROUP BY day
-	ORDER BY day ";
-}
-
-$resultm = $DB->query($querym) or die('erro');
-
-$arr_grfm = array();
-
-while ($row_result = $DB->fetch_assoc($resultm))		
-	{ 
-	$v_row_result = $row_result['day_l'];
-	$arr_grfm[$v_row_result] = $row_result['nb'];			
-	} 
-	
-$grfm = array_keys($arr_grfm) ;
-$quantm = array_values($arr_grfm) ;
-
-$grfm2 = implode("','",$grfm);
-$grfm3 = "'$grfm2'";
-$quantm2 = implode(',',$quantm);
-
-//array to compare months
-$DB->data_seek($resultm, 0);
-$arr_month = array();
-while ($row_result = $DB->fetch_assoc($resultm))		
-	{ 
-	$v_row_result = $row_result['day_l'];
-	$arr_month[$v_row_result] = 0;			
-	} 
-*/
-//$status = "('2','1','3','4')"	;	
-
 //incidents
-
 if($interval >= "31") {
 
 	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
@@ -79,6 +22,7 @@ if($interval >= "31") {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day 
 	";
@@ -92,6 +36,7 @@ else {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day  ";
 }
@@ -113,6 +58,7 @@ while ($row_result = $DB->fetch_assoc($months))
 		AND type = 1
 		AND glpi_tickets.date ".$datas."
 		AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['day_l']."' 
+		".$entidade."
 		GROUP BY day
 		ORDER BY day";	
 		}
@@ -126,6 +72,7 @@ while ($row_result = $DB->fetch_assoc($months))
 		AND type = 1
 		AND glpi_tickets.date ".$datas."
 		AND DATE_FORMAT( date, '%b-%d' ) = '".$row_result['day_l']."' 
+		".$entidade."
 		GROUP BY day
 		ORDER BY day";	
 		}
@@ -162,6 +109,7 @@ if($interval >= "31") {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day 
 	";
@@ -175,6 +123,7 @@ else {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day  ";
 }
@@ -196,6 +145,7 @@ while ($row_result = $DB->fetch_assoc($months))
 		AND type = 2
 		AND glpi_tickets.date ".$datas."
 		AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['day_l']."' 
+		".$entidade."
 		GROUP BY day
 		ORDER BY day";	
 		}
@@ -209,6 +159,7 @@ while ($row_result = $DB->fetch_assoc($months))
 		AND type = 2
 		AND glpi_tickets.date ".$datas."
 		AND DATE_FORMAT( date, '%b-%d' ) = '".$row_result['day_l']."' 
+		".$entidade."
 		GROUP BY day
 		ORDER BY day";	
 		}
@@ -245,6 +196,7 @@ if($interval >= "31") {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day 
 	";
@@ -258,6 +210,7 @@ else {
 	FROM glpi_tickets
 	WHERE glpi_tickets.is_deleted = '0'
 	AND glpi_tickets.date ".$datas."
+	".$entidade."
 	GROUP BY day
 	ORDER BY day  ";
 }
@@ -278,6 +231,7 @@ while ($row_result = $DB->fetch_assoc($months))
 		WHERE is_deleted = 0		
 		AND glpi_problems.date ".$datas."
 		AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['day_l']."' 
+		".$problem."
 		GROUP BY day
 		ORDER BY day  ";	
 		}
@@ -290,6 +244,7 @@ while ($row_result = $DB->fetch_assoc($months))
 		WHERE is_deleted = 0		
 		AND glpi_problems.date ".$datas."
 		AND DATE_FORMAT( date, '%b-%d' ) = '".$row_result['day_l']."' 
+		".$problem."
 		GROUP BY day
 		ORDER BY day  ";
 		}
@@ -351,7 +306,7 @@ $(function () {
                 y: 0,
                 //floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 adjustChartSize: true
             },
                 tooltip: {

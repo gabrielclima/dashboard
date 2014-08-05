@@ -16,6 +16,7 @@ SELECT glpi_manufacturers.name AS name, count( glpi_peripherals.id ) AS conta
 FROM glpi_manufacturers, glpi_peripherals
 WHERE glpi_peripherals.is_deleted =0
 AND glpi_manufacturers.id = glpi_peripherals.manufacturers_id
+".$ent_peri."
 GROUP BY glpi_manufacturers.name
 ORDER BY count( glpi_peripherals.id ) DESC ";
 

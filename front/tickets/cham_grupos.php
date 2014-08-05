@@ -44,12 +44,16 @@ $('#clock').jclock(options);
 </script>
 
 <style type="text/css">
+/*
 	.up-down a, a:link, a:visited {color: #555555; text-decoration: none;} 
 	.today a, a:link {color:#000099; text-decoration: none;}	
 	.title a, a:link, a:visited {color:#0076CC; text-decoration: none;}
 	.up-down a:visited	{color: #555555; text-decoration: none;}
 	.today a:visited	{color: #000099; text-decoration: none;}
+	*/
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
 <body style="background-color: #fff;">
@@ -204,7 +208,7 @@ $group_name = $DB->result($result_n, 0, 'name');
 </tr>
 <tr><td></td></tr>
 
-<table style="color:#000099; font-size:25pt; font-weight:bold; width: 100%; margin-left: auto; margin-right: auto;"><tr><td align="center" ><span class="today"><a href="cham_grupos.php?grp=<?php echo $grp; ?>"> <?php echo __('Today Tickets','dashboard'); ?>: </a> 
+<table style="font-size:25pt; font-weight:bold; width: 100%; margin-left: auto; margin-right: auto;"><tr><td align="center" ><span class="today"><a href="cham_grupos.php?grp=<?php echo $grp; ?>"  style="color:#000099;"> <?php echo __('Today Tickets','dashboard'); ?>: </a> 
 <a href="../front/ticket.php" target="_blank" style="color:#8b1a1a;"> <?php echo "&nbsp; ".$hoje['total'] ; ?> </a>
 <img src= <?php echo $up_down ;?>  alt="" title= <?php echo __('Yesterday','dashboard'). ':';  echo $ontem['total'] ;?>  > </span> </td></tr>
 </table>
@@ -315,7 +319,7 @@ if($priority == 6) {
 
 
 echo "<tr>
-<td style='text-align:center; vertical-align:middle;'> <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span style='color:#000099';>" . $row['id'] . "</span> </a></td>
+<td style='text-align:center; vertical-align:middle;'> <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span>" . $row['id'] . "</span> </a></td>
 <td style='vertical-align:middle;'><span style='color:#000099';><img src=../../../../pics/".$status1.".png />  ".Ticket::getStatus($row['status'])."</span ></td><td style='vertical-align:middle;'>
 <a href=../../../../front/ticket.form.php?id=". $row['id'] ." target=_blank > <span >" . $row['descri'] . "</span> </a></td>
 <td style='vertical-align:middle;'><span >". $row_grp['name'] ." ".$row_grp['sname'] ."</span></td>

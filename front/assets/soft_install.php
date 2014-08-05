@@ -5,6 +5,7 @@ SELECT glpi_softwares.name AS name, COUNT( glpi_computers_softwareversions.compu
 FROM glpi_computers_softwareversions, glpi_softwares, glpi_softwareversions
 WHERE glpi_softwares.id = glpi_softwareversions.softwares_id
 AND glpi_computers_softwareversions.softwareversions_id = glpi_softwareversions.id
+".$ent_soft."
 GROUP BY name
 ORDER BY conta DESC
 LIMIT 10 ";

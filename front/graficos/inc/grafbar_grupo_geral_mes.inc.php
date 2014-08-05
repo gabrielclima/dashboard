@@ -21,6 +21,7 @@ WHERE glpi_groups_tickets.`groups_id` = glpi_groups.id
 AND glpi_groups_tickets.`tickets_id` = glpi_tickets.id
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY name
 ORDER BY conta DESC
 LIMIT 30
@@ -85,11 +86,11 @@ $(function () {
             },
             plotOptions: {
                 column: {
-                    pointPadding: 0.2,
-                    borderWidth: 2,
-                borderColor: 'white',
-                shadow:true,           
-                showInLegend: false
+                    	pointPadding: 0.2,
+                    	borderWidth: 2,
+                		borderColor: 'white',
+                		shadow:true,           
+                		showInLegend: false
                 }
             },
             series: [{
@@ -97,13 +98,13 @@ $(function () {
                 data: [$quant_2],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                   // color: '#000099',
                     align: 'center',
                     x: 1,
                     y: 1,                    
                     style: {
-                        fontSize: '11px',
-                        fontFamily: 'Verdana, sans-serif'
+                       // fontSize: '11px',
+                       // fontFamily: 'Verdana, sans-serif'
                     },
                     formatter: function () {
                     return Highcharts.numberFormat(this.y, 0, '', ''); // Remove the thousands sep?

@@ -30,9 +30,11 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
 <script src="../js/highcharts.js"></script>
-<script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?>
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
 
 </head>
 
@@ -53,6 +55,19 @@ else {
 
 $month = date("Y-m");
 $datahoje = date("Y-m-d");  
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+}
+
 	  
 ?>
 <div id='content' >
@@ -95,8 +110,8 @@ $datahoje = date("Y-m-d");
 ?>
 
 <script language="Javascript">
-$('#dp1').datepicker('update');
-$('#dp2').datepicker('update');
+	$('#dp1').datepicker('update');
+	$('#dp2').datepicker('update');
 </script>
 
 </td>
@@ -106,7 +121,7 @@ $('#dp2').datepicker('update');
 	<tr align="center">
 		<td>
 			<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?> </button>
-			<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" ><i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button>
+			<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='usuarios.php'" ><i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button>
 		</td>
 	</tr>
 </table>

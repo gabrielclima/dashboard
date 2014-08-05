@@ -9,6 +9,20 @@ else {
 $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+}
+
 $sql_grp = "
 SELECT count(glpi_groups_tickets.id) AS conta, glpi_groups.name AS name
 FROM `glpi_groups_tickets`, glpi_tickets, glpi_groups
@@ -16,6 +30,7 @@ WHERE glpi_groups_tickets.`groups_id` = glpi_groups.id
 AND glpi_groups_tickets.`tickets_id` = glpi_tickets.id
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY name
 ORDER BY conta DESC
 LIMIT 30
@@ -101,7 +116,7 @@ echo "    ],
             },
             series: [{            	
             	 dataLabels: {
-            	 	color: '#000099'
+            	 	//color: '#000099'
             	 	},
                 name: '". __('Tickets','dashboard')."',
                 data: [  

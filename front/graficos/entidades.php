@@ -30,12 +30,15 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
 <script src="../js/highcharts.js"></script>
-<script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/modules/no-data-to-display.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?>  
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
   
 </head>
+
 <body style="background-color:#e5e5e5; margin-left:0%;">
 
 <?php

@@ -46,9 +46,11 @@ global $DB;
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
 <script src="../js/highcharts.js"></script>
 <script src="../js/modules/exporting.js"></script>
-<script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/no-data-to-display.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?>
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
 
 </head>
 
@@ -71,6 +73,21 @@ else {
 $ano = date("Y");
 $month = date("Y-m");
 $datahoje = date("Y-m-d");
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+	$problem = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+	$problem =  "AND glpi_problems.entities_id = ".$sel_ent." ";
+}
 
 ?>
 

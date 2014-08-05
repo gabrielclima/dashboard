@@ -8,8 +8,6 @@ $result_loc = $DB->query($sql_loc) or die('erro');
 $num_loc = $DB->fetch_assoc($result_loc);
 
 
-//if($num_loc['id'] > 0) {
-
 echo '<div id="graf3" class="span12" >';
 
 if($data_ini == $data_fin) {
@@ -102,10 +100,10 @@ $(function () {
                 data: [$quant_2],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                   // color: '#000099',
                     style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                       // fontSize: '13px',
+                       // fontFamily: 'Verdana, sans-serif'
                     }
                 }    
             }]

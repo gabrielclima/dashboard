@@ -1,13 +1,26 @@
-
 <?php
 
 if($data_ini == $data_fin) {
-$datas = "LIKE '".$data_ini."%'";	
+	$datas = "LIKE '".$data_ini."%'";	
 }	
 
 else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
+	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+}
+
 
 $sql_tec = "
 SELECT count( glpi_tickets.id ) AS conta, glpi_tickets_users.`users_id` AS id
@@ -16,9 +29,9 @@ WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.date ".$datas."
 AND glpi_tickets_users.type = 2
 AND glpi_tickets.is_deleted = 0
+".$entidade."
 GROUP BY `users_id`
-ORDER BY conta DESC
-";
+ORDER BY conta DESC ";
 
 $query_tec = $DB->query($sql_tec);
 
@@ -57,6 +70,7 @@ GROUP BY glpi_users.firstname
 	$queryC = $DB->query($sqlC);
 	$chamado = $DB->fetch_assoc($queryC);
 
+
 echo "'". $chamado['name']." ". $chamado['sname']."',";
 
 }   
@@ -94,9 +108,9 @@ echo "    ],
                         enabled: true                                                
                     },
                      borderWidth: 1,
-                	borderColor: 'white',
-                	shadow:true,           
-                	showInLegend: false
+                		borderColor: 'white',
+                		shadow:true,           
+                		showInLegend: false
                 }
             },
             legend: {
@@ -107,7 +121,7 @@ echo "    ],
                 y: 100,
                 floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 shadow: true,
                 enabled: false
             },
@@ -116,7 +130,7 @@ echo "    ],
             },
             series: [{            	
             	 dataLabels: {
-            	 	color: '#000099'
+            	 	//color: '#000099'
             	 	},
                 name: '". __('Tickets','dashboard')."',
                 data: [  

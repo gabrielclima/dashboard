@@ -38,10 +38,39 @@ if($num_years == '') {
 $sql_theme = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'theme' AND users_id = ".$_SESSION['glpiID']."";
 $result_theme = $DB->query($sql_theme);
 $theme = $DB->result($result_theme,0,'value');
+$style = $theme;
 
-if($theme == '') {
-	$theme = 'skin-default.css';
+if($theme == '' || substr($theme,0,5) == 'skin-' ) {
+	$theme = 'default.css';
+	$style = 'default.css';
 }
+
+$_SESSION['theme'] = $theme;
+$_SESSION['style'] = $theme;
+
+
+# background
+$sql_back = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'back' AND users_id = ".$_SESSION['glpiID']."";
+$result_back = $DB->query($sql_back);
+$back = $DB->result($result_back,0,'value');
+
+if($back == '') {
+	$back = 'bg1.jpg';	
+}
+$_SESSION['back'] = $back;
+
+
+# charts colors 
+$sql_colors = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'charts_colors' AND users_id = ".$_SESSION['glpiID']."";
+$result_colors = $DB->query($sql_colors);
+$colors = $DB->result($result_colors,0,'value');
+
+if($colors == '') {
+	$colors = 'grid-light.js';	
+}
+$_SESSION['charts_colors'] = $colors;
+
+
 
      switch (date("m")) {
     case "01": $mes = __('January','dashboard'); break;
@@ -82,13 +111,11 @@ if($theme == '') {
     
     <link rel="icon" href="img/dash.ico" type="image/x-icon" />
 	 <link rel="shortcut icon" href="img/dash.ico" type="image/x-icon" />    
-    <link href="css/bootstrap.css" rel="stylesheet">
- 
+    <link href="css/bootstrap.css" rel="stylesheet"> 
 
     <!-- Styles -->   
     <!-- Color theme -->      
-    <!-- <link href="css/skin-default.css" rel="stylesheet"> -->
- 	 <?php echo '<link rel="stylesheet" type="text/css" title="skin-default" href="./css/'.$theme.'">'; ?>     
+    <!-- <link href="css/skin-default.css" rel="stylesheet"> -->   
 		   
     <link rel="stylesheet" type="text/css" href="css/layout.css">
     <link rel="stylesheet" type="text/css" href="css/elements.css">
@@ -100,19 +127,13 @@ if($theme == '') {
      <!-- this page specific styles -->
     <link rel="stylesheet" href="css/compiled/index.css" type="text/css" media="screen" />    
 
-    <!-- open sans font -->
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-
-    <!-- lato font -->
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900,300italic,400italic,700italic,900italic' rel='stylesheet' type='text/css'>
-
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     <link href="css/styles.css" rel="stylesheet" type="text/css" />
     <link href="css/style-dash.css" rel="stylesheet" type="text/css" />
     <link href="css/dashboard.css" rel="stylesheet" type="text/css" />
-    <link href="less/style.less" rel="stylesheet"  title="lessCss" id="lessCss">
+   <!-- <link href="less/style.less" rel="stylesheet"  title="lessCss" id="lessCss"> -->
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -120,41 +141,54 @@ if($theme == '') {
      <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
      <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
      <![endif]-->
-     <script src="js/jquery.js"></script>
+     <script src="js/jquery.js"></script>     
+     <link href="fonts/fonts.css" rel="stylesheet" type="text/css" />
+     
+  	 <?php 
+ 	 	echo '<link rel="stylesheet" type="text/css" href="./css/skin-'.$theme.'">'; 
+	 	echo '<link rel="stylesheet" type="text/css" href="./css/style-'.$style.'">';
+ 	 ?> 
 
 <script type="text/javascript">
-$(function($) {
-var options = {
-timeNotation: '24h',
-am_pm: false,
-fontFamily: 'Open Sans',
-fontSize: '11pt',
-foreground: '#FFF'
-}
-$('#clock').jclock(options);
-});
+	$(function($) {
+	var options = {
+	timeNotation: '24h',
+	am_pm: false,
+	fontFamily: 'Open Sans',
+	fontSize: '10pt',
+	foreground: '#FFF'
+	}
+	$('#clock').jclock(options);
+	});
 </script> 
 </head>
-        <body style="background-color: #FFF;" >
+
+	<?php
+	if($theme == 'trans.css') {		
+   	echo "<body style=\"background: url('./img/".$back."') no-repeat top center fixed; \">";
+   	}
+   else {
+   	echo "<body style='background-color: #FFF;' >";
+   	}	 
+   ?>
 
             <div class="site-holder">
                 <!-- .navbar -->
-                <nav class="navbar  navbar-default nav-delighted" role="navigation">
+                <nav class="navbar navbar-default nav-delighted" role="navigation" >
                     <a href="#" class="toggle-left-sidebar">
                         <i class="fa fa-th-list"></i>
                     </a>
 
                     <!-- Brand and toggle get grouped for better mobile display -->
-                    <div class="navbar-header">
+                    <div class="navbar-header" style="color:#fff;" >
                         <a class="navbar-brand" href="<?php echo $CFG_GLPI['url_base'].'/front/ticket.php';?>" target="_blank">
                             <span>GLPI</span></a>
                     </div>
-					<!-- NAVBAR LEFT  -->
-					
+					<!-- NAVBAR LEFT  -->					
 					<ul id="navbar-left" class="nav navbar-nav pull-left hidden-xs">
 					    <li class="dropdown">
 					        <a class="dropdown-toggle" data-toggle="dropdown" href="#" style="margin-top: 6px;">           
-					            <span class="name" style="color:#FFF; font-size:14pt;">
+					            <span class="name" style="color: #FFF; font-size:14pt;">
 					                <?php echo $ent_name; ?>  
 					            </span>            
 					        </a>
@@ -167,7 +201,7 @@ $('#clock').jclock(options);
 					
 					<ul class="nav navbar-nav pull-right hidden-xs">
 						<li id="header-user" class="dropdown user">
-							<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#FFF; font-size:11pt; margin-top:5px;">							
+							<a class="dropdown-toggle" data-toggle="dropdown" href="#" style="color:#FFF; font-size:10pt; margin-top:5px;">							
 							<span class="username">
 							
 							<script type="text/javascript">
@@ -180,8 +214,7 @@ $('#clock').jclock(options);
 							var curr_month = d.getMonth();
 							var curr_year = d.getFullYear();
 							
-							document.write(d_names + ", " + curr_date + " " + m_names + " " + curr_year );
-							
+							document.write("<i class='fa fa-calendar-o'> </i>  " + d_names + ", " + curr_date + " " + m_names + " " + curr_year );							
 							</script> 
 							</span>
 							<span id="clock"></span>							
@@ -192,11 +225,9 @@ $('#clock').jclock(options);
                         <!-- Collect the nav links, forms, and other content for toggling -->
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav navbar-right">
-                                <li>
-                                    
+                                <li>                                    
                                 </li>
-                                <li>
-                                   
+                                <li>                                   
                                 </li>
                             </ul>
                         </div>
@@ -219,7 +250,7 @@ $('#clock').jclock(options);
                                 <!-- /.User   -->
 
                                 <!-- Menu -->
-                                <ul class="nav  nav-list">
+                                <ul class="nav nav-list">
                                 
                                   <li class=' '>
                                     <a href='./index.php' data-original-title='Dashboard'>
@@ -262,7 +293,7 @@ $('#clock').jclock(options);
                                 </li>
                                 </li>
                                                                
-											<li class='submenu  '>
+											<li class='submenu'>
                                     <a class='dropdown' onClick='return false;' href='#' data-original-title='Relatórios'>
                                         <i class='fa fa-list-alt'></i>
                                         <span class='hidden-minibar'><?php echo __('Reports','dashboard'); //<b class="caret"></b>?>
@@ -461,8 +492,7 @@ $('#clock').jclock(options);
 				 <li>
               <?php
 
-              //version check	              								
-              								
+              //version check	              								              								
 					$ver = explode(" ",implode(" ",plugin_version_dashboard())); 																																																			
 					$urlv = "http://a.fsdn.com/con/app/proj/glpidashboard/screenshots/".$ver[1].".png";
 					$headers = get_headers($urlv, 1);										
@@ -470,7 +500,6 @@ $('#clock').jclock(options);
 					if($headers[0] != '') {
 
 					//if ($headers[0] == 'HTTP/1.1 200 OK') { }
-
 					if ($headers[0] == 'HTTP/1.0 404 Not Found') {
 						echo '<a href="https://sourceforge.net/projects/glpidashboard/files/?source=navbar" target="_blank">
 					 	<i class="fa fa-refresh"></i>                   
@@ -479,14 +508,11 @@ $('#clock').jclock(options);
 							}
 						}
 				  ?>
-            </li>                                 
-                                
-                                                              
+            </li>                                                                                                                               
             </ul>
             <!-- /.Menu -->
         </div>
         <!-- /.left-sidebar Holder-->
-
 <?php
  
 if(file_exists('/etc/hosts')) { 
@@ -513,7 +539,7 @@ echo		'</span>
 			<span class="data-value">'; include './sh/mem.php'; 
 
 echo '<div class="progress" style="height: 5px;">
-    		<div class="progress-bar progress-striped '.$corm.' " style="width: '.$umem.'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'.$umem.'" role="progressbar"></div>
+    		<div class="progress-bar progress-bar-striped active '.$corm.' " style="width: '.$umem.'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'.$umem.'" role="progressbar"></div>
 		</div>
 			</span>		
 		</li>
@@ -523,7 +549,7 @@ echo '<div class="progress" style="height: 5px;">
 			<span class="data-value">'; include './sh/df.php'; 
 
 echo '<div class="progress" style="height: 5px;">
-    		<div class="progress-bar  progress-striped '.$cord.'" style="width: '.$udisk.'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'.$udisk.'" role="progressbar"></div>
+    		<div class="progress-bar progress-bar-striped active '.$cord.'" style="width: '.$udisk.'%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="'.$udisk.'" role="progressbar"></div>
 		</div>
 			</span>			
 		</li>	';	
@@ -1067,22 +1093,38 @@ setTimeout(function(){
 <script>
 function scrollWin()
 {
-$('html, body').animate({ scrollTop: 0 }, 'slow');
+	$('html, body').animate({ scrollTop: 0 }, 'slow');
 }
 </script> 
-        
+
+	<div id="go-top" class="go-top" onclick="scrollWin()">
+	   <i class="fa fa-chevron-up"></i>&nbsp; Top     							    
+	</div>        
    </div>    
-	</div>
+	
+	</div>	
+	
 	<!-- end main-content -->	
 	</div>
 
-	<div id="go-top" class="go-top" onclick="scrollWin()">
-	   <i class="fa fa-chevron-up"></i>&nbsp; Top     						
-	</div>    
 </div>
 <!-- /.box-holder -->
+	<!-- transparent them footer -->
+	<style type="text/css">
+	@media screen and (min-width: 1201px) and (max-width: 2200px) {
+  	#footer-bar {
+    margin-top: 5px;
+    height: 20px;
+  	 }
+	}
+	</style>
+	<?php
+	if($theme == 'trans.css') {		 
+		echo '<div id="footer-bar" class="footer-bar row-fluid" style="overflow: hidden; height:70px; width:100%; background-color: #000; opacity:0.7; float:left; bottom:0px; margin-top: -70px; position:relative; clear: both; margin-left: 220px; " ></div>';
+	}  
+	?>
+	
 </div>
-
 <!-- /.site-holder -->
 
  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -1123,15 +1165,15 @@ $('html, body').animate({ scrollTop: 0 }, 'slow');
 <link href="css/odometer.css" rel="stylesheet">
 <script src="js/odometer.js"></script>
 
-       <script>
-           $('document').ready(function(){
-               $("[name='my-checkbox']").bootstrapSwitch();
-           });
-       </script>
+ <script>
+     $('document').ready(function(){
+         $("[name='my-checkbox']").bootstrapSwitch();
+     });
+ </script>
 
-       <!-- Remove below two lines in production --> 
-       
-       <script src="js/theme-options.js"></script>       
-       <script src="js/core.js"></script>
+ <!-- Remove below two lines in production --> 
+ 
+ <script src="js/theme-options.js"></script>       
+ <script src="js/core.js"></script>
 </body>
 </html>

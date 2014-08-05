@@ -7,6 +7,7 @@ $querym = "
 SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
+".$entidade."
 GROUP BY month
 ORDER BY month
  ";
@@ -30,7 +31,6 @@ $quantm2 = implode(',',$quantm);
 $opened = array_sum($quantm);
 
 //array to compare months
-
 $DB->data_seek($resultm, 0);
 
 $arr_month = array();
@@ -42,7 +42,6 @@ while ($row_result = $DB->fetch_assoc($resultm))
 
 
 // incidents
-
 $arr_grfa = array();
 
 $DB->data_seek($resultm, 0);
@@ -55,6 +54,7 @@ FROM glpi_tickets
 WHERE is_deleted = 0
 AND type = 1
 AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+".$entidade."
 GROUP BY month
 ORDER BY month";
 
@@ -93,7 +93,8 @@ SELECT DISTINCT DATE_FORMAT( date, '%b-%y' ) AS month_l, DATE_FORMAT( date, '%y-
 FROM glpi_tickets
 WHERE is_deleted = 0
 AND type = 2
-AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."'
+".$entidade." 
 GROUP BY month
 ORDER BY month";	
 
@@ -130,6 +131,7 @@ SELECT DISTINCT DATE_FORMAT(date, '%b-%y') as month_l, DATE_FORMAT(date, '%y-%m'
 FROM glpi_problems
 WHERE glpi_problems.is_deleted = '0'
 AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+".$problem."
 GROUP BY month
 ORDER BY month ";
 
@@ -188,7 +190,7 @@ $(function () {
                 y: 0,
                 //floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 adjustChartSize: true
             },
         /*    tooltip: {
@@ -207,7 +209,7 @@ $(function () {
                     stacking: 'normal',
                     dataLabels: {
                         enabled: false,
-                        x: 5,
+                        x:0,
                         y:0,
                         color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'white',
                         style: {

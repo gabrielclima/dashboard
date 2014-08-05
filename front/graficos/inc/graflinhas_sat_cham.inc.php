@@ -27,6 +27,7 @@ SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY month
 ORDER BY month
  ";
@@ -79,6 +80,7 @@ FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.status IN ". $status ."
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY month
 ORDER BY month
  ";
@@ -109,6 +111,7 @@ FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.status NOT IN ". $status ."
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY month
 ORDER BY month
  ";
@@ -138,6 +141,7 @@ WHERE glpi_tickets.is_deleted = '0'
 AND `glpi_ticketsatisfactions`.tickets_id = glpi_tickets.id
 AND glpi_tickets.date ".$datas."
 AND glpi_ticketsatisfactions.satisfaction <> 'NULL'
+".$entidade."
 GROUP BY MONTH
 ORDER BY MONTH";          		 
 
@@ -199,7 +203,7 @@ echo           "height: 460
                 y: 0,
                 //floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 adjustChartSize: true
             },
             xAxis: {
@@ -304,7 +308,7 @@ if(array_sum($quantsat) != 0) {
                 },
                     dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
                     x: 1,
                     y: 1,  
@@ -327,7 +331,7 @@ echo "
                 color: '#4572A7',
                  dataLabels: {
                     enabled: true,                    
-                    color: '#000000',
+                   // color: '#000000',
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',
@@ -348,7 +352,7 @@ echo "
                 color: '#800000',
                 dataLabels: {
                     enabled: true,                    
-                    color: '#800000',
+                    //color: '#800000',
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',

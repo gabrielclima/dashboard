@@ -4,7 +4,7 @@ define('GLPI_ROOT', '../../../..');
 include (GLPI_ROOT . "/inc/includes.php");
 include (GLPI_ROOT . "/config/config.php");
 
-global $DB;
+global $DB, $style;
 
 Session::checkLoginUser();
 Session::checkRight("profile", "r");
@@ -98,11 +98,25 @@ $time -= $seconds;
 $return = "{$days}d {$hours}h {$minutes}m {$seconds}s"; // 1d 6h 50m 31s
 
 return $return;
+}
 
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+	$entidade_u = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+	$entidade_u = "AND glpi_users.entities_id = ".$sel_ent." ";
 }
 
 ?>
-
 <html>
 <head>
 <title> GLPI - <?php echo __('Tickets', 'dashboard') .'  '. __('by Requester', 'dashboard') ?> </title>
@@ -114,7 +128,7 @@ return $return;
 
 <link rel="icon" href="../img/dash.ico" type="image/x-icon" />
 <link rel="shortcut icon" href="../img/dash.ico" type="image/x-icon" />
-<link href="../css/styles.css" rel="stylesheet" type="text/css" />
+<!-- <link href="../css/styles.css" rel="stylesheet" type="text/css" /> -->
 <link href="../css/bootstrap.css" rel="stylesheet" type="text/css" />
 <link href="../css/bootstrap-responsive.css" rel="stylesheet" type="text/css" />
 <link href="../css/font-awesome.css" type="text/css" rel="stylesheet" />
@@ -133,10 +147,13 @@ return $return;
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 <script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
-<style type="text/css" title="currentStyle">	
+<style type="text/css">	
 	select { width: 60px; }
 	table.dataTable { empty-cells: show; }
+	a:link, a:visited, a:active { text-decoration: none; }
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
 
@@ -144,14 +161,14 @@ return $return;
 <?php
 
 $sql_tec = "
-SELECT DISTINCT glpi_users.`id` AS id , glpi_users.`firstname` AS name, glpi_users.`realname` AS sname
-FROM `glpi_users` , glpi_tickets_users
+SELECT DISTINCT glpi_users.id AS id , glpi_users.firstname AS name, glpi_users.realname AS sname
+FROM glpi_users, glpi_tickets_users
 WHERE glpi_tickets_users.users_id = glpi_users.id
 AND glpi_tickets_users.type = 1
 AND glpi_users.is_deleted = 0
 AND glpi_users.is_active = 1
-ORDER BY `glpi_users`.`firstname` ASC
-";
+".$entidade_u."
+ORDER BY name ASC ";
 
 $result_tec = $DB->query($sql_tec);
 $tec = $DB->fetch_assoc($result_tec);
@@ -159,21 +176,13 @@ $tec = $DB->fetch_assoc($result_tec);
 ?>
 <div id='content' >
 <div id='container-fluid' style="margin: 0px 8% 0px 8%;">
-
 <div id="charts" class="row-fluid chart" >
 <div id="pad-wrapper" >
 <div id="head" class="row-fluid">
 
-<style type="text/css">
-a:link, a:visited, a:active { text-decoration: none; }
-a:hover { color: #000099; }
-
-</style>
-
 <a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
 
     <div id="titulo_graf"> <?php echo __('Tickets', 'dashboard') .'  '. __('by Requester', 'dashboard') ?>  </div>
-
     <div id="datas-tec" class="col-md-12 row-fluid" >
     <form id="form1" name="form1" class="form_rel" method="post" action="rel_usuario.php?con=1">
 	    <table border="0" cellspacing="0" cellpadding="3" bgcolor="#efefef">
@@ -185,7 +194,7 @@ a:hover { color: #000099; }
 			$arr_url = explode("?", $url);
 			$url2 = $arr_url[0];
 			
-			echo'
+			echo '
 			<table style="margin-top:0px;" border=0>
 				<tr>
 					<td>
@@ -219,8 +228,8 @@ a:hover { color: #000099; }
 			
 			while ($row_result = $DB->fetch_assoc($result_tec))
 			    {
-			    $v_row_result = $row_result['id'];
-			    $arr_tec[$v_row_result] = $row_result['name']." ".$row_result['sname'] ;
+			    	$v_row_result = $row_result['id'];
+			    	$arr_tec[$v_row_result] = $row_result['name']." ".$row_result['sname'] ;
 			    }
 			
 			$name = 'sel_tec';
@@ -247,10 +256,12 @@ a:hover { color: #000099; }
         </div>
     </div>
 </div>
+
 <script language="Javascript">
 	$('#dp1').datepicker('update');
 	$('#dp2').datepicker('update');
 </script>
+
 <?php
 
 //tecnico2
@@ -331,6 +342,7 @@ AND glpi_tickets_users.type = 1
 AND glpi_tickets_users.users_id = ". $id_tec ."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
+".$entidade."
 AND glpi_tickets.status IN ".$status."
 GROUP BY id
 ORDER BY id DESC ";
@@ -347,6 +359,7 @@ AND glpi_tickets_users.type = 1
 AND glpi_tickets_users.users_id = ". $id_tec ."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
+".$entidade."
 AND glpi_tickets.status IN ".$status."
 GROUP BY id
 ORDER BY id DESC
@@ -360,17 +373,6 @@ $consulta = $conta_cons;
 
 if($consulta > 0) {
 
-if(!isset($_GET['pagina'])) {
-$primeiro_registro = 0;
-$pagina = 1;
-
-}
-else {
-    $pagina = $_GET['pagina'];
-    $primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
-
-
 //abertos
 
 $sql_ab = "SELECT count( glpi_tickets.id ) AS total, glpi_tickets_users.`users_id` AS id
@@ -379,7 +381,8 @@ WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets_users.users_id = ".$id_tec."
 AND glpi_tickets.status IN ".$status_open."
-AND glpi_tickets.is_deleted = 0" ;
+AND glpi_tickets.is_deleted = 0
+".$entidade." " ;
 
 $result_ab = $DB->query($sql_ab) or die ("erro_ab");
 $data_ab = $DB->fetch_assoc($result_ab);
@@ -413,10 +416,10 @@ else { $barra = 0;}
 
 //nome e total
 $sql_nome = "
-SELECT `firstname` , `realname`, `name`
-FROM `glpi_users`
-WHERE `id` = ".$id_tec."
-";
+SELECT firstname , realname, name
+FROM glpi_users
+WHERE id = ".$id_tec."
+".$entidade_u." ";
 
 $result_nome = $DB->query($sql_nome) ;
 

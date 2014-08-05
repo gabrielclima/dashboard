@@ -73,7 +73,7 @@ Highcharts.setOptions({
                 y: 0,
                 //floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 adjustChartSize: true
             },
             xAxis: {
@@ -147,7 +147,7 @@ Highcharts.setOptions({
                 },
                     dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
                     x: 0,
                     y: 0,  

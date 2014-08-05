@@ -3,8 +3,9 @@
 $query_os = "
 SELECT glpi_manufacturers.name AS name, count( glpi_softwares.id ) AS conta
 FROM glpi_manufacturers, glpi_softwares
-WHERE glpi_softwares.is_deleted =0
+WHERE glpi_softwares.is_deleted = 0
 AND glpi_manufacturers.id = glpi_softwares.manufacturers_id
+".$ent_soft."
 GROUP BY glpi_manufacturers.name
 ORDER BY count( glpi_softwares.id ) DESC
 LIMIT 10 ";

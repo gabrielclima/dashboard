@@ -1,13 +1,12 @@
 
 <?php
 
-
 if($data_ini == $data_fin) {
-$datas = "LIKE '".$data_ini."%'";	
+	$datas = "LIKE '".$data_ini."%'";	
 }	
 
 else {
-$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
+	$datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";	
 }
 
 
@@ -25,9 +24,9 @@ FROM glpi_tickets
 LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY glpi_entities.name
-ORDER BY tick DESC
- ";
+ORDER BY tick DESC ";
 
 $result3 = $DB->query($query3) or die('erro');
 
@@ -41,11 +40,9 @@ while ($row_result = $DB->fetch_assoc($result3))
 $grf3 = array_keys($arr_grf3) ;
 $quant3 = array_values($arr_grf3) ;
 $soma3 = array_sum($arr_grf3);
-//$total = 'Total: '.$soma;
 
 $grf_2 = implode("','",$grf3);
 $grf_3 = "'$grf_2'";
-//$grf_4 = "$grf_3'";
 $quant_2 = implode(',',$quant3);
 
 echo "
@@ -99,13 +96,13 @@ $(function () {
                 data: [$quant_2],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
                     x: 1,
                     y: 1,
                     style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                       // fontSize: '13px',
+                       // fontFamily: 'Verdana, sans-serif'
                     },
                     formatter: function () {
                     return Highcharts.numberFormat(this.y, 0, '', ''); // Remove the thousands sep?

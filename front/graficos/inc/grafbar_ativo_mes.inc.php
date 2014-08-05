@@ -16,6 +16,19 @@ else {
 	$limite = 25;
 }
 
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+}
+else {
+	$entidade = "AND gt.entities_id = ".$sel_ent." ";
+}
+
 $sql_grp = "
 SELECT gi.id AS id, gi.name AS name, count(gt.id) AS conta
 FROM glpi_tickets gt, glpi_". strtolower($type)."s gi
@@ -23,6 +36,7 @@ WHERE gt.itemtype = '".$type."'
 AND gt.items_id = gi.id
 AND gt.is_deleted = 0
 AND gt.date ".$datas."
+".$entidade."
 GROUP BY gi.name
 ORDER BY conta DESC
 LIMIT ".$limite." 
@@ -77,10 +91,10 @@ echo "    ],
                         fontSize: '12px',
                         fontFamily: 'Verdana, sans-serif'
                     },
-                  formatter: function() {
-                    return '<a href=\"'+ categoryLinks[this.value] +'\" target=\"_blank\" style=\"color:#606060;\">'+this.value +'</a>';
-                		},
-                		useHTML: true
+                   // formatter: function() {
+                   // return '<a href=\"'+ categoryLinks[this.value] +'\" target=\"_blank\" style=\"color:#606060;\">'+this.value +'</a>';
+                	//	},
+                	//	useHTML: true
                 	}
             },
             yAxis: {
@@ -102,9 +116,9 @@ echo "    ],
                         enabled: true                                                
                     },
                      borderWidth: 1,
-                	borderColor: 'white',
-                	shadow:true,           
-                	showInLegend: false
+                		borderColor: 'white',
+                		shadow:true,           
+                		showInLegend: false
                 }
             },
             legend: {
@@ -115,7 +129,7 @@ echo "    ],
                 y: 100,
                 floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 shadow: true,
                 enabled: false
             },
@@ -130,7 +144,7 @@ echo "    ],
           },
             series: [{            	
             	 dataLabels: {
-            	 	color: '#000099'
+            	 	//color: '#000099'
             	 	},
                 name: '". __('Tickets','dashboard')."',
                 data: [  

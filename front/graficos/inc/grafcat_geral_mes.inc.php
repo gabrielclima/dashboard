@@ -16,6 +16,7 @@ FROM glpi_tickets,  glpi_itilcategories
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_itilcategories.id = glpi_tickets.itilcategories_id
 AND glpi_tickets.date ".$datas."
+".$entidade."
 GROUP BY glpi_itilcategories.id
 ORDER BY `cat_tick` DESC
 LIMIT 10
@@ -83,12 +84,12 @@ $(function () {
             },
             plotOptions: {
                 bar: {
-                    pointPadding: 0.2,
-                    borderWidth: 0,
-                    borderWidth: 2,
-                borderColor: 'white',
-                shadow:true,           
-                showInLegend: false,
+		             pointPadding: 0.2,
+		             borderWidth: 0,
+		             borderWidth: 2,
+	                borderColor: 'white',
+	                shadow:true,           
+	                showInLegend: false,
                 }
             },
             series: [{
@@ -96,13 +97,13 @@ $(function () {
                 data: [".$quant_2a."],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
-                    x: 25,
+                    x: 20,
                     y: 1,
                     style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                        //fontSize: '13px',
+                        //fontFamily: 'Verdana, sans-serif'
                     },
                     formatter: function () {
                     return Highcharts.numberFormat(this.y, 0, '', ''); // Remove the thousands sep?

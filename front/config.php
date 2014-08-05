@@ -25,8 +25,10 @@ Session::checkRight("profile", "r");
 <link href="./css/font-awesome.css" type="text/css" rel="stylesheet" />
 
 <script src="./js/jquery.js" type="text/javascript"></script>
-<link href="./inc/select2/select2.css" rel="stylesheet" type="text/css">
 <script src="./inc/select2/select2.js" type="text/javascript" language="javascript"></script>
+<link href="./inc/select2/select2.css" rel="stylesheet" type="text/css">
+
+<?php echo '<link rel="stylesheet" type="text/css" href="./css/style-'.$_SESSION['style'].'">';  ?> 
 
 <script type="text/javascript">
 function reload() {	
@@ -44,8 +46,8 @@ function reload() {
 <div id="tabela" class="row-fluid " >
 
 	<div id="head" class="row-fluid span12" style="margin-bottom: 35px; margin-top:20px;;">	
-	<a href="./index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px; color: #0088CC;"></i><span></span></a>
-	<div id="titulo" style="margin-top: -5px; margin-bottom: 25px;"> <?php echo __('Setup')." ".__('Dashboard','dashboard'); ?> </div> 
+		<a href="./index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
+	<div id="titulo" style="margin-top: -5px; margin-bottom: 25px;"> <a href="config.php" ><?php echo __('Setup')." ".__('Dashboard','dashboard'); ?> </a></div> 
 	 
 </div>
 	<div id="pad-wrapper" >
@@ -81,7 +83,7 @@ function reload() {
 		    return $dropdown;
 		}                        
                         
-			// lista de entidades
+		// lista de entidades
 		$sql_ent = "
 		SELECT id, name
 		FROM `glpi_entities`
@@ -107,8 +109,6 @@ function reload() {
 		else {
 			$selected = "0";
 	   }			
-		//echo dropdown( $name, $options, $selected );			
-		//$count = count($arr_ents);
 		            
 				      if(isset($_REQUEST['conf']) && $_REQUEST['conf'] == 1 ) {	      	
 							if(isset($_REQUEST['sel_ent'])) {				
@@ -128,14 +128,11 @@ function reload() {
 					<td>-- ".__('Entity','dashboard').":&nbsp;";
 	
 		echo dropdown( $name, $options, $selected );	
-		//echo $ent;
-	
+
 		echo "</td>
 				</tr>
 				</table>";
-				Html::closeForm(); 				
-		//echo "</div>"; 				
-		
+				Html::closeForm(); 								
 		
       echo "<div id='config' class='center' style='margin-top: 0%; margin-left:0%'> ";
 
@@ -179,13 +176,38 @@ function reload() {
 									
 									$query = "INSERT INTO glpi_plugin_dashboard_config (name, value, users_id)
 												  VALUES ('theme', '".$skin."', '".$_SESSION['glpiID']."') ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), value = '".$skin."' ";																
-									$result = $DB->query($query);																																														
+									$result = $DB->query($query);	
+									
+									$_SESSION['theme'] = $skin;
+									$_SESSION['style'] = $skin;																																													
+							}	
+							
+							// backgrounds  	
+							if(isset($_REQUEST['back'])) {				
+									$back = $_REQUEST['back'];													
+									
+									$query = "INSERT INTO glpi_plugin_dashboard_config (name, value, users_id)
+												  VALUES ('back', '".$back."', '".$_SESSION['glpiID']."') ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), value = '".$back."' ";																
+									$result = $DB->query($query);	
+									
+									$_SESSION['back'] = $back;																																													
+							}
+							
+						// chats colors  	
+							if(isset($_REQUEST['colors'])) {				
+									$colors = $_REQUEST['colors'];													
+									
+									$query = "INSERT INTO glpi_plugin_dashboard_config (name, value, users_id)
+												  VALUES ('charts_colors', '".$colors."', '".$_SESSION['glpiID']."') ON DUPLICATE KEY UPDATE id=LAST_INSERT_ID(id), value = '".$colors."' ";																
+									$result = $DB->query($query);	
+									
+									$_SESSION['charts_colors'] = $colors;																																													
 							}																						 
 		                               
  		echo '<div id="datas-tecx" class="span12 row-fluid" > 
- 				<form id="form1" name="form1" class="form1" method="post" action="config.php?conf=1">';  
- 						
-		echo "<table border='0' style='width: 370px; margin-left: auto; margin-right: auto; margin-bottom: 20px; margin-top:20px;'>
+
+ 				<form id="form1" name="form1" class="form1" method="post" action="config.php?conf=1">';   						
+		echo "<table border='0' style='width: 420px; margin-left: auto; margin-right: auto; margin-bottom: 20px; margin-top:20px;'>
 				<tr>
 					<td>-- ".__('Period in index page','dashboard').":&nbsp; 
 						<select id='num' name='num' style='width: 130px;' onChange='this.form.submit()'>
@@ -202,61 +224,140 @@ function reload() {
 				</table>";
 				Html::closeForm();  		
 									 
- 			 echo '<div id="skins" class="form1">';  
-			 echo "<table border='0' width=375px>									
+ 			 echo '<div id="skins" class="form1" style="left: -23%;">';  
+			 echo "<table border='0' style='width: 510px; margin-left: auto; margin-right: auto; margin-bottom: 5px; margin-top:20px;'>									
 					<tr>
 						<td>-- ".__('Theme','dashboard').":&nbsp;</td>
   				   </tr>
 					<tr style='text-align:center;'>
 						<td><div id='default-t' style='cursor:pointer;' ><img src='./img/default-t.png' alt='default'/></div></td>
 						<td>&nbsp;&nbsp;</td>					
-						<td><div id='glpi-t' style='cursor:pointer;' ><img src='./img/glpi-t.png' alt='glpi'/></div></td>	
+						<td><div id='glpi-t' style='cursor:pointer;' ><img src='./img/glpi-t.png' alt='glpi'/></div></td>
+						<td>&nbsp;&nbsp;</td>						
+						<td><div id='graphite-t' style='cursor:pointer;' ><img src='./img/graphite-t.png' alt='graphite'/></div></td>
+						<td>&nbsp;&nbsp;</td>						
+						<td><div id='nature-t' style='cursor:pointer;' ><img src='./img/nature-t.png' alt='nature'/></div></td>	
+						<td>&nbsp;&nbsp;</td>						
+						<td><div id='trans-t' style='cursor:pointer;' ><img src='./img/trans-t.png' alt='trans'/></div></td>
 					</tr>
 					<tr><td height='10px'></td></tr>
 					<tr style='text-align:center;'>				
-						<td><button class='btn btn-primary btn-sm' type='button' id='skin-default' name='glpi_skin' value=\"Default\" onclick='location.href=\"config.php?theme=skin-default.css\"'> Default </button></td>
+						<td><button class='btn btn-primary btn-sm' type='button' id='skin-default' name='glpi_skin' value=\"Default\" onclick='location.href=\"config.php?theme=default.css\"'> Default </button></td>
 						<td>&nbsp;&nbsp;</td>						
-						<td><button class='btn btn-primary btn-sm' type='button' id='skin-glpi' name='glpi_skin' value=\"GLPI\" onclick='location.href=\"config.php?theme=skin-glpi.css\"'>GLPI</button></td>
+						<td><button class='btn btn-primary btn-sm' type='button' id='skin-glpi' name='glpi_skin' value=\"GLPI\" onclick='location.href=\"config.php?theme=glpi.css\"'>GLPI</button></td>
+						<td>&nbsp;&nbsp;</td>										
+						<td><button class='btn btn-primary btn-sm' type='button' name='glpi_skin' value=\"Graphite\" id='skin-graphite' onclick='location.href=\"config.php?theme=graphite.css\"'>Graphite</button></td>
+						<td>&nbsp;&nbsp;</td>
+						<td><button class='btn btn-primary btn-sm' type='button' name='glpi_skin' value=\"Nature\" id='skin-nature' onclick='location.href=\"config.php?theme=nature.css\"'>Nature</button></td>
+						<td>&nbsp;&nbsp;</td>
+						<td><button class='btn btn-primary btn-sm' type='button' name='glpi_skin' value=\"Transparent\" id='skin-trans' onclick='location.href=\"config.php?theme=trans.css\"'>Transparent</button></td>					
 					</tr>
 					
-					<tr><td>&nbsp;</td></tr>
-						
+					<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+						<td>&nbsp;</td><td style='vertical-align:bottom; height:35px;'>Background:</td></tr>
+					<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+						<td>&nbsp;</td>
+						<td>
+							<div id='theme-bg' class='theme-bg'>
+								<div id='button-bg' onclick='location.href=\"config.php?back=back.jpg\"'></div>
+								<div id='button-bg1' onclick='location.href=\"config.php?back=bg1.jpg\"'></div>
+								<div id='button-bg2' onclick='location.href=\"config.php?back=bg2.jpg\"'></div>
+								<div id='button-bg3' onclick='location.href=\"config.php?back=bg3.jpg\"'></div>
+								<div id='button-bg4' onclick='location.href=\"config.php?back=bg4.jpg\"'></div>
+								
+								<div id='button-bg5' onclick='location.href=\"config.php?back=bg5.jpg\"'></div>																																															
+								<div id='button-bg6' onclick='location.href=\"config.php?back=bg6.jpg\"'></div>
+								<div id='button-bg7' onclick='location.href=\"config.php?back=bg7.jpg\"'></div>
+								<div id='button-bg8' onclick='location.href=\"config.php?back=bg8.jpg\"'></div>
+								<div id='button-bg9' onclick='location.href=\"config.php?back=bg9.jpg\"'></div>
+								<div id='button-bg10' onclick='location.href=\"config.php?back=bg10.jpg\"'></div>
+								<div id='button-bg11' onclick='location.href=\"config.php?back=bg11.jpg\"'></div>
+							</div>
+						</td>
+					</tr>
+					</table>	
+					</div>				
+
+					<div id='skins' class='form1'>
+					<table border='0' width=420px>	
+					<tr style='text-align:center;'>	
+					</tr>								
+					</table>				
+					</div> ";
+				
+			 echo '<div id="gcolors" class="form1" style="left: -14%; ">';  
+			 echo "<table border='0' style='width: 460px; margin-left: auto; margin-right: auto; margin-bottom: 20px; margin-top:20px;'>									
+					<tr>
+						<td>-- ".__('Charts Theme','dashboard').":&nbsp;</td>
+  				   </tr>
 					<tr style='text-align:center;'>
-						<td><div id='graphite-t' style='cursor:pointer;' ><img src='./img/graphite-t.png' alt='graphite'/></div></td>
+						<td><div id='defaultc-t' style='cursor:pointer;' ><img src='./img/defaultc-t.png' alt='default'/></div></td>
+						<td>&nbsp;&nbsp;</td>					
+						<td><div id='dark-t' style='cursor:pointer;' ><img src='./img/dark-t.png' alt='dark'/></div></td>
+						<td>&nbsp;&nbsp;</td>							
+						<td><div id='sand-t' style='cursor:pointer;' ><img src='./img/sand-t.png' alt='sand'/></div></td>
 						<td>&nbsp;&nbsp;</td>						
-						<td><div id='nature-t' style='cursor:pointer;' ><img src='./img/nature-t.png' alt='nature'/></div></td>
+						<td><div id='clean-t' style='cursor:pointer;' ><img src='./img/clean-t.png' alt='clean'/></div></td>
 					</tr>
 					<tr><td height='10px'></td></tr>
-					<tr style='text-align:center;'>
-						<td><button class='btn btn-primary btn-sm' type='button' name='glpi_skin' value=\"Graphite\" id='skin-graphite' onclick='location.href=\"config.php?theme=skin-graphite.css\"'>Graphite</button></td>
+					<tr style='text-align:center;'>				
+						<td><button class='btn btn-primary btn-sm' type='button' id='default' name='gcolor' value=\"Default\" onclick='location.href=\"config.php?colors=grid-light.js\"'> Default </button></td>
+						<td>&nbsp;&nbsp;</td>						
+						<td><button class='btn btn-primary btn-sm' type='button' id='dark' name='gcolor' value=\"Dark Unica\" onclick='location.href=\"config.php?colors=dark-unica.js\"'>Dark Unica</button></td>
 						<td>&nbsp;&nbsp;</td>
-						<td><button class='btn btn-primary btn-sm' type='button' name='glpi_skin' value=\"Nature\" id='skin-nature' onclick='location.href=\"config.php?theme=skin-nature.css\"'>Nature</button></td>
-					</tr>					
+						<td><button class='btn btn-primary btn-sm' type='button' name='gcolor' value=\"Sand Signika\" id='sand' onclick='location.href=\"config.php?colors=sand-signika.js\"'>Sand Signika</button></td>
+						<td>&nbsp;&nbsp;</td>
+						<td><button class='btn btn-primary btn-sm' type='button' name='gcolor' value=\"Clean\" id='clean' onclick='location.href=\"config.php?colors=grid_ligh.js\"'>Clean</button></td>
+					</tr>								
 				
 				</table>	";			
-		echo "</div>
-				</div>
-				"; 																		  
+		echo "</div>";				
+				
+		echo "</div> "; 	
+																											  
 ?>
 		<style type="text/css">
-			#default-s{ display:none; }
+			#default-s { display:none; }
 			#glpi-s{ display:none; }
 			#graphite-s { display:none; }
-			#nature-s { display:none; } 
+			#nature-s { display:none; }
+			#trans-s { display:none; }
+			
+			#defaultc-s { display:none; } 
+			#dark-s { display:none; }
+			#sand-s { display:none; }
+			#clean-s { display:none; } 
 		</style>  		
 		  		
-		<div id="default-s" style="position:absolute; margin-left:12%; margin-top:10%; cursor:pointer;">
+		<div id="default-s" style="position:absolute; margin-left:12%; margin-top: -6%; cursor:pointer;">
 			<img src="./img/default-s.png" alt="default" />
 		</div>
-		<div id="glpi-s" style="position:absolute; margin-left:12%; margin-top:10%; cursor:pointer;">
+		<div id="glpi-s" style="position:absolute; margin-left:12%; margin-top: -6%; cursor:pointer;">
 			<img src="./img/glpi-s.png" alt="glpi" />
 		</div>   		
-		<div id="graphite-s" style="position:absolute; margin-left:12%; margin-top:10%; cursor:pointer;">
+		<div id="graphite-s" style="position:absolute; margin-left:12%; margin-top: -6%; cursor:pointer;">
 			<img src="./img/graphite-s.png" alt="graphite" />
 		</div>
-		<div id="nature-s" style="position:absolute; margin-left:12%; margin-top:10%; cursor:pointer;">
+		<div id="nature-s" style="position:absolute; margin-left:12%; margin-top: -6%; cursor:pointer;">
 			<img src="./img/nature-s.png" alt="nature" />
-		</div>  		
+		</div>  
+		<div id="trans-s" style="position:absolute; margin-left:12%; margin-top: -6%; cursor:pointer;">
+			<img src="./img/trans-s.png" alt="nature" />
+		</div>	
+		
+		
+		<div id="defaultc-s" style="position:absolute; margin-left:12%; margin-top: -5%; cursor:pointer;">
+			<img src="./img/defaultc-s.png" alt="default" />
+		</div>
+		<div id="dark-s" style="position:absolute; margin-left:12%; margin-top: -5%; cursor:pointer;">
+			<img src="./img/dark-s.png" alt="dark" />
+		</div>   		
+		<div id="sand-s" style="position:absolute; margin-left:12%; margin-top: -5%; cursor:pointer;">
+			<img src="./img/sand-s.png" alt="sand" />
+		</div>
+		<div id="clean-s" style="position:absolute; margin-left:12%; margin-top: -5%; cursor:pointer;">
+			<img src="./img/clean-s.png" alt="clean" />
+		</div>  	
   		
       </div>
 	</div>
@@ -295,6 +396,47 @@ $(document).ready(function () {
 	});	
 	$('#nature-s').on("click", "img", function () {    
 	    $('#nature-s').hide(); 
+	});
+	
+	$('#trans-t').on("click", "img", function () {
+	    $('#trans-s').show(); 
+	});	
+	$('#trans-s').on("click", "img", function () {    
+	    $('#trans-s').hide(); 
+	});	
+	
+	
+	
+		$('#defaultc-t').on("click", "img", function () {
+	    //alert('You Clicked Me');
+	    $('#defaultc-s').show(); 
+	});	
+	$('#defaultc-s').on("click", "img", function () {    
+	    $('#defaultc-s').hide(); 
+	});
+	
+		$('#dark-t').on("click", "img", function () {
+	    //alert('You Clicked Me');
+	    $('#dark-s').show(); 
+	});	
+	$('#dark-s').on("click", "img", function () {    
+	    $('#dark-s').hide(); 
+	});
+	
+	$('#sand-t').on("click", "img", function () {
+	    //alert('You Clicked Me');
+	    $('#sand-s').show(); 
+	});	
+	$('#sand-s').on("click", "img", function () {    
+	    $('#sand-s').hide(); 
+	});
+	
+		$('#clean-t').on("click", "img", function () {
+	    //alert('You Clicked Me');
+	    $('#clean-s').show(); 
+	});	
+	$('#clean-s').on("click", "img", function () {    
+	    $('#clean-s').hide(); 
 	});
     
 });

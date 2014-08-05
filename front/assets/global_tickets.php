@@ -7,6 +7,7 @@ FROM glpi_tickets
 WHERE glpi_tickets.`itemtype` <> ''
 AND glpi_tickets.`items_id` >0
 AND glpi_tickets.`itemtype` <> 'PluginProjetProjet'
+".$ent."
 GROUP BY glpi_tickets.`itemtype` , glpi_tickets.`items_id`
 ORDER BY conta DESC
 LIMIT 100 

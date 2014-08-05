@@ -4,7 +4,8 @@
 $query2 = "
 SELECT COUNT(glpi_tickets.id) as tick, glpi_tickets.status as stat
 FROM glpi_tickets
-WHERE glpi_tickets.is_deleted = 0         
+WHERE glpi_tickets.is_deleted = 0  
+".$entidade."       
 GROUP BY glpi_tickets.status
 ORDER BY stat  ASC ";
 

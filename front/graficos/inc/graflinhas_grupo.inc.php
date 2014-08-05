@@ -20,7 +20,6 @@ $datas = "BETWEEN '".$data_ini." 00:00:00' AND '".$data_fin." 23:59:59'";
 
 //chamados mensais
 
-	
  $querym = "
 SELECT DISTINCT DATE_FORMAT(glpi_tickets.date, '%b-%Y') as day_l,  COUNT(glpi_tickets.id) as nb, DATE_FORMAT(glpi_tickets.date, '%y-%m') as day
 FROM glpi_tickets, glpi_groups_tickets
@@ -158,7 +157,7 @@ Highcharts.setOptions({
                 y: 20,
                 floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF'
+                //backgroundColor: '#FFFFFF'
             },
             xAxis: {
                 categories: [$grfm3],

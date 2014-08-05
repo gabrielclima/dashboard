@@ -29,7 +29,6 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
 <script src="../js/highcharts.js"></script>
-<script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/exporting.js"></script>
 
 <link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
@@ -38,6 +37,9 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
 
 </head>
 
@@ -133,7 +135,7 @@ $datahoje = date("Y-m-d");
 	<tr align="center">
 	<td>
 		<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?> </button>
-		<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" ><i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button>
+		<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='ativos.php'" ><i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button>
 	</td>
 	</tr>
 </table>

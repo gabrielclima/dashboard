@@ -98,8 +98,27 @@ $time -= $seconds;
 $return = "{$days}d {$hours}h {$minutes}m {$seconds}s"; // 1d 6h 50m 31s
 
 return $return;
-
 }
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+	$entidade_t = "";
+	$entidade_tw = "";
+	$entidade_u = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+	$entidade_t = "AND entities_id = ".$sel_ent." ";
+	$entidade_tw = "WHERE entities_id = ".$sel_ent." ";
+	$entidade_u = "AND glpi_users.entities_id = ".$sel_ent." ";
+}
+
 
 ?>
 
@@ -136,10 +155,13 @@ return $return;
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 <script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
-<style type="text/css" title="currentStyle">	
-select { width: 60px; }
-table.dataTable { empty-cells: show; }
+<style type="text/css">	
+	select { width: 60px; }
+	table.dataTable { empty-cells: show; }
+   a:link, a:visited, a:active { text-decoration: none;}
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
 
@@ -152,8 +174,8 @@ SELECT DISTINCT glpi_users.`id` AS id , glpi_users.`firstname` AS name, glpi_use
 FROM `glpi_users` , glpi_tickets_users
 WHERE glpi_tickets_users.users_id = glpi_users.id
 AND glpi_tickets_users.type = 2
-ORDER BY `glpi_users`.`firstname` ASC
-";
+".$entidade_u."
+ORDER BY name ASC ";
 
 $result_tec = $DB->query($sql_tec);
 $tec = $DB->fetch_assoc($result_tec);
@@ -212,15 +234,13 @@ $url2 = $arr_url[0];
 	?>
 
 <script language="Javascript">
-
-$('#dp1').datepicker('update');
-$('#dp2').datepicker('update');
-
+	$('#dp1').datepicker('update');
+	$('#dp2').datepicker('update');
 </script>
+
 </td>
 
 <td style="margin-top:2px;">
-
 <?php
 
 // lista de técnicos
@@ -243,22 +263,20 @@ $selected = 0;
 echo dropdown( $name, $options, $selected );
 
 ?>
-</td>
-</tr>
-<tr><td height="15px"></td></tr>
-<tr>
-<td colspan="2" align="center">
-
-<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
-</td>
-</tr>
+	</td>
+	</tr>
+	<tr><td height="15px"></td></tr>
+	<tr>
+		<td colspan="2" align="center">
+		<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
+		<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='<?php echo $url2 ?>'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
+		</td>
+	</tr>
 
     </table>
 <?php Html::closeForm(); ?>
 <!-- </form> -->
 </div>
-
 </div>
 
 <?php
@@ -342,7 +360,8 @@ else {
 // Chamados
 $sql_cham =
 "SELECT glpi_tickets.id AS id, glpi_tickets.name AS name, glpi_tickets.date AS date, glpi_tickets.solvedate as solvedate,
-glpi_tickets.type, glpi_tickets.status, FROM_UNIXTIME( UNIX_TIMESTAMP( `glpi_tickets`.`solvedate` ) , '%Y-%m' ) AS date_unix, AVG( glpi_tickets.solve_delay_stat ) AS time
+glpi_tickets.type, glpi_tickets.status, FROM_UNIXTIME( UNIX_TIMESTAMP( `glpi_tickets`.`solvedate` ) , '%Y-%m' ) AS date_unix, AVG( glpi_tickets.solve_delay_stat ) AS time,
+glpi_tickets.solve_delay_stat AS time_sec
 FROM `glpi_tickets_users` , glpi_tickets
 WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets_users.type =2
@@ -350,6 +369,7 @@ AND glpi_tickets_users.users_id = ". $id_tec ."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
+".$entidade."
 GROUP BY id
 ORDER BY id DESC ";
 
@@ -366,6 +386,7 @@ AND glpi_tickets_users.users_id = ". $id_tec ."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
+".$entidade."
 GROUP BY id
 ORDER BY id DESC
 ";
@@ -379,17 +400,6 @@ $consulta = $conta_cons;
 
 if($consulta > 0) {
 
-
-if(!isset($_GET['pagina'])) {
-	$primeiro_registro = 0;
-	$pagina = 1;
-}
-else {
-    $pagina = $_GET['pagina'];
-    $primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
-
-
 //abertos
 $sql_ab = "SELECT count( glpi_tickets.id ) AS total, glpi_tickets_users.`users_id` AS id
 FROM `glpi_tickets_users`, glpi_tickets
@@ -397,7 +407,8 @@ WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets_users.users_id = ".$id_tec."
 AND glpi_tickets.status IN ".$status_open."
-AND glpi_tickets.is_deleted = 0" ;
+AND glpi_tickets.is_deleted = 0
+".$entidade." " ;
 
 $result_ab = $DB->query($sql_ab) or die ("erro_ab");
 $data_ab = $DB->fetch_assoc($result_ab);
@@ -415,8 +426,8 @@ AND `glpi_ticketsatisfactions`.tickets_id = glpi_tickets_users.tickets_id
 AND `glpi_users`.id = glpi_tickets_users.users_id
 AND glpi_tickets_users.type = 2
 AND glpi_tickets.date ".$datas2."
-AND glpi_tickets_users.users_id = ".$id_tec."
-";
+AND glpi_tickets_users.users_id = ".$id_tec." 
+".$entidade." ";
 
 $result_sat = $DB->query($query_sat) or die('erro');
 $media = $DB->fetch_assoc($result_sat);
@@ -448,7 +459,25 @@ else {
 }
 else { $barra = 0;}
 
-//$satisfacao = 0;
+//total time
+$DB->data_seek($result_cham, 0);
+
+while($row = $DB->fetch_assoc($result_cham)) {
+
+	$secs += $row['time_sec'];	
+}
+
+$seconds = $secs;
+
+$days = floor($seconds / 86400);
+$seconds -= $days * 86400;
+$hours = floor($seconds / 3600);
+$seconds -= $hours * 3600;
+$minutes = floor($seconds / 60);
+$seconds -= $minutes * 60;
+
+$total_time = "{$days}d {$hours}h : {$minutes}m : {$seconds}s";  
+
 
 //nome e total
 $sql_nome = "
@@ -459,116 +488,120 @@ WHERE `id` = ".$id_tec."
 
 $result_nome = $DB->query($sql_nome) ;
 
-while($row = $DB->fetch_assoc($result_nome)){
 
-$tech = $row['firstname'] ." ". $row['realname'];
+$DB->data_seek($result_cham, 0);
+while($row = $DB->fetch_assoc($result_nome))
 
-echo "
-<div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
+{
 
-<table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
-	<tr style='width: 450px;'><td style='vertical-align:middle;'> <span style='color: #000;'>".__('Technician','dashboard').": </span>". $row['firstname'] ." ". $row['realname']. "</td>
+	$tech = $row['firstname'] ." ". $row['realname'];
 	
-		<td style='vertical-align:middle; ' colspan=2> <span style='color: #000;'>".__('Tickets','dashboard').": </span>". $conta_cons ."</td>
-		<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
-		<td style='vertical-align:middle; width: 190px; '>
-		<div class='progress' style='margin-top: 19px;'>
-			<div class='progress-bar ". $cor ." progress-bar-striped active' role='progressbar' aria-valuenow='".$barra."' aria-valuemin='0' aria-valuemax='100' style='width: ".$barra."%;'>
-	 			".$barra." % ".__('Closed', 'dashboard') ."	
-	 		</div>		
-		</div>		   
-		</td>
-	</tr>
-
-</table> ";
-
-if($satisfacao != '' || $satisfacao > 0) {
-
-echo "
-<table align='right' style='margin-bottom:10px;' width=100% border='0'>
-<tr>
-
-<td colspan=6 >
-<div id='gauge' style='width:150px; height:100px; margin-left: 120px;'></div>
-
-<!-- gauge -->
-    <script>
-    var g = new JustGage({
-    id: \"gauge\",
-    value: ".$satisfacao.",
-    min: 0,
-    max: 100,
-    title: \" ". __('Satisfaction','dashboard') ." - %\",
-    label: \" \",
-       levelColors: [
-          \"#ff0000\",
-          \"#FB8300\",
-          \"#F9C800\",
-          \"#9FCA0C\"
-        ]
-
-    });
-    </script>
-
-	<td colspan=3 align='right' style='vertical-align:bottom;'>
-		<button class='btn btn-primary btn-sm' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> 
-		<button class='btn btn-primary btn-sm' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> 
-		<button class='btn btn-primary btn-sm' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> 
-	</td>	
-</tr>
-</table>
-
-<table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
-	<thead>
-		<tr>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
-			<th></th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
-			<th style='text-align:center; color: #000;'> ". __('Satisfaction','dashboard') ."</th>
+	echo "
+	<div class='well info_box row-fluid span12' style='margin-top:25px; margin-left: -1px;'>
+	
+	<table class='row-fluid'  style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
+		<tr style='width: 450px;'><td style='vertical-align:middle;'> <span style='color: #000;'>".__('Technician','dashboard').": </span>". $row['firstname'] ." ". $row['realname']. "</td>	
+			<td style='vertical-align:middle; ' colspan=2> <span style='color: #000;'>".__('Tickets','dashboard').": </span>". $conta_cons ."</td>
+			<td colspan='3' style='font-size: 16px; font-weight:bold; vertical-align:middle; width:200px;'><span style='color:#000;'>".__('Period', 'dashboard') .": </span> " . conv_data($data_ini2) ." a ". conv_data($data_fin2)."
+			<td style='vertical-align:middle; width: 190px; '>
+			<div class='progress' style='margin-top: 19px;'>
+				<div class='progress-bar ". $cor ." progress-bar-striped active' role='progressbar' aria-valuenow='".$barra."' aria-valuemin='0' aria-valuemax='100' style='width: ".$barra."%;'>
+		 			".$barra." % ".__('Closed', 'dashboard') ."	
+		 		</div>		
+				</div>		   
+			</td>
 		</tr>
-	</thead>
-<tbody>
-";
-}
-
-else {
-
-echo "
-<table align='right' style='margin-bottom:10px;'>
-
+		
+	</table> ";
+	//<tr><td><span style='color:#000;'>".__('Time').":</span> ".$total_time."</td></tr>
+	
+	if($satisfacao != '' || $satisfacao > 0) {
+	
+	echo "
+	<table align='right' style='margin-bottom:10px;' width=100% border='0'>
 	<tr>
-		<td colspan=3 style='vertical-align:bottom;'>
+	
+	<td colspan=6 >
+	<div id='gauge' style='width:150px; height:100px; margin-left: 120px;'></div>
+	
+	<!-- gauge -->
+	    <script>
+	    var g = new JustGage({
+	    id: \"gauge\",
+	    value: ".$satisfacao.",
+	    min: 0,
+	    max: 100,
+	    title: \" ". __('Satisfaction','dashboard') ." - %\",
+	    label: \" \",
+	       levelColors: [
+	          \"#ff0000\",
+	          \"#FB8300\",
+	          \"#F9C800\",
+	          \"#9FCA0C\"
+	        ]
+	
+	    });
+	    </script>
+	
+		<td colspan=3 align='right' style='vertical-align:bottom;'>
 			<button class='btn btn-primary btn-sm' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> 
 			<button class='btn btn-primary btn-sm' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> 
 			<button class='btn btn-primary btn-sm' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> 
 		</td>	
 	</tr>
-</table>
-
-<table>
-	<tr><td>&nbsp;</td></tr>
-	<tr><td>&nbsp;</td></tr>
-</table>
-
-<table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
-	<thead>
+	</table>
+	
+	<table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
+		<thead>
+			<tr>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
+				<th></th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
+				<th style='text-align:center; color: #000;'> ". __('Satisfaction','dashboard') ."</th>
+			</tr>
+		</thead>
+	<tbody>
+	";
+	}
+	
+	else {
+	
+	echo "
+	<table align='right' style='margin-bottom:10px;'>
+	
 		<tr>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
-			<th></th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
-			<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
+			<td colspan=3 style='vertical-align:bottom;'>
+				<button class='btn btn-primary btn-sm' type='button' name='abertos' value='Abertos' onclick='location.href=\"rel_tecnico.php?con=1&stat=open&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Opened','dashboard'). " </button> 
+				<button class='btn btn-primary btn-sm' type='button' name='fechados' value='Fechados' onclick='location.href=\"rel_tecnico.php?con=1&stat=close&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('Closed','dashboard')." </button> 
+				<button class='btn btn-primary btn-sm' type='button' name='todos' value='Todos' onclick='location.href=\"rel_tecnico.php?con=1&stat=all&tec=".$id_tec."&date1=".$data_ini2."&date2=".$data_fin2."&npage=".$num_por_pagina."\"' <i class='icon-white icon-trash'></i> ".__('All','dashboard')." </button> 
+			</td>	
 		</tr>
-	</thead>
-<tbody>
-";
-}
+	</table>
+	
+	<table>
+		<tr><td>&nbsp;</td></tr>
+		<tr><td>&nbsp;</td></tr>
+	</table>
+	
+	<table id='tec' class='display' style='font-size: 13px; font-weight:bold;' cellpadding = 2px >
+		<thead>
+			<tr>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Tickets','dashboard') ." </th>
+				<th></th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Type') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Title','dashboard') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Opened','dashboard') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Closed','dashboard') ."</th>
+				<th style='text-align:center; color: #000; cursor:pointer;'> ". __('Resolution time') ."</th>
+			</tr>
+		</thead>
+	<tbody>
+	";
+	}
 
 }
 
@@ -576,60 +609,60 @@ echo "
 
 while($row = $DB->fetch_assoc($result_cham)){
 
-$status1 = $row['status'];
-
-    if($status1 == "1" ) { $status1 = "new";}
-    if($status1 == "2" ) { $status1 = "assign";}
-    if($status1 == "3" ) { $status1 = "plan";}
-    if($status1 == "4" ) { $status1 = "waiting";}
-    if($status1 == "5" ) { $status1 = "solved";}
-    if($status1 == "6" ) { $status1 = "closed";}
-
-if($row['type'] == 1) { 
-	$type = __('Incident'); }
-else { 
-	$type = __('Request'); }
-
-if($satisfacao != '' || $satisfacao > 0) {
-
-$query_satc = "SELECT `glpi_ticketsatisfactions`.satisfaction AS sat
-FROM `glpi_ticketsatisfactions`
-WHERE glpi_ticketsatisfactions.tickets_id = ". $row['id'] ."
-";
-
-$result_satc = $DB->query($query_satc);
-$satc = $DB->fetch_assoc($result_satc);
-
-$satc1 = $satc['sat'];
-
-echo "
-<tr>
-<td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
-<td style='vertical-align:middle;' align='center'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
-<td style='vertical-align:middle;'> ". $type ." </td>
-<td style='vertical-align:middle;'> ". substr($row['name'],0,75) ." </td>
-<td style='vertical-align:middle;'> ". conv_data_hora($row['date']) ." </td>
-<td style='vertical-align:middle;'> ". conv_data_hora($row['solvedate']) ." </td>
-<td style='vertical-align:middle;'> ". time_ext($row['time']) ."</td>
-<td style='vertical-align:middle;'> <img src=../img/s". $satc1 .".png> </td>
-</tr>";
-    }
-//}
-
-else {
-
-echo "
-<tr>
-<td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
-<td style='vertical-align:middle;' align='center'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
-<td style='vertical-align:middle;'> ". $type ." </td>
-<td style='vertical-align:middle;'> ". substr($row['name'],0,75) ." </td>
-<td style='vertical-align:middle;'> ". conv_data_hora($row['date']) ." </td>
-<td style='vertical-align:middle;'> ". conv_data_hora($row['solvedate']) ." </td>
-<td style='vertical-align:middle;'> ". time_ext($row['time']) ."</td>
-</tr>";
-
-    }
+	$status1 = $row['status'];
+	
+	if($status1 == "1" ) { $status1 = "new";}
+	if($status1 == "2" ) { $status1 = "assign";}
+	if($status1 == "3" ) { $status1 = "plan";}
+	if($status1 == "4" ) { $status1 = "waiting";}
+	if($status1 == "5" ) { $status1 = "solved";}
+	if($status1 == "6" ) { $status1 = "closed";}
+	
+	if($row['type'] == 1) { 
+		$type = __('Incident'); }
+	else { 
+		$type = __('Request'); }
+	
+	if($satisfacao != '' || $satisfacao > 0) {
+	
+		$query_satc = "SELECT `glpi_ticketsatisfactions`.satisfaction AS sat
+		FROM `glpi_ticketsatisfactions`
+		WHERE glpi_ticketsatisfactions.tickets_id = ". $row['id'] ."
+		";
+		
+		$result_satc = $DB->query($query_satc);
+		$satc = $DB->fetch_assoc($result_satc);
+		
+		$satc1 = $satc['sat'];
+		
+		echo "
+		<tr>
+		<td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
+		<td style='vertical-align:middle;' align='center'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
+		<td style='vertical-align:middle;'> ". $type ." </td>
+		<td style='vertical-align:middle;'> ". substr($row['name'],0,75) ." </td>
+		<td style='vertical-align:middle;'> ". conv_data_hora($row['date']) ." </td>
+		<td style='vertical-align:middle;'> ". conv_data_hora($row['solvedate']) ." </td>
+		<td style='vertical-align:middle;'> ". time_ext($row['time']) ."</td>
+		<td style='vertical-align:middle;'> <img src=../img/s". $satc1 .".png> </td>
+		</tr>";
+	    }
+	//}
+	
+	else {
+	
+		echo "
+		<tr>
+		<td style='vertical-align:middle; text-align:center;'><a href=".$CFG_GLPI['root_doc']."/front/ticket.form.php?id=". $row['id'] ." target=_blank >" . $row['id'] . "</a></td>
+		<td style='vertical-align:middle;' align='center'><img src=../../../../pics/".$status1.".png title='".Ticket::getStatus($row['status'])."' style=' cursor: pointer; cursor: hand;'/> </td>
+		<td style='vertical-align:middle;'> ". $type ." </td>
+		<td style='vertical-align:middle;'> ". substr($row['name'],0,75) ." </td>
+		<td style='vertical-align:middle;'> ". conv_data_hora($row['date']) ." </td>
+		<td style='vertical-align:middle;'> ". conv_data_hora($row['solvedate']) ." </td>
+		<td style='vertical-align:middle;'> ". time_ext($row['time']) ."</td>
+		</tr>";
+	
+	    }
 
 }
 
@@ -679,26 +712,21 @@ $(document).ready(function() {
         }
 		  
     });    
-} );
-		
+} );	
 </script>  
 
 <?php
-
 echo '</div><br>';
-
 }
-
 
 else {
 
-echo "
-<div class='well info_box row-fluid span12' style='margin-top:30px; margin-left: -3px;'>
-<table class='table' style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
-<tr><td style='vertical-align:middle; text-align:center;'> <span style='color: #000;'>" . __('No ticket found','dashboard') . "</td></tr>
-<tr></tr>
-</table></div>";
-
+	echo "
+	<div class='well info_box row-fluid span12' style='margin-top:30px; margin-left: -3px;'>
+	<table class='table' style='font-size: 18px; font-weight:bold;' cellpadding = 1px>
+	<tr><td style='vertical-align:middle; text-align:center;'> <span style='color: #000;'>" . __('No ticket found','dashboard') . "</td></tr>
+	<tr></tr>
+	</table></div>";
 }
 
 }

@@ -68,6 +68,22 @@ $itemtype = $_REQUEST['sel_item'];
 	} 
 }
 
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+	$entidade_u = "";
+}
+else {
+	$entidade = "AND entities_id = ".$sel_ent." ";
+	$entidade_u = "AND glpi_users.entities_id = ".$sel_ent." ";
+}
+
 ?>
 
 <html> 
@@ -102,10 +118,13 @@ $itemtype = $_REQUEST['sel_item'];
 	<link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 	<script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 	
-	<style type="text/css" title="currentStyle">		
-	select { width: 60px; }
-	table.dataTable { empty-cells: show; }
+	<style type="text/css">	
+		select { width: 60px; }
+		table.dataTable { empty-cells: show; }
+	   a:link, a:visited, a:active { text-decoration: none;}
 	</style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
 
 </head>
 
@@ -310,6 +329,7 @@ if($id_mod == '') {
 			FROM glpi_".$type."s
 			WHERE manufacturers_id = ".$id_fab."
 			AND is_deleted = 0
+			".$entidade."
 			ORDER BY name";
 			
 			$result_cham = $DB->query($sql_cham);			
@@ -319,6 +339,7 @@ if($id_mod == '') {
 			FROM glpi_".$type."s
 			WHERE manufacturers_id = ".$id_fab."
 			AND is_deleted = 0
+			".$entidade."
 			ORDER BY name";
 			
 			$result_cons1 = $DB->query($consulta1);	
@@ -333,6 +354,7 @@ if($id_mod == '') {
 			FROM glpi_softwares
 			WHERE manufacturers_id = ".$id_fab."
 			AND is_deleted = 0
+			".$entidade."
 			ORDER BY name ";
 			 			
 			$result_cham = $DB->query($sql_cham);
@@ -343,6 +365,7 @@ if($id_mod == '') {
 			FROM glpi_softwares
 			WHERE manufacturers_id = ".$id_fab."
 			AND is_deleted = 0
+			".$entidade."
 			ORDER BY name";
 			
 			$result_cons1 = $DB->query($consulta1);	
@@ -362,9 +385,8 @@ else {
 			WHERE manufacturers_id = ".$id_fab."
 			AND ".$type."models_id = ".$id_mod."
 			AND is_deleted = 0
-			ORDER BY name
-			 ";
-			 //LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
+			".$entidade."
+			ORDER BY name ";			
 			
 			$result_cham = $DB->query($sql_cham);
 			
@@ -375,6 +397,7 @@ else {
 			WHERE manufacturers_id = ".$id_fab."
 			AND ".$type."models_id = ".$id_mod."
 			AND is_deleted = 0
+			".$entidade."
 			ORDER BY name ";
 		
 			$result_cons1 = $DB->query($consulta1);	
@@ -387,10 +410,10 @@ else {
 			$sql_cham = 
 			"SELECT id, name
 			FROM glpi_softwares
-			WHERE id = ".$id_mod."			
-			ORDER BY name
-			 ";
-			//LIMIT ". $primeiro_registro .", ". $num_por_pagina ."
+			WHERE id = ".$id_mod."	
+			".$entidade."		
+			ORDER BY name ";
+		
 			
 			$result_cham = $DB->query($sql_cham);
 			
@@ -398,7 +421,8 @@ else {
 			$consulta1 = 
 			"SELECT id, name
 			FROM glpi_softwares
-			WHERE id = ".$id_mod."			
+			WHERE id = ".$id_mod."
+			".$entidade."			
 			ORDER BY name ";
 		
 			$result_cons1 = $DB->query($consulta1);	
@@ -411,16 +435,6 @@ else {
 
 
 if($consulta > 0) {
-
-if(!isset($_GET['pagina'])) {
-	$primeiro_registro = 0;
-	$pagina = 1;
-}
-else {
-	$pagina = $_GET['pagina'];
-	$primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
-
 
 //fabricante
 	$sql_fab = "SELECT name
@@ -464,7 +478,7 @@ if($type == 'software') {
 	$sql_item = "SELECT id, name
 			 		FROM glpi_softwares
 			 		WHERE id = " . $row['id'] . "			 		
-			 		";
+			 		".$entidade." ";
 }
 else	{
 
@@ -472,7 +486,8 @@ else	{
 			 		FROM glpi_".$type."s
 			 		WHERE id = " . $row['id'] . "			 		
 			 		AND is_deleted = 0
-			 		". $model ."";
+			 		". $model ."
+			 		".$entidade."";
 }
 
 	$result_item = $DB->query($sql_item);		

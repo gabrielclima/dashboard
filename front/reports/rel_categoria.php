@@ -72,6 +72,25 @@ function dropdown( $name, array $options, $selected=null )
     return $dropdown;
 }
 
+
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+	$entidade_c = "";
+	$entidade_cw = "";
+}
+else {
+	$entidade = "AND glpi_tickets.entities_id = ".$sel_ent." ";
+	$entidade_c = "AND entities_id = ".$sel_ent." ";
+	$entidade_cw = "WHERE entities_id = ".$sel_ent." ";
+}
+
+
 ?>
 
 <html> 
@@ -103,10 +122,13 @@ function dropdown( $name, array $options, $selected=null )
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
 <script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 
-<style type="text/css" title="currentStyle">		
+<style type="text/css">	
 	select { width: 60px; }
 	table.dataTable { empty-cells: show; }
+   a:link, a:visited, a:active { text-decoration: none;}
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
    
 </head>
 
@@ -179,6 +201,7 @@ $('#dp2').datepicker('update');
 $sql_cat = "
 SELECT id, completename AS name
 FROM `glpi_itilcategories`
+".$entidade_cw."
 ORDER BY `name` ASC
 ";
 
@@ -288,6 +311,7 @@ WHERE glpi_tickets.itilcategories_id = ".$id_cat."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
+".$entidade."
 ORDER BY id DESC ";
 
 $result_cham = $DB->query($sql_cham);
@@ -300,6 +324,7 @@ WHERE glpi_tickets.itilcategories_id = ".$id_cat."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
 AND glpi_tickets.status IN ".$status."
+".$entidade."
 ";
 
 $result_cons1 = $DB->query($consulta1);
@@ -311,22 +336,14 @@ $consulta = $conta_cons;
 
 if($consulta > 0) {
 
-if(!isset($_GET['pagina'])) {
-	$primeiro_registro = 0;
-	$pagina = 1;
-}
-else {
-	$pagina = $_GET['pagina'];
-	$primeiro_registro = ($pagina*$num_por_pagina) - $num_por_pagina;
-}
-
 //montar barra
 $sql_ab = "SELECT glpi_tickets.id AS total
 FROM glpi_tickets
 WHERE glpi_tickets.itilcategories_id = ".$id_cat."
 AND glpi_tickets.is_deleted = 0
 AND glpi_tickets.date ".$datas2."
-AND glpi_tickets.status IN ".$status_open ;
+AND glpi_tickets.status IN ".$status_open." 
+".$entidade." ";
 
 $result_ab = $DB->query($sql_ab) or die ("erro_ab");
 $data_ab = $DB->numrows($result_ab);
@@ -362,7 +379,8 @@ else { $barra = 0;}
 $sql_nm = "
 SELECT id , completename AS name
 FROM `glpi_itilcategories`
-WHERE id = ".$id_cat."";
+WHERE id = ".$id_cat."
+".$entidade_c." ";
 
 $result_nm = $DB->query($sql_nm);
 $ent_name = $DB->fetch_assoc($result_nm);
@@ -440,7 +458,8 @@ WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.id = ". $row['id'] ."
 AND glpi_tickets_users.`users_id` = glpi_users.id
 AND glpi_tickets_users.type = 1
-";
+".$entidade." ";
+
 $result_user = $DB->query($sql_user);
 		
 	$row_user = $DB->fetch_assoc($result_user);
@@ -452,8 +471,9 @@ FROM `glpi_tickets_users` , glpi_tickets, glpi_users
 WHERE glpi_tickets.id = glpi_tickets_users.`tickets_id`
 AND glpi_tickets.id = ". $row['id'] ."
 AND glpi_tickets_users.`users_id` = glpi_users.id
-AND glpi_tickets_users.type = 2
-";
+AND glpi_tickets_users.type = 2 
+".$entidade." ";
+
 $result_tec = $DB->query($sql_tec);	
 
 	$row_tec = $DB->fetch_assoc($result_tec);

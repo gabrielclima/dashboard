@@ -14,6 +14,7 @@ SELECT glpi_entities.name AS name, COUNT( glpi_tickets.id ) AS tick
 FROM glpi_tickets
 LEFT JOIN glpi_entities ON glpi_tickets.entities_id = glpi_entities.id
 WHERE glpi_tickets.is_deleted = '0'
+".$entidade."
 GROUP BY glpi_entities.name
 ORDER BY tick DESC
  ";
@@ -96,15 +97,15 @@ $(function () {
                 data: [".$quant_2."],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     crop: false,
                     overflow: 'none',
                     align: 'center',
                     x: 1,
                     y: 1,
                     style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                        //fontSize: '13px',
+                        //fontFamily: 'Verdana, sans-serif'
                     },
                     formatter: function () {
                     return Highcharts.numberFormat(this.y, 0, '', ''); // Remove the thousands sep?

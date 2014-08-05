@@ -18,6 +18,7 @@ AND `glpi_users`.id = glpi_tickets_users.users_id
 AND glpi_tickets_users.type = 2
 AND glpi_ticketsatisfactions.date_answered ".$datas."
 AND glpi_ticketsatisfactions.satisfaction <> 'NULL'
+".$entidade."
 GROUP BY name
 ORDER BY media DESC";          		 
 
@@ -72,7 +73,7 @@ Highcharts.setOptions({
                 y: 0,
                 //floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+               // backgroundColor: '#FFFFFF',
                 adjustChartSize: true
             },
             xAxis: {
@@ -146,7 +147,7 @@ Highcharts.setOptions({
                 },
                     dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
                     x: 22,
                     y: 0,  

@@ -7,6 +7,7 @@ $querym = "
 SELECT DISTINCT   DATE_FORMAT(date, '%b-%y') as month_l,  COUNT(id) as nb, DATE_FORMAT(date, '%y-%m') as month
 FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
+".$entidade."
 GROUP BY month
 ORDER BY month
  ";
@@ -56,6 +57,7 @@ WHERE solvedate IS NOT NULL
 AND due_date IS NOT NULL
 AND solvedate > due_date
 AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+".$entidade."
 GROUP BY MONTH
 ORDER BY MONTH";
 
@@ -98,6 +100,7 @@ FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.solvedate IS NOT NULL
 AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+".$entidade."
 GROUP BY month
 ORDER BY month";	
 
@@ -138,6 +141,7 @@ FROM glpi_tickets
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_tickets.closedate IS NOT NULL
 AND DATE_FORMAT( date, '%b-%y' ) = '".$row_result['month_l']."' 
+".$entidade."
 GROUP BY month
 ORDER BY month ";
 
@@ -173,6 +177,7 @@ avg( `glpi_ticketsatisfactions`.satisfaction ) AS media
 FROM glpi_tickets, `glpi_ticketsatisfactions`
 WHERE glpi_tickets.is_deleted = '0'
 AND `glpi_ticketsatisfactions`.tickets_id = glpi_tickets.id
+".$entidade."
 GROUP BY MONTH
 ORDER BY MONTH";          		 
 
@@ -225,7 +230,7 @@ echo           "height: 460
                 y: 0,
                 //floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF',
+                //backgroundColor: '#FFFFFF',
                 adjustChartSize: true
             },
             xAxis: {
@@ -262,13 +267,13 @@ if(array_sum($quantsat) != 0) {
                 title: {
                     text: '".__('Satisfaction','dashboard')."',
                     style: {
-                        color: '#4572A7'
+                       // color: '#4572A7'
                     }
                 },
                 labels: {
                     format: '{value} %',
                     style: {
-                        color: '#4572A7'
+                       // color: '#4572A7'
                     }
                 },                       	 	
                 opposite: true
@@ -330,7 +335,7 @@ if(array_sum($quantsat) != 0) {
                 },
                     dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
                     x: 1,
                     y: 1,  
@@ -353,7 +358,7 @@ echo "
                
                  dataLabels: {
                     enabled: true,                    
-                    color: '#000000',
+                    //color: '#000000',
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',
@@ -381,7 +386,7 @@ echo "
                
                 dataLabels: {
                     enabled: true,                    
-                    color: '#800000',
+                    //color: '#800000',
                     style: {
                         fontSize: '11px',
                         fontFamily: 'Verdana, sans-serif',

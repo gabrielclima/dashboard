@@ -20,6 +20,9 @@ if($sel_ent == '' || $sel_ent == -1) {
 	$ent_net = "";
 	$ent_peri="";
 	$ent_phone="";
+	$ent_soft = "";
+	$ent_global = "";
+	$ent = "";
 	//$ent_global="";	
 }	
 
@@ -30,7 +33,9 @@ else {
 	$ent_net = "AND glpi_networkequipments.entities_id = ".$sel_ent."";
 	$ent_peri = "AND glpi_peripherals.entities_id = ".$sel_ent."";
 	$ent_phone = "AND glpi_phones.entities_id = ".$sel_ent."";
-	//$ent_global = "AND glpi_".$asset.".entities_id = ".$sel_ent."";
+	$ent_soft = "AND glpi_softwares.entities_id = ".$sel_ent."";
+	$ent_global = "AND glpi_". strtolower($asset)."s.entities_id = ".$sel_ent."";
+	$ent = "AND entities_id = ".$sel_ent."";
 	}
 
 
@@ -65,7 +70,7 @@ else {
 }	
 
 //cartridges and consumables
-function conta1($asset) {
+function conta1($asset,$sel_ent) {
 
 global $DB;
 
@@ -73,7 +78,7 @@ if($sel_ent == '' || $sel_ent == -1) {
 	$ent_global="";	
 }
 else {
-	$ent_global = "AND entities_id = ".$sel_ent."";
+	$ent_global = "WHERE entities_id = ".$sel_ent."";
 }
 
 $query = "
@@ -93,7 +98,8 @@ else {
     }	
 }	
 
-//all assets
+
+//all assets - global
 $arr_assets =  array('computers', 'monitors', 'printers', 'networkequipments', 'phones', 'peripherals');
 $global = 0;
 
@@ -146,16 +152,17 @@ $global+=$total;
 <script src="../js/extensions/TableTools/js/dataTables.tableTools.js"></script>
 <link href="../js/extensions/TableTools/css/dataTables.tableTools.css" type="text/css" rel="stylesheet" />
   
-<style type="text/css" title="currentStyle">	
+<style type="text/css">	
 	@import "../js/media/css/jquery.dataTables_themeroller.css";
 	@import "../js/smoothness/jquery-ui-1.9.2.custom.css";
-	
-select
-{
-    width: 60px;
-}	
-	
+
+	select { width: 60px; }
+	table.dataTable { empty-cells: show; }
+   a:link, a:visited, a:active { text-decoration: none;}
 </style>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?> 
+
 </head>
 
 <body style="background-color: #e5e5e5; margin-left:0%;">
@@ -166,9 +173,8 @@ select
   <div id="tabela_assets" class="row-fluid " >
 
 	<div id="head" class="row-fluid span12" style="margin-bottom: 35px; margin-top:20px;;">
-	
-	<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px; color: #0088CC;"></i><span></span></a>
-	<div id="titulo" style="margin-top: -10px; margin-bottom: 20px;"> <?php echo __('Assets'); ?> </div> 
+		<a href="../index.php"><i class="fa fa-home" style="font-size:14pt; margin-left:25px;"></i><span></span></a>
+	<div id="titulo" style="margin-top: -10px; margin-bottom: 20px;"> <?php echo __('Assets') ; ?> </div> 
 	 
 </div>
         

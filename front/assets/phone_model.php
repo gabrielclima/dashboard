@@ -16,6 +16,7 @@ SELECT glpi_phonemodels.name AS name, count( glpi_phones.id ) AS conta
 FROM glpi_phonemodels, glpi_phones
 WHERE glpi_phones.is_deleted =0
 AND glpi_phonemodels.id = glpi_phones.phonemodels_id
+".$ent_phone." 
 GROUP BY glpi_phonemodels.name
 ORDER BY count( glpi_phones.id ) DESC ";
 

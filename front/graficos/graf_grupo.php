@@ -47,14 +47,17 @@ global $DB;
 
 <script src="../js/highcharts.js"></script>
 <script src="../js/modules/exporting.js"></script>
-<script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/no-data-to-display.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
     
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?>
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
+
 </head>
+
 <body style="background-color: #e5e5e5; margin-left:0%;">
 
 <?php
@@ -76,11 +79,24 @@ $ano = date("Y");
 $month = date("Y-m");
 $datahoje = date("Y-m-d");
 
-//seleciona entidade
+#entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
 
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+}
+else {
+	$entidade = "WHERE entities_id = ".$sel_ent." ";
+}
+
+//seleciona grupo
 $sql_grp = "
 SELECT id, name
 FROM `glpi_groups`
+".$entidade."
 ORDER BY `name` ASC
 ";
 
@@ -189,8 +205,8 @@ echo dropdown( $name, $options, $selected );
 <tr><td height="15px"></td></tr>
 <tr>
 <td colspan="2" align="center" style="">
-<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_grupo.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
+	<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
+	<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_grupo.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
 </td>
 </tr>	
 	</table>
@@ -258,7 +274,6 @@ $result_nm = $DB->query($sql_nm);
 $grp_name = $DB->fetch_assoc($result_nm);
 
 //quant de chamados
-
 $query_quant = "
 SELECT count(*) AS total
 FROM `glpi_groups_tickets` , glpi_tickets, glpi_groups
@@ -287,7 +302,7 @@ echo "</div>";
 	<?php  include ("./inc/grafpie_stat_grupo.inc.php"); ?>
 </div>
 
-<div id="graf_tipo" class="span6" >
+<div id="graf_tipo" class="span6" style="margin-left: 2.5%;">
 	<?php include ("./inc/grafpie_tipo_grupo.inc.php");  ?>
 </div>	
 

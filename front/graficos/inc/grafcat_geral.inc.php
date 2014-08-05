@@ -6,6 +6,7 @@ SELECT glpi_itilcategories.completename as cat_name, COUNT(glpi_tickets.id) as c
 FROM glpi_tickets,  glpi_itilcategories
 WHERE glpi_tickets.is_deleted = '0'
 AND glpi_itilcategories.id = glpi_tickets.itilcategories_id
+".$entidade."
 GROUP BY glpi_itilcategories.id
 ORDER BY `cat_tick` DESC
 LIMIT 10
@@ -83,13 +84,13 @@ $(function () {
                 data: [".$quant_2a."],
                 dataLabels: {
                     enabled: true,                    
-                    color: '#000099',
+                    //color: '#000099',
                     align: 'center',
-                    x: 25,
-                    y: 1,
+                    x: 20,
+                    y: 0,
                     style: {
-                        fontSize: '13px',
-                        fontFamily: 'Verdana, sans-serif'
+                       // fontSize: '13px',
+                       // fontFamily: 'Verdana, sans-serif'
                     },
                     formatter: function () {
                     return Highcharts.numberFormat(this.y, 0, '', ''); // Remove the thousands sep?

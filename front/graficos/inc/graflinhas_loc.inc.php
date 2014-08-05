@@ -137,7 +137,7 @@ Highcharts.setOptions({
                 y: 20,
                 floating: true,
                 borderWidth: 1,
-                backgroundColor: '#FFFFFF'
+                //backgroundColor: '#FFFFFF'
             },
             xAxis: {
                 categories: [$grfm3],

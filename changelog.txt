@@ -1,22 +1,30 @@
 
-Versão 0.4.8:
+Versão 0.4.9:
 
-- Na página da configuração é possível selecionar a entidade para ser exibida na tela inicial;
+- A entidade selecionada é aplicada aos relatórios e gráficos;
 
-- Correção na ordenação do painel de chamados;
+- Temas de cores aplicados a todas as páginas;
 
-- Atualização para o bootstrap 3;
+- Novo tema: Transparent;
+
+- Temas de cores para os gráficos;
+
+- Fontes do Google offline;
 
 - Correção de pequenos bugs.
 
 
 
-Version 0.4.8:
+Version 0.4.9:
 
-- In configuration page you can select the entity to be displayed on the index;
+- The selected entity is applied to reports and graphs;
 
-- Fixed the ordering of the tickets panel;
+- Themes of colors applied to all pages;
 
-- Update to bootstrap 3;
+- New theme: Transparent;
+
+- Color Themes for graphics;
+
+- Google Fonts offline;
 
 - Fixed minor bugs.

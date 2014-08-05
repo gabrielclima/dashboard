@@ -29,9 +29,11 @@ $mydate = isset($_POST["date1"]) ? $_POST["date1"] : "";
 
 <script type="text/javascript" src="../js/jquery.min.js"></script> 
 <script src="../js/highcharts.js"></script>
-<script src="../js/themes/grid-light.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?>
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
 
 </head>
 
@@ -94,8 +96,8 @@ $datahoje = date("Y-m-d");
 	?>
 
 <script language="Javascript">
-$('#dp1').datepicker('update');
-$('#dp2').datepicker('update');
+	$('#dp1').datepicker('update');
+	$('#dp2').datepicker('update');
 </script>
 	</td>
 	<td style="margin-top:2px;">

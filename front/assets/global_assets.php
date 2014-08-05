@@ -5,24 +5,23 @@ $global = 0;
 
 foreach($arr_assets as $asset) {
 
-$query = "
-SELECT count(id) AS id
-FROM glpi_". strtolower($asset)."s
-WHERE is_deleted = 0
-AND is_template = 0
-AND glpi_". strtolower($asset)."s.entities_id = ".$sel_ent."";
-
-
-$result = $DB->query($query);
-$total = $DB->result($result,0,'id');
-
-$arr_totals[$asset] = $total;
+	$query = "
+	SELECT count(id) AS id
+	FROM glpi_". strtolower($asset)."s
+	WHERE is_deleted = 0
+	AND is_template = 0
+	".$ent_global." ";
+	
+	
+	$result = $DB->query($query);
+	$total = $DB->result($result,0,'id');
+	
+	$arr_totals[$asset] = $total;
 
 }
 
 $grf_os2 = array_keys($arr_totals);
 $quant_os2 = array_values($arr_totals);
-
 $conta_os = count($arr_totals);
 
 echo "

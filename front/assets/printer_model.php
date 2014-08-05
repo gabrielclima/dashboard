@@ -16,6 +16,7 @@ SELECT glpi_printermodels.name AS name, count( glpi_printers.id ) AS conta
 FROM glpi_printermodels, glpi_printers
 WHERE glpi_printers.is_deleted = 0
 AND glpi_printermodels.id = glpi_printers.printermodels_id
+".$ent_print." 
 GROUP BY glpi_printermodels.name
 ORDER BY count( glpi_printers.id ) DESC ";
 

@@ -46,13 +46,15 @@ global $DB;
 <script src="../js/highcharts.js"></script>
 <script src="../js/modules/exporting.js"></script>
 <script src="../js/modules/no-data-to-display.js"></script> 
-<script src="../js/themes/grid-light.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
 <link href="../css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="../less/datepicker.less" rel="stylesheet" type="text/css">
 
 <link href="../inc/select2/select2.css" rel="stylesheet" type="text/css">
 <script src="../inc/select2/select2.js" type="text/javascript" language="javascript"></script>
+
+<?php echo '<link rel="stylesheet" type="text/css" href="../css/style-'.$_SESSION['style'].'">';  ?>
+<?php echo '<script src="../js/themes/'.$_SESSION['charts_colors'].'"></script>'; ?>
 
 </head>
 
@@ -78,15 +80,29 @@ $ano = date("Y");
 $month = date("Y-m");
 $datahoje = date("Y-m-d");
 
-//seleciona técnico
 
+# entity
+$sql_e = "SELECT value FROM glpi_plugin_dashboard_config WHERE name = 'entity' AND users_id = ".$_SESSION['glpiID']."";
+$result_e = $DB->query($sql_e);
+$sel_ent = $DB->result($result_e,0,'value');
+
+if($sel_ent == '' || $sel_ent == -1) {
+	$sel_ent = 0;
+	$entidade = "";
+}
+else {
+	$entidade = "AND glpi_users.entities_id = ".$sel_ent." ";
+}
+
+
+//seleciona técnico
 $sql_tec = "
 SELECT DISTINCT glpi_users.`id` AS id , glpi_users.`firstname` AS name, glpi_users.`realname` AS sname
 FROM `glpi_users` , glpi_tickets_users
 WHERE glpi_tickets_users.users_id = glpi_users.id
 AND glpi_tickets_users.type = 1
-ORDER BY `glpi_users`.`firstname` ASC
-";
+".$entidade."
+ORDER BY `glpi_users`.`firstname` ASC";
 
 $result_tec = $DB->query($sql_tec);
 $tec = $DB->fetch_assoc($result_tec);
@@ -193,8 +209,8 @@ echo dropdown( $name, $options, $selected );
 <tr><td height="15px"></td></tr>
 <tr>
 <td colspan="2" align="center" style="">
-<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
-<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_usuario.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
+	<button class="btn btn-primary btn-sm" type="submit" name="submit" value="Atualizar" ><i class="fa fa-search"></i>&nbsp; <?php echo __('Consult','dashboard'); ?></button>
+	<button class="btn btn-primary btn-sm" type="button" name="Limpar" value="Limpar" onclick="location.href='graf_usuario.php'" > <i class="fa fa-trash-o"></i>&nbsp; <?php echo __('Clean','dashboard'); ?> </button></td>
 </td>
 </tr>
 	
